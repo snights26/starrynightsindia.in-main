@@ -1,0 +1,135 @@
+.mytours-container {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 24px;
+  border: 1px solid var(--app-border);
+  border-radius: 18px;
+  background: var(--app-card);
+  color: var(--app-text);
+  box-shadow: var(--app-shadow);
+}
+
+.mytours-container h2 {
+  margin: 0 0 18px;
+  color: var(--app-text);
+  font-size: clamp(1.45rem, 2vw, 1.9rem);
+  font-weight: 800;
+}
+
+.mytours-container h2::after {
+  content: "";
+  display: block;
+  width: 70px;
+  height: 3px;
+  margin-top: 10px;
+  border-radius: 999px;
+  background: var(--app-accent);
+}
+
+.mytours-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  border: 1px solid var(--app-border);
+  border-radius: 14px;
+  background: var(--app-card-soft);
+}
+
+.mytours-table-wrapper::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
+.mytours-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 680px;
+}
+
+.mytours-table th,
+.mytours-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--app-border);
+  color: var(--app-text);
+  text-align: left;
+  font-size: 0.86rem;
+}
+
+.mytours-table th {
+  background: var(--app-table-header, var(--app-card-soft));
+  color: var(--app-text-muted);
+  font-size: 0.75rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.mytours-table tbody tr:hover {
+  background: var(--app-hover-panel-bg);
+}
+
+.mytours-table td[colspan="7"],
+.mytours-table td[colspan="8"] {
+  color: var(--app-text-muted);
+  font-style: italic;
+  text-align: center;
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 0 10px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: capitalize;
+}
+
+.status.confirmed {
+  background: rgba(22, 163, 74, 0.13);
+  color: #16a34a;
+}
+
+.status.pending {
+  background: rgba(245, 158, 11, 0.16);
+  color: #b45309;
+}
+
+.status.completed {
+  background: rgba(14, 165, 233, 0.14);
+  color: #0284c7;
+}
+
+.status.cancelled {
+  background: rgba(220, 38, 38, 0.13);
+  color: #dc2626;
+}
+
+.view-btn {
+  min-height: 32px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--app-accent);
+  color: #fff;
+  cursor: pointer;
+  font-size: 0.78rem;
+  font-weight: 800;
+  transition: 0.2s ease;
+}
+
+.view-btn:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.05);
+}
+
+@media (max-width: 768px) {
+  .mytours-container {
+    padding: 18px 14px;
+  }
+}

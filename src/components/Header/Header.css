@@ -1,0 +1,320 @@
+/* IMPORT PREMIUM FONTS */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@500;600&display=swap');
+
+/* ================= HEADER ================= */
+.luxury-header {
+  position: fixed;
+  top: 0;
+  z-index: 9999;
+  width: 100%;
+  min-height: 65px;
+  display: flex;
+  align-items: center;
+  background: transparent;
+  transition: all 0.35s ease;
+}
+
+.luxury-header.scrolled {
+  background: rgba(35, 35, 35, 0.92);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.9);
+}
+
+/* ================= CONTAINER ================= */
+.header-container {
+  width: 100%;
+  padding: 10px 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* ================= LEFT ================= */
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* ================= LOGO IMAGE ================= */
+.luxury-logo {
+  position: relative;
+  cursor: pointer;
+}
+
+/* 🔥 Hidden initially */
+.header-logo-img {
+  height: 46px;
+  width: auto;
+  object-fit: contain;
+
+  opacity: 0 !important;
+  transform: translateY(-12px) scale(0.95);
+  transition: all 0.4s ease;
+}
+
+
+/* 🔥 Show on scroll */
+.luxury-header.scrolled .header-logo-img {
+  opacity: 0 !important;
+}
+
+
+/* 🔥 Premium hover */
+.header-logo-img:hover {
+  transform: translateY(0) scale(1.06);
+}
+
+/* ================= NAV ================= */
+.nav-menu {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+}
+
+.nav-menu a {
+  font-family: "Inter", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #eaeaea;
+  text-decoration: none;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  position: relative;
+  transition: 0.25s;
+}
+
+.nav-menu a:hover {
+  color: #fff;
+}
+
+.nav-menu a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 0;
+  height: 2px;
+  background: #e50914;
+  transition: 0.3s;
+}
+
+.nav-menu a:hover::after {
+  width: 100%;
+}
+
+/* CTA */
+.nav-cta {
+  background: linear-gradient(135deg,#e50914,#ff2d2d);
+  padding: 6px 14px;
+  border-radius: 5px;
+  color: #fff !important;
+}
+
+/* ================= SIGN IN ================= */
+.signin-btn {
+  padding: 8px 18px;
+  border-radius: 5px;
+  border: none;
+  background: #e50914;
+  color: white;
+  cursor: pointer;
+  margin-right: 20px;
+}
+
+/* ================= PROFILE ================= */
+.profile-wrapper {
+  margin-right: 20px;
+  cursor: pointer;
+}
+
+.profile-icon {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: #e50914;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font: inherit;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+}
+
+.profile-icon:hover,
+.profile-icon:focus-visible {
+  transform: translateY(-1px);
+  filter: brightness(1.05);
+  box-shadow: 0 10px 24px rgba(229, 9, 20, 0.35);
+  outline: none;
+}
+
+/* ================= SIDEBAR ================= */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 270px;
+  height: 100vh;
+  background: linear-gradient(180deg, #0a0a0a, #111);
+  padding-top: 90px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transform: translateX(-100%);
+  transition: 0.35s;
+  z-index: 10001;
+}
+
+.sidebar.active {
+  transform: translateX(0);
+}
+
+.sidebar a {
+  color: #dcdcdc;
+  padding: 14px 22px;
+  text-decoration: none;
+  font-size: 14px;
+  transition: 0.25s;
+}
+
+.sidebar a:hover {
+  background: rgba(229,9,20,0.1);
+  color: #fff;
+}
+
+/* ================= OVERLAY ================= */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  z-index: 10000;
+}
+
+.sidebar-overlay.active {
+  display: block;
+}
+
+/* ================= HAMBURGER ================= */
+.hamburger {
+  display: none;
+  font-size: 24px;
+  color: white;
+  cursor: pointer;
+}
+
+/* ================= MOBILE ================= */
+@media (max-width: 900px) {
+
+  .header-container {
+    position: relative;
+  }
+
+  .luxury-logo {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .nav-menu {
+    display: none !important;
+  }
+
+  .hamburger {
+    display: block;
+  }
+
+  .desktop-auth {
+    display: none;
+  }
+
+  /* 🔥 MOBILE HEADER HEIGHT */
+  .luxury-header {
+    min-height: 55px;
+  }
+
+  /* 🔥 MOBILE LOGO ALWAYS VISIBLE */
+   /* mobile pe normal hidden */
+  .header-logo-img{
+    height: 34px;
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  /* 🔥 SCROLL KE BAAD SIRF MOBILE PE DIKHEGA */
+  .luxury-header.scrolled .header-logo-img{
+    opacity: 1 !important;
+    transform: translateY(0);
+  }
+
+  /* thoda compact feel */
+  .luxury-header.scrolled .header-logo-img{
+    height: 40px;
+  }
+}
+
+/* ================= MOBILE BOTTOM NAV ================= */
+.mobile-bottom-nav {
+  display: none;
+}
+
+@media (max-width: 900px) {
+
+  .mobile-bottom-nav {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height:55px;
+    background: rgba(35, 35, 35, 0.95);
+    backdrop-filter: blur(12px);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 10002;
+  }
+
+  .mobile-bottom-nav div {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: #eaeaea;
+  }
+
+  .mobile-bottom-nav svg {
+    font-size: 22px;
+  }
+
+  body {
+    padding-bottom: 75px;
+  }
+}
+
+/* 🔥 ACTIVE LINK (NAVBAR + SIDEBAR) */
+.active-link {
+  color: #e50914 !important;
+  position: relative;
+}
+
+/* 🔥 SIDEBAR ACTIVE */
+.sidebar a.active-link {
+  background: rgba(229,9,20,0.15);
+  border-left: 3px solid #e50914;
+  color: #fff;
+}
+/* 🔥 ACTIVE TAB (BOTTOM NAV) */
+.active-tab {
+  color: #e50914 !important;
+  transform: scale(1.15);
+  position: relative;
+}
+
+/* glow dot */

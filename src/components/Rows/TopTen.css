@@ -1,0 +1,207 @@
+/* ============================= */
+/* Container */
+/* ============================= */
+
+.topten-container{
+  width:100%;
+  position:relative;
+  background:#000;
+  color:#fff;
+  overflow:hidden;
+}
+
+/* ============================= */
+/* Title */
+/* ============================= */
+
+.topten-title{
+  font-size:32px;
+  font-weight:700;
+  margin:0 0 10px 50px; /* FIX: no extra top/bottom gap */
+}
+
+/* ============================= */
+/* Horizontal Scroll */
+/* ============================= */
+
+.topten-scroll{
+  display:flex;
+  gap:95px;
+  overflow-x:auto;
+  overflow-y:hidden;
+
+  /* FIX: remove extra top/side imbalance */
+  padding:0 40px 30px 50px;
+    align-items:flex-end;
+
+  scroll-behavior:smooth;
+  cursor:grab;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+  -ms-overflow-style:none;
+}
+
+.topten-scroll:active{
+  cursor:grabbing;
+}
+
+.topten-scroll::-webkit-scrollbar{
+  display:none;
+}
+
+/* ============================= */
+/* Card Wrapper */
+/* ============================= */
+
+.topten-card-wrapper{
+  position:relative;
+  display:flex;
+  align-items:center;
+  height:300px;
+  flex:0 0 auto;
+}
+
+/* ============================= */
+/* Ranking Number */
+/* ============================= */
+
+.topten-index{
+  position:absolute;
+  bottom:20px;
+  left:-80px;
+
+  font-weight:900;
+  font-size:250px;
+  line-height:1;
+
+  z-index:0;
+  pointer-events:none;
+
+  color:rgba(255,255,255,.06);
+  -webkit-text-stroke:2px rgba(255,255,255,.18);
+}
+
+.topten-index.double-digit{
+  font-size:190px;
+  left:-100px;
+}
+
+/* ============================= */
+/* Package Card */
+/* ============================= */
+
+.topten-card-wrapper .package-card{
+  position:relative;
+  z-index:2;
+}
+
+.topten-card-wrapper .package-card:hover{
+  transform:scale(1.03);
+}
+
+/* ============================= */
+/* Scroll Buttons */
+/* ============================= */
+
+.topten-scroll-btn{
+  position:absolute;
+  top:50%;
+  transform:translateY(-50%);
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  background:linear-gradient(90deg, rgba(0,0,0,0.9), rgba(0,0,0,0.55));
+  border:1px solid rgba(255,255,255,0.14);
+  color:#fff;
+
+  font-size:30px;
+  width:44px;
+  height:104px;
+
+  cursor:pointer;
+  z-index:10;
+  border-radius:999px;
+  transition:opacity 0.2s ease, transform 0.2s ease, background 0.2s ease;
+  box-shadow:0 12px 32px rgba(0,0,0,0.36);
+
+  opacity:0.84;
+}
+
+.topten-container:hover .topten-scroll-btn{
+  opacity:1;
+}
+
+.topten-scroll-btn.left{ left:10px; }
+.topten-scroll-btn.right{ right:10px; }
+
+.topten-scroll-btn:hover{
+  background:rgba(229,9,20,0.94);
+  transform:translateY(-50%) scale(1.03);
+}
+
+/* ============================= */
+/* Tablet */
+/* ============================= */
+
+@media (max-width:768px){
+
+  .topten-title{
+    font-size:26px;
+    margin:0 0 20px 30px;
+  }
+
+
+  .topten-card-wrapper{
+    height:250px;
+  }
+
+  .topten-index{
+    font-size:190px;
+    left:-60px;
+  }
+
+  .topten-index.double-digit{
+    font-size:150px;
+    left:-70px;
+  }
+}
+
+/* ============================= */
+/* Mobile */
+/* ============================= */
+
+@media (max-width:480px){
+
+  .topten-title{
+    font-size:22px;
+    margin:0 0 15px 18px;
+  }
+
+ 
+  .topten-card-wrapper{
+    height:260px;
+    align-items:flex-start;
+  }
+
+  .topten-index{
+    font-size:145px;
+    left:-45px;
+    bottom:80px;
+  }
+
+  .topten-index.double-digit{
+    font-size:120px;
+    left:-50px;
+  }
+  .topten-card-wrapper .package-card{
+  position:relative;
+  z-index:2;
+}
+}
+@media (max-width:480px){
+  .topten-scroll-btn{
+    width:34px;
+    height:62px;
+    opacity:0.92;
+  }
+}

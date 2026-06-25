@@ -1,0 +1,208 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+.netflix-modal-overlay {
+  position: fixed;
+  inset: 0;
+  backdrop-filter: blur(12px);
+  background: var(--app-overlay);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000010;
+}
+
+.netflix-modal-box {
+  background: var(--app-card);
+  padding: 50px 45px;
+  width: 360px;
+  border-radius: 8px;
+  color: var(--app-text);
+  position: relative;
+  box-shadow: var(--app-shadow);
+  font-family: Arial, Helvetica, sans-serif;
+  border: 1px solid var(--app-border);
+  z-index: 1;
+}
+
+.netflix-modal-box h1 {
+  font-size: 24px;
+  margin-bottom: 22px;
+  color: var(--app-text);
+}
+
+.netflix-close {
+  position: absolute;
+  top: 12px;
+  right: 15px;
+  font-size: 18px;
+  cursor: pointer;
+  color: var(--app-text);
+  font-weight: 700;
+}
+
+.netflix-close:hover {
+  color: var(--app-accent);
+}
+
+.netflix-input {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.netflix-input input {
+  width: 100%;
+  min-height: 50px;
+  padding: 16px 12px 6px;
+  background: var(--app-input);
+  border: 1px solid var(--app-input-border);
+  border-radius: 5px;
+  color: var(--app-text);
+  font-size: 14px;
+  outline: none;
+}
+
+.netflix-input label {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 13px;
+  color: var(--app-text-muted);
+  pointer-events: none;
+  transition: top 0.2s ease, transform 0.2s ease, font-size 0.2s ease, color 0.2s ease, background 0.2s ease;
+}
+
+.netflix-input input:focus + label,
+.netflix-input input:not(:placeholder-shown) + label {
+  top: 6px;
+  transform: translateY(0);
+  font-size: 10px;
+  color: var(--app-accent);
+  background: transparent;
+}
+
+.netflix-login-btn {
+  width: 100%;
+  padding: 14px;
+  background: var(--app-accent);
+  border: 1px solid var(--app-accent);
+  color: #ffffff;
+  font-size: 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.netflix-login-btn:hover {
+  background: var(--app-accent-hover);
+  border-color: var(--app-accent-hover);
+}
+
+.google-login-btn {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  background: var(--app-card-soft);
+  color: var(--app-text);
+  border: 1px solid var(--app-border);
+  font-size: 14px;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.google-login-btn:hover {
+  background: var(--app-accent-soft);
+}
+
+.google-login-wrapper {
+  margin-top: 10px;
+}
+
+.google-login-slot {
+  display: flex;
+  justify-content: center;
+  min-height: 40px;
+  width: 100%;
+}
+
+.google-login-slot iframe,
+.google-login-slot div[role="button"] {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.google-login-status {
+  margin-top: 8px;
+  color: var(--app-text-muted);
+  font-size: 12px;
+  line-height: 1.35;
+  text-align: center;
+}
+
+.google-login-status.error {
+  color: var(--app-danger);
+}
+
+.google-login-unavailable {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.google-login-unavailable:hover {
+  background: var(--app-card-soft);
+}
+
+.netflix-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
+  font-size: 13px;
+  margin-top: 12px;
+  color: var(--app-text);
+}
+
+.netflix-options label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--app-text);
+}
+
+.netflix-options span {
+  color: var(--app-text);
+}
+
+.netflix-signup {
+  margin-top: 20px;
+  font-size: 14px;
+  color: var(--app-text);
+}
+
+.netflix-signup span {
+  color: var(--app-text);
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.netflix-signup span:hover {
+  color: var(--app-accent);
+}
+
+@media (max-width: 480px) {
+  .netflix-modal-box {
+    width: calc(100vw - 28px);
+    padding: 36px 24px;
+  }
+
+  .netflix-modal-box h1 {
+    font-size: 20px;
+  }
+}

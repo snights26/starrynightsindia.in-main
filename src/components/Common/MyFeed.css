@@ -1,0 +1,360 @@
+/* ROOT */
+.mf-container {
+  background: var(--app-page-gradient, #000);
+  min-height: 100vh;
+  padding: 25px 40px; /* reduced */
+  padding-top: 90px; /* reduced */
+  color: var(--app-text, #ffffff);
+}
+
+/* HEADER */
+.mf-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 25px; /* reduced */
+}
+
+.mf-header-left {
+  display: flex;
+  gap: 14px; /* reduced */
+  align-items: center;
+}
+
+.mf-back-btn {
+  background: var(--app-card-soft, rgba(255,255,255,0.08));
+  border: 1px solid var(--app-border, transparent);
+  padding: 8px 14px; /* reduced */
+  border-radius: 50px;
+  color: var(--app-text, #ffffff);
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.mf-title {
+  font-size: 22px; /* reduced */
+}
+
+.mf-subtitle {
+  font-size: 11px;
+  color: var(--app-text-muted, #aaa);
+}
+
+.mf-upload-btn {
+  background: linear-gradient(135deg, var(--app-accent, #e50914), var(--app-accent-hover, #ff3c3c));
+  border: 1px solid var(--app-accent, #e50914);
+  padding: 8px 16px; /* reduced */
+  border-radius: 50px;
+  font-size: 12px;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+/* 🔥 MASONRY */
+.mf-masonry {
+  column-count: 4;
+  column-gap: 14px; /* reduced */
+}
+
+.mf-masonry-item {
+  break-inside: avoid;
+  margin-bottom: 14px; /* reduced */
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.mf-masonry-item img {
+  width: 100%;
+  border-radius: 12px;
+  transition: 0.4s;
+}
+
+.mf-masonry-item:hover img {
+  transform: scale(1.05);
+}
+
+/* OVERLAY */
+.mf-overlay {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 8px; /* reduced */
+  background: linear-gradient(transparent, rgba(0,0,0,0.9));
+  opacity: 0;
+  transition: 0.3s;
+}
+
+.mf-masonry-item:hover .mf-overlay {
+  opacity: 1;
+}
+
+/* 🔥 PREVIEW */
+.mf-preview {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.97);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mf-preview-content {
+  position: relative;
+  text-align: center;
+}
+
+.mf-preview img {
+  max-width: 80vw;
+  max-height: 70vh;
+  border-radius: 12px;
+}
+
+.mf-close {
+  position: absolute;
+  top: 20px;
+  right: 25px;
+  font-size: 26px;
+  cursor: pointer;
+}
+
+/* SUCCESS */
+.mf-success {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: var(--app-success, #1db954);
+  color: #ffffff;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+/* UPLOAD OVERLAY */
+.mf-upload-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--app-overlay, rgba(0,0,0,0.85));
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+}
+
+/* UPLOAD BOX */
+.mf-upload-box {
+  background: var(--app-surface-gradient, linear-gradient(145deg, #111, #1c1c1c));
+  color: var(--app-text, #ffffff);
+  padding: 22px;
+  border-radius: 16px;
+  width: min(420px, calc(100vw - 32px));
+  border: 1px solid var(--app-border, rgba(255,255,255,0.12));
+  box-shadow: var(--app-shadow, 0 20px 60px rgba(0,0,0,0.8));
+  animation: fadeIn 0.3s ease;
+}
+
+.mf-upload-box h3 {
+  margin-bottom: 12px;
+  font-size: 16px;
+  color: var(--app-text, #ffffff);
+}
+
+.mf-upload-box input {
+  width: 100%;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid var(--app-input-border, rgba(255,255,255,0.16));
+  background: var(--app-input, #222);
+  color: var(--app-text, #ffffff);
+}
+
+.mf-field-label {
+  display: block;
+  margin: 12px 0 6px;
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--app-text, #ffffff);
+}
+
+.mf-field-label span {
+  color: var(--app-accent, #e50914);
+}
+
+.mf-file-picker {
+  display: flex;
+  min-height: 44px;
+  align-items: center;
+  padding: 10px 12px;
+  border: 1px dashed var(--app-input-border, rgba(255,255,255,0.16));
+  border-radius: 10px;
+  background: var(--app-input, #222);
+  color: var(--app-text, #ffffff);
+  cursor: pointer;
+}
+
+.mf-file-picker input {
+  display: none;
+}
+
+.mf-file-picker span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--app-text, #ffffff);
+}
+
+.mf-field-help,
+.mf-consent-row span {
+  margin: 6px 0 0;
+  color: var(--app-text-muted, #aaa);
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.mf-consent-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  margin: 14px 0 4px;
+  cursor: pointer;
+}
+
+.mf-consent-row input {
+  width: auto;
+  margin-top: 2px;
+  accent-color: var(--app-accent, #e50914);
+}
+
+.mf-form-error {
+  margin: 10px 0 0;
+  color: var(--app-danger, #ef4444);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* BUTTONS */
+.mf-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.mf-actions button {
+  flex: 1;
+  padding: 8px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.mf-actions button:first-child {
+  background: linear-gradient(135deg, var(--app-accent, #e50914), var(--app-accent-hover, #ff3c3c));
+  color: #ffffff;
+}
+
+.mf-actions button:last-child {
+  background: var(--app-card-soft, #333);
+  color: var(--app-text, #ffffff);
+  border: 1px solid var(--app-border, transparent);
+}
+
+/* DELETE BUTTON */
+.mf-delete-btn {
+  margin-top: 6px;
+  background: rgba(229, 9, 20, 0.9);
+  border: none;
+  padding: 5px 10px;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  font-size: 11px;
+}
+
+
+/* ================= MOBILE ================= */
+
+/* TABLET */
+@media (max-width: 768px) {
+
+  .mf-container {
+    padding: 20px 16px;
+    padding-top: 80px;
+  }
+
+  .mf-header {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .mf-title {
+    font-size: 18px;
+  }
+
+  .mf-masonry {
+    column-count: 2; /* fix */
+    column-gap: 10px;
+  }
+}
+
+
+/* MOBILE */
+@media (max-width: 480px) {
+
+  .mf-container {
+    padding: 16px 12px;
+    padding-top: 70px;
+  }
+
+  .mf-title {
+    font-size: 16px;
+  }
+
+  .mf-subtitle {
+    font-size: 10px;
+  }
+
+  .mf-upload-btn {
+    width: 100%;
+  }
+
+  /* 🔥 GRID FIX */
+  .mf-masonry {
+    column-count: 2;
+    column-gap: 8px;
+  }
+
+  .mf-masonry-item {
+    margin-bottom: 8px;
+  }
+
+  /* PREVIEW */
+  .mf-preview img {
+    max-width: 95vw;
+    max-height: 65vh;
+  }
+
+  .mf-close {
+    top: 15px;
+    right: 15px;
+    font-size: 22px;
+  }
+
+  /* UPLOAD */
+  .mf-upload-box {
+    width: 90%;
+    padding: 18px;
+  }
+
+  .mf-actions button {
+    padding: 7px;
+    font-size: 11px;
+  }
+
+  .mf-success {
+    top: 10px;
+    right: 10px;
+    font-size: 11px;
+  }
+}

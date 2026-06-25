@@ -1,0 +1,535 @@
+.global-explorer-page {
+  min-height: 100vh;
+  padding: 92px 28px 48px;
+  background: var(--app-page-gradient);
+  color: var(--app-text);
+}
+
+.explorer-hero {
+  width: min(1380px, 100%);
+  margin: 0 auto 22px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.explorer-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 10px;
+  color: var(--app-accent);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.explorer-hero h1 {
+  margin: 0;
+  color: var(--app-text);
+  font-size: clamp(2.1rem, 4vw, 4rem);
+}
+
+.explorer-hero p {
+  max-width: 760px;
+  margin: 12px 0 0;
+  color: var(--app-text-muted);
+  font-size: 1rem;
+}
+
+.explorer-back-btn {
+  flex: 0 0 auto;
+  min-height: 38px;
+  padding: 0 16px;
+  border-radius: 999px;
+  border: 1px solid var(--app-border);
+  background: var(--app-card);
+  color: var(--app-text);
+  box-shadow: var(--app-shadow);
+}
+
+.explorer-workspace {
+  width: min(1380px, 100%);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(340px, 0.85fr);
+  gap: 22px;
+  align-items: start;
+}
+
+.explorer-map-panel,
+.explorer-results-panel {
+  border: 1px solid var(--app-border);
+  border-radius: 18px;
+  background: var(--app-surface-gradient);
+  color: var(--app-text);
+  box-shadow: var(--app-shadow);
+}
+
+.explorer-map-panel {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.explorer-slider-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 16px;
+  border-bottom: 1px solid var(--app-border);
+}
+
+.explorer-mode-tabs,
+.explorer-arrows {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.explorer-mode-tabs button,
+.explorer-arrows button,
+.explorer-region-strip button,
+.explorer-package-card button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid var(--app-border);
+  color: var(--app-text);
+  background: var(--app-card);
+}
+
+.explorer-mode-tabs button {
+  min-height: 38px;
+  padding: 0 16px;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+.explorer-mode-tabs button.active,
+.explorer-region-strip button.active {
+  border-color: var(--app-accent);
+  background: var(--app-accent);
+  color: #fff;
+}
+
+.explorer-arrows button {
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border-radius: 50%;
+  font-size: 1.25rem;
+}
+
+.explorer-slider-viewport {
+  overflow: hidden;
+}
+
+.explorer-slide {
+  width: 100%;
+  min-width: 0;
+  padding: 18px;
+  display: grid;
+  grid-template-columns: minmax(190px, 0.35fr) minmax(0, 0.65fr);
+  gap: 18px;
+  align-items: center;
+}
+
+.explorer-map-copy {
+  border: 1px solid var(--app-border);
+  border-radius: 16px;
+  background: var(--app-card);
+  padding: 18px;
+}
+
+.explorer-map-copy span {
+  display: inline-block;
+  margin-bottom: 10px;
+  color: var(--app-accent);
+  font-size: 0.8rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.explorer-map-copy h2 {
+  margin: 0;
+  color: var(--app-text);
+  font-size: clamp(1.45rem, 2.2vw, 2.35rem);
+}
+
+.explorer-map-copy p {
+  margin: 10px 0 0;
+  color: var(--app-text-muted);
+}
+
+.explorer-map {
+  display: block;
+  width: 100%;
+  min-height: 500px;
+  border-radius: 18px;
+  max-height: 72vh;
+}
+
+.map-backdrop {
+  fill: var(--map-bg, rgba(148, 163, 184, 0.08));
+  stroke: var(--app-border);
+  stroke-width: 0.8;
+}
+
+.map-reference-image {
+  opacity: 0.98;
+  pointer-events: none;
+}
+
+.map-regions-layer {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.map-landmass {
+  fill: rgba(15, 23, 42, 0.12);
+  stroke: rgba(15, 23, 42, 0.82);
+  stroke-width: 1.7;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.map-landmass--international {
+  fill: rgba(255, 255, 255, 0.18);
+  stroke: rgba(4, 83, 102, 0.88);
+}
+
+.geo-region {
+  fill: var(--region-fill, rgba(148, 163, 184, 0.2));
+  stroke: rgba(17, 24, 39, 0.78);
+  stroke-width: 1.15;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+  shape-rendering: geometricPrecision;
+  cursor: pointer;
+  transition: fill 0.18s ease, stroke 0.18s ease, filter 0.18s ease;
+}
+
+.explorer-map.has-reference-image .map-backdrop {
+  fill: #ffffff;
+}
+
+.explorer-map.has-reference-image .map-landmass {
+  display: none;
+}
+
+.explorer-map.has-reference-image .geo-region {
+  fill: transparent;
+  stroke: transparent;
+  stroke-width: 0.8;
+  mix-blend-mode: normal;
+  pointer-events: all;
+}
+
+.explorer-map.has-reference-image .geo-region:hover,
+.explorer-map.has-reference-image .geo-region:focus-visible {
+  fill: rgba(229, 9, 20, 0.1);
+  stroke: var(--app-accent);
+  stroke-width: 0.7;
+}
+
+.explorer-map.has-reference-image .geo-region.selected {
+  fill: rgba(229, 9, 20, 0.12);
+  stroke: var(--app-accent);
+  stroke-width: 0.75;
+  filter: drop-shadow(0 4px 7px rgba(229, 9, 20, 0.2));
+}
+
+.geo-region:hover,
+.geo-region:focus-visible {
+  fill: var(--app-hover-panel-bg);
+  stroke: var(--app-accent);
+  outline: none;
+}
+
+.geo-region.selected {
+  fill: var(--app-accent);
+  stroke: #fff;
+  filter: drop-shadow(0 8px 14px rgba(225, 29, 72, 0.32));
+}
+
+.geo-region-hit {
+  fill: transparent;
+  stroke: transparent;
+  stroke-width: 0.7;
+  cursor: pointer;
+  vector-effect: non-scaling-stroke;
+  transition: fill 0.18s ease, stroke 0.18s ease, filter 0.18s ease;
+}
+
+.geo-region-hit:hover,
+.geo-region-hit:focus-visible,
+.geo-region-hit.selected {
+  fill: rgba(229, 9, 20, 0.1);
+  stroke: var(--app-accent);
+  outline: none;
+  filter: drop-shadow(0 4px 8px rgba(225, 29, 72, 0.24));
+}
+
+.explorer-map--international .geo-region {
+  stroke: rgba(4, 83, 102, 0.88);
+  stroke-width: 1.05;
+}
+
+.explorer-region-strip {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 0 16px 16px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.explorer-region-strip::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+.explorer-region-strip button {
+  flex: 0 0 auto;
+  min-height: 34px;
+  padding: 0 12px;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.explorer-results-panel {
+  position: sticky;
+  top: 84px;
+  padding: 18px;
+}
+
+.explorer-results-header {
+  margin-bottom: 16px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--app-border);
+}
+
+.explorer-results-header span {
+  color: var(--app-accent);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.78rem;
+}
+
+.explorer-results-header h2 {
+  margin: 6px 0;
+  color: var(--app-text);
+  font-size: clamp(1.45rem, 2.2vw, 2rem);
+}
+
+.explorer-results-header p {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  color: var(--app-text-muted);
+  font-size: 0.92rem;
+}
+
+.explorer-inline-note {
+  margin-bottom: 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--app-border);
+  border-radius: 10px;
+  background: var(--app-card);
+  color: var(--app-text-muted);
+  font-size: 0.9rem;
+}
+
+.explorer-package-grid {
+  display: grid;
+  gap: 14px;
+}
+
+.explorer-package-card {
+  display: grid;
+  grid-template-columns: 104px minmax(0, 1fr);
+  gap: 12px;
+  padding: 10px;
+  border: 1px solid var(--app-border);
+  border-radius: 14px;
+  background: var(--app-card);
+  color: var(--app-text);
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.explorer-package-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--app-accent);
+}
+
+.explorer-package-card img {
+  width: 104px;
+  height: 138px;
+  object-fit: cover;
+  border-radius: 10px;
+  background: var(--app-card-soft);
+}
+
+.explorer-package-body {
+  min-width: 0;
+}
+
+.explorer-package-body h3 {
+  margin: 0 0 10px;
+  color: var(--app-text);
+  font-size: 1rem;
+  line-height: 1.25;
+}
+
+.explorer-package-body dl {
+  display: grid;
+  gap: 7px;
+  margin: 0 0 12px;
+}
+
+.explorer-package-body dl div {
+  min-width: 0;
+}
+
+.explorer-package-body dt {
+  color: var(--app-text-muted);
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.explorer-package-body dd {
+  margin: 1px 0 0;
+  color: var(--app-text);
+  font-size: 0.88rem;
+  font-weight: 800;
+  overflow-wrap: anywhere;
+}
+
+.explorer-package-card button {
+  min-height: 32px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: var(--app-accent);
+  color: #fff;
+  font-size: 0.82rem;
+  font-weight: 900;
+}
+
+.explorer-skeleton-grid {
+  display: grid;
+  gap: 14px;
+}
+
+.explorer-skeleton-card {
+  min-height: 160px;
+  border-radius: 14px;
+  background: linear-gradient(90deg, var(--app-card), var(--app-card-soft), var(--app-card));
+  background-size: 240% 100%;
+  animation: explorerSkeleton 1.2s ease-in-out infinite;
+}
+
+@keyframes explorerSkeleton {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: -100% 0;
+  }
+}
+
+@media (max-width: 1100px) {
+  .explorer-workspace {
+    grid-template-columns: 1fr;
+  }
+
+  .explorer-results-panel {
+    position: static;
+  }
+}
+
+@media (max-width: 768px) {
+  .global-explorer-page {
+    padding: 72px 12px 84px;
+  }
+
+  .explorer-hero {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .explorer-back-btn {
+    width: max-content;
+  }
+
+  .explorer-slider-header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .explorer-mode-tabs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .explorer-mode-tabs button {
+    min-width: 0;
+    padding: 0 10px;
+  }
+
+  .explorer-arrows {
+    justify-content: flex-end;
+  }
+
+  .explorer-slide {
+    padding: 12px;
+    grid-template-columns: 1fr;
+  }
+
+  .explorer-map {
+    min-height: 320px;
+    max-height: 58vh;
+  }
+
+  .explorer-region-strip {
+    padding: 0 12px 12px;
+  }
+
+  .explorer-results-panel {
+    padding: 14px;
+  }
+
+  .explorer-package-card {
+    grid-template-columns: 92px minmax(0, 1fr);
+  }
+
+  .explorer-package-card img {
+    width: 92px;
+    height: 126px;
+  }
+}
+
+@media (max-width: 430px) {
+  .explorer-package-card {
+    grid-template-columns: 1fr;
+  }
+
+  .explorer-package-card img {
+    width: 100%;
+    height: 170px;
+  }
+}

@@ -1,0 +1,105 @@
+.all-packages-page{
+  padding:86px 24px 32px;
+  background:#000;
+  min-height:100vh;
+  color:white;
+}
+
+/* Topbar compact */
+.all-packages-topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  position:sticky;
+  top:70px;
+  padding:12px 16px 14px;
+  z-index:20;
+  backdrop-filter: blur(14px);
+}
+
+/* Title chota */
+.page-title{
+  font-size:26px; /* 36 se kam */
+  font-weight:700;
+  color:red;
+  margin:0;
+  min-width:0;
+}
+
+/* Grid compact */
+.packages-grid{
+  margin-top:22px;
+  display:grid;
+
+  /* 280 -> 220 */
+  grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+
+  gap:14px; /* 20 se kam */
+  justify-items:center;
+}
+
+/* Back button small */
+.back-btn{
+  padding:4px 10px;
+  font-size:12px;
+  border-radius:5px;
+}
+/* Mobile */
+@media(max-width:768px){
+  .all-packages-page{
+    padding:72px 12px 82px;
+  }
+
+  .all-packages-topbar{
+    top:55px;
+    padding:10px 0 12px;
+    flex-wrap:nowrap;
+  }
+
+  .page-title{
+    font-size:16px;
+    max-width:65%;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+
+  .packages-grid{
+    margin-top:16px;
+
+    /* jitne fit ho sake utne */
+    grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+
+    gap:10px;
+  }
+
+  .back-btn{
+    padding:2px 6px;
+    font-size:9px;
+  }
+}
+
+
+/* Small phones */
+@media(max-width:480px){
+
+  .page-title{
+    font-size:14px;
+    max-width:60%;
+  }
+
+   .packages-grid{
+    margin-top:14px;
+
+    /* small phones pe bhi dynamic */
+    grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
+
+    gap:8px;
+  }
+
+  .back-btn{
+    padding:1px 5px;
+    font-size:8px;
+  }
+}

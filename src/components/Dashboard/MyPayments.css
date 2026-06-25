@@ -1,0 +1,211 @@
+/* ================= NETFLIX PREMIUM CSS ================= */
+
+.payments-page {
+  min-height: 100vh;
+  background: radial-gradient(circle at top, #1a1a1a, #000);
+  padding: 45px 60px; /* reduced */
+  color: white;
+  font-family: "Poppins", sans-serif;
+}
+
+/* TOPBAR */
+.payments-topbar {
+  margin-top: 15px; /* reduced */
+}
+
+.back-btn {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.2);
+  padding: 8px 14px; /* reduced */
+  border-radius: 30px;
+  color: #ddd;
+  cursor: pointer;
+  transition: 0.3s;
+  font-size: 13px; /* added small */
+}
+
+/* HEADER */
+.payments-header {
+  margin-top: 30px; /* reduced */
+  margin-bottom: 35px; /* reduced */
+}
+
+.payments-header h1 {
+  font-size: 30px; /* reduced from 42 */
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.payments-header p {
+  color: #aaa;
+  margin-top: 8px;
+  font-size: 13px;
+}
+
+/* CARD */
+.payments-card {
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 20px;
+  padding: 22px; /* reduced */
+  backdrop-filter: blur(25px);
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+}
+
+/* TABLE */
+.payments-table {
+  width: 100%;
+  border-collapse: collapse;
+  
+}
+
+.payments-table th {
+  text-align: left;
+  padding: 12px; /* reduced */
+  color: #888;
+  font-weight: 500;
+  font-size: 12px; /* reduced */
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.payments-table td {
+  padding: 14px 12px; /* reduced */
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  font-size: 13px; /* reduced */
+}
+
+.payments-table tbody tr {
+  transition: 0.3s;
+}
+
+.payments-table tbody tr:hover {
+  background: rgba(255,255,255,0.06);
+  transform: scale(1.01);
+}
+
+.id {
+  font-weight: 600;
+  color: #fff;
+}
+
+/* STATUS */
+.status {
+  padding: 5px 12px; /* reduced */
+  border-radius: 50px;
+  font-size: 11px; /* reduced */
+  font-weight: 500;
+}
+
+.status.pending {
+  background: rgba(255, 77, 77, 0.15);
+  color: #ff4d4d;
+  border: 1px solid rgba(255, 77, 77, 0.4);
+}
+
+.status.paid {
+  background: rgba(0, 255, 170, 0.12);
+  color: #00ffaa;
+  border: 1px solid rgba(0,255,170,0.4);
+}
+
+/* BUTTON */
+.invoice-btn {
+  padding: 6px 14px; /* reduced */
+  border-radius: 30px;
+  border: none;
+  font-size: 12px; /* reduced */
+  font-weight: 500;
+  background: linear-gradient(45deg, #e50914, #ff2e63);
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.invoice-btn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 0 20px rgba(229, 9, 20, 0.7);
+}
+@media (max-width: 480px) {
+
+  .payments-page {
+    padding: 20px 16px; /* reduced */
+  }
+
+  /* TOPBAR */
+  .payments-topbar {
+    margin-top: 34px;
+  }
+
+  .back-btn {
+    padding: 7px 12px;
+    font-size: 12px;
+  }
+
+  /* HEADER */
+  .payments-header {
+    margin-top: 20px;
+    margin-bottom: 25px;
+  }
+
+  .payments-header h1 {
+    font-size: 22px; /* reduced */
+  }
+
+  .payments-header p {
+    font-size: 12px;
+  }
+
+  /* CARD */
+  .payments-card {
+    padding: 16px;
+    border-radius: 16px;
+  }
+
+  /* TABLE */
+  .payments-table th {
+    padding: 8px;
+    font-size: 10px;
+  }
+
+  .payments-table td {
+    padding: 10px 8px;
+    font-size: 12px;
+  }
+
+  /* STATUS */
+  .status {
+    padding: 4px 10px;
+    font-size: 10px;
+  }
+
+  /* BUTTON */
+  .invoice-btn {
+    padding: 5px 10px;
+    font-size: 11px;
+  }
+
+}
+/* SCROLL WRAPPER */
+.payments-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+/* SCROLLBAR */
+.payments-table-wrapper::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
+/* MOBILE FIX */
+@media (max-width: 768px) {
+  .payments-table {
+    min-width: 600px; /* 🔥 key fix */
+  }
+}

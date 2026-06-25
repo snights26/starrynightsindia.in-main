@@ -1,0 +1,149 @@
+/* ========================================= */
+/* DYNAMIC ROW BASE */
+/* ========================================= */
+
+.dr-row{
+  width:100%;
+  padding:50px 14px 0 14px;
+  position:relative;
+  color:#fff;
+  background:#000;
+
+  margin:0;          /* white strip gap fix */
+  margin-top:0;
+  margin-bottom:0;
+
+  overflow:hidden;
+}
+
+/* HEADER */
+
+.dr-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:14px;
+}
+
+.dr-title{
+  font-size:32px;
+  font-weight:700;
+  margin:0;
+}
+
+.dr-view-all{
+  background:none;
+  border:none;
+  color:#ff0000;
+  font-size:16px;
+  cursor:pointer;
+  font-weight:600;
+}
+
+/* SCROLL */
+
+.dr-scroll{
+  display:flex;
+  gap:18px;
+  overflow-x:auto;
+  padding-bottom:20px;
+  scroll-behavior:smooth;
+  scrollbar-width:none;
+  -ms-overflow-style:none;
+}
+
+.dr-scroll::-webkit-scrollbar{
+  display:none;
+}
+
+.dr-btn{
+  position:absolute;
+  top:58%;
+  z-index:10;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:42px;
+  height:96px;
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:999px;
+  background:linear-gradient(90deg, rgba(0,0,0,.9), rgba(0,0,0,.55));
+  color:#fff;
+  cursor:pointer;
+  font-size:30px;
+  opacity:.84;
+  transform:translateY(-50%);
+  transition:opacity .2s ease, transform .2s ease, background .2s ease;
+  box-shadow:0 12px 32px rgba(0,0,0,.36);
+}
+
+.dr-btn.left{
+  left:10px;
+}
+
+.dr-btn.right{
+  right:10px;
+}
+
+.dr-btn:hover{
+  background:rgba(229,9,20,.94);
+  opacity:1;
+  transform:translateY(-50%) scale(1.03);
+}
+
+/* ❌ Black edge layers removed */
+.dr-row::before,
+.dr-row::after{
+  display:none;
+}
+
+/* Tablet */
+
+@media (max-width:768px){
+
+  .dr-row{
+    padding:35px 10px 0 10px;
+  }
+
+  .dr-title{
+    font-size:26px;
+  }
+
+  .dr-view-all{
+    font-size:14px;
+  }
+
+  .dr-scroll{
+    gap:14px;
+  }
+
+  .dr-btn{
+    width:36px;
+    height:70px;
+    font-size:24px;
+  }
+}
+
+/* Mobile */
+
+@media (max-width:480px){
+
+  .dr-row{
+    padding:28px 8px 0 8px;
+  }
+
+  .dr-title{
+    font-size:22px;
+  }
+
+  .dr-scroll{
+    gap:12px;
+    padding-bottom:14px;
+  }
+
+  .dr-btn{
+    width:34px;
+    height:62px;
+    opacity:.92;
+  }
+}

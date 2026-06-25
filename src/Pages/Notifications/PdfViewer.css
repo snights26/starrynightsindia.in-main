@@ -1,0 +1,73 @@
+/* OVERLAY */
+.pdf-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.95);
+  backdrop-filter: blur(6px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+/* CONTAINER */
+.pdf-container {
+  width: 92%;
+  height: 94%;
+  background: #0f0f0f;
+  border-radius: 14px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+}
+
+/* HEADER */
+.pdf-header {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 12px 16px;
+  background: rgba(20, 20, 20, 0.9);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+/* CLOSE BUTTON */
+.pdf-header button {
+  background: rgba(255,255,255,0.08);
+  border: none;
+  color: #fff;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.25s ease;
+}
+
+.pdf-header button:hover {
+  background: rgba(255,255,255,0.18);
+  transform: scale(1.05);
+}
+
+/* IFRAME (IMPORTANT) */
+.pdf-container iframe {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: #1a1a1a;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+/* SCROLLBAR (premium feel) */
+.pdf-container iframe::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
+.pdf-container {
+  max-width: 1200px;
+}

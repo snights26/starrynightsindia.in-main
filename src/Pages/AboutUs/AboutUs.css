@@ -1,0 +1,299 @@
+.about-page {
+  background: var(--app-bg, #050505);
+  color: var(--app-text, #f8fafc);
+  width: 100%;
+  font-family: "Poppins", sans-serif;
+}
+
+.team-banner {
+  width: 100%;
+  min-height: 320px;
+  overflow: hidden;
+  position: relative;
+  background: var(--app-card-soft, #d3d3d3);
+}
+
+.team-banner img {
+  width: 100%;
+  min-height: 320px;
+  max-height: 520px;
+  object-fit: cover;
+  object-position: center bottom;
+  filter: brightness(0.92);
+  display: block;
+}
+
+.team-banner::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 34%;
+  background: linear-gradient(to bottom, transparent, var(--app-bg, #050505));
+}
+
+.about-hero {
+  width: 100%;
+  padding: 34px 8% 56px;
+  text-align: center;
+  background: var(--app-page-gradient, linear-gradient(180deg, #000000, #050505));
+}
+
+.about-hero h1 {
+  font-size: clamp(30px, 4vw, 52px);
+  line-height: 1.15;
+  font-weight: 900;
+  color: var(--app-accent, #e50914);
+  margin: 0 auto 18px;
+  max-width: 1240px;
+}
+
+.about-hero p,
+.about-hero q {
+  display: block;
+  font-size: 18px;
+  color: var(--app-text-muted, #d4d4d8);
+  max-width: 1180px;
+  margin: 0 auto;
+  line-height: 1.75;
+  quotes: none;
+}
+
+.about-hero q::before,
+.about-hero q::after {
+  content: "";
+}
+
+.about-section {
+  width: 100%;
+  padding: 50px 8%;
+  background: var(--app-bg, #050505);
+  color: var(--app-text, #f8fafc);
+}
+
+.about-highlight {
+  background: var(--app-surface-gradient, linear-gradient(180deg, #000000, #060606));
+  border-top: 1px solid var(--app-border, rgba(255, 255, 255, 0.08));
+  border-bottom: 1px solid var(--app-border, rgba(255, 255, 255, 0.08));
+}
+
+.about-section h2 {
+  font-size: clamp(26px, 3vw, 42px);
+  line-height: 1.16;
+  font-weight: 900;
+  color: var(--app-accent, #e50914);
+  margin-bottom: 18px;
+}
+
+.about-section h3 {
+  color: var(--app-text, #f8fafc);
+  font-size: 20px;
+  margin: 24px 0 10px;
+}
+
+.about-section p,
+.about-section q {
+  font-size: 17px;
+  line-height: 1.75;
+  color: var(--app-text-muted, #d4d4d8);
+  max-width: 1260px;
+  margin-bottom: 14px;
+}
+
+.story-section p {
+  font-weight: 500;
+}
+
+.story-section q {
+  display: block;
+  font-size: 17px;
+  line-height: 1.8;
+  font-style: normal;
+  quotes: none;
+}
+
+.story-section q::before,
+.story-section q::after {
+  content: "";
+}
+
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  position: relative;
+  padding-left: 20px;
+}
+
+.timeline::before {
+  content: "";
+  position: absolute;
+  left: 6px;
+  top: 0;
+  width: 2px;
+  height: 100%;
+  background: var(--app-accent, #e50914);
+}
+
+.timeline-item {
+  padding: 18px 20px;
+  background: var(--app-card, #181818);
+  color: var(--app-text, #f8fafc);
+  border: 1px solid var(--app-border, rgba(255, 255, 255, 0.12));
+  border-left: 3px solid var(--app-accent, #e50914);
+  border-radius: 10px;
+  box-shadow: var(--app-shadow, 0 18px 48px rgba(0, 0, 0, 0.4));
+  transition: transform 0.25s ease, background 0.25s ease, border-color 0.25s ease;
+}
+
+.timeline-item:hover {
+  background: var(--app-accent-soft, rgba(229, 9, 20, 0.14));
+  transform: translateX(4px);
+}
+
+.timeline-year {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--app-text, #f8fafc);
+  display: block;
+  margin-bottom: 8px;
+}
+
+.timeline-item p {
+  color: var(--app-text-muted, #d4d4d8);
+  margin-bottom: 0;
+}
+
+.vm-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.vm-card {
+  background: var(--app-card, #181818);
+  color: var(--app-text, #f8fafc);
+  padding: 22px;
+  border-radius: 12px;
+  border: 1px solid var(--app-border, rgba(255, 255, 255, 0.12));
+  box-shadow: var(--app-shadow, 0 18px 48px rgba(0, 0, 0, 0.4));
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.vm-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--app-accent, #e50914);
+  box-shadow: 0 18px 40px rgba(229, 9, 20, 0.2);
+}
+
+.vm-card h3 {
+  font-size: 20px;
+  color: var(--app-accent, #e50914);
+  margin-bottom: 10px;
+}
+
+.vm-card p {
+  font-size: 15px;
+  color: var(--app-text-muted, #d4d4d8);
+}
+
+.about-cta {
+  padding: 58px 8%;
+  text-align: center;
+  background:
+    radial-gradient(circle at center, var(--app-accent-soft, rgba(229, 9, 20, 0.14)), transparent 34rem),
+    var(--app-bg, #050505);
+  border-top: 1px solid var(--app-border, rgba(255, 255, 255, 0.08));
+}
+
+.about-cta h2 {
+  font-size: clamp(28px, 3.4vw, 46px);
+  line-height: 1.15;
+  color: var(--app-accent, #e50914);
+  font-weight: 900;
+}
+
+.about-cta p {
+  font-size: 17px;
+  color: var(--app-text-muted, #d4d4d8);
+  margin: 12px auto 24px;
+  max-width: 760px;
+  line-height: 1.65;
+}
+
+.about-cta button {
+  background: var(--app-accent, #e50914);
+  color: #ffffff;
+  border: 1px solid var(--app-accent, #e50914);
+  padding: 13px 30px;
+  border-radius: 40px;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform 0.25s ease, background 0.25s ease, color 0.25s ease;
+}
+
+.about-cta button:hover {
+  background: var(--app-accent-hover, #f6121d);
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+html[data-theme="light"] .about-page {
+  background: #f8fafc;
+}
+
+html[data-theme="light"] .team-banner::after {
+  background: linear-gradient(to bottom, transparent, #f8fafc);
+}
+
+html[data-theme="light"] .about-hero,
+html[data-theme="light"] .about-section {
+  background: #f8fafc;
+}
+
+html[data-theme="light"] .about-highlight,
+html[data-theme="light"] .about-cta {
+  background:
+    radial-gradient(circle at top left, rgba(229, 9, 20, 0.07), transparent 30rem),
+    #ffffff;
+}
+
+html[data-theme="light"] .timeline-item,
+html[data-theme="light"] .vm-card {
+  background: #ffffff;
+}
+
+html[data-theme="dark"] .about-page {
+  background: #050505;
+}
+
+@media (max-width: 768px) {
+  .team-banner,
+  .team-banner img {
+    min-height: 240px;
+  }
+
+  .about-hero {
+    padding: 28px 5% 42px;
+  }
+
+  .about-section {
+    padding: 40px 5%;
+  }
+
+  .about-section p,
+  .about-section q,
+  .about-hero q {
+    font-size: 14px;
+  }
+
+  .about-cta p {
+    font-size: 14px;
+  }
+
+  .vm-card {
+    padding: 16px;
+  }
+}

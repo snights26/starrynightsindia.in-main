@@ -1,0 +1,71 @@
+
+/* Root container */
+#root {
+  width: 100%;
+  margin: 0 auto;
+  padding: 0;
+  text-align: left;
+}
+
+/* Logo */
+.logo {
+  height: clamp(3rem, 8vw, 6rem); /* responsive height */
+  padding: 1rem;
+  will-change: filter;
+  transition: filter 0.3s ease;
+}
+
+.logo:hover {
+  filter: drop-shadow(0 0 1.5rem #646cffaa);
+}
+
+.logo.react:hover {
+  filter: drop-shadow(0 0 1.5rem #61dafbaa);
+}
+
+/* Animation */
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Respect user motion preference */
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin 20s linear infinite;
+  }
+}
+
+/* Card */
+.card {
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  background: var(--card-bg);
+}
+
+/* Docs text */
+.read-the-docs {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+/* 📱 Responsive tweaks */
+@media (max-width: 768px) {
+  .card {
+    padding: 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .card {
+    padding: 1rem;
+  }
+
+  .logo {
+    padding: 0.5rem;
+  }
+}
