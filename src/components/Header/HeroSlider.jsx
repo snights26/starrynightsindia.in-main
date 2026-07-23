@@ -18,6 +18,10 @@ export default function HeroSlider() {
 
   const handlePointerDown = (event) => {
     if (event.pointerType === "mouse" && event.button !== 0) return;
+
+    // Do not capture pointers that belong to the slide's controls. Native
+    // button/link clicks must remain available for indicators and CTAs.
+    if (event.target.closest("button, a")) return;
     pointerStart.current = {
       id: event.pointerId,
       x: event.clientX,
