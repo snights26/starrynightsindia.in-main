@@ -7,29 +7,45 @@ export default function HeroSlider() {
   const navigate = useNavigate();
   const [slides, setSlides] = useState([]);
   const [index, setIndex] = useState(0);
-  const [isSwiping, setIsSwiping] = useState(false);
+  const [isInteracting, setIsInteracting] = useState(false);
 
-  const touchStartX = useRef(null);
-  const touchEndX = useRef(null);
+  const pointerStart = useRef(null);
 
-  const handleTouchStart = (e) => {
-    setIsSwiping(true);
-    touchStartX.current = e.touches[0].clientX;
+  const changeSlide = (nextIndex) => {
+    if (!slides.length) return;
+    setIndex((nextIndex + slides.length) % slides.length);
   };
 
-  const handleTouchMove = (e) => {
-    touchEndX.current = e.touches[0].clientX;
-    setIsSwiping(false);
+  const handlePointerDown = (event) => {
+    if (event.pointerType === "mouse" && event.button !== 0) return;
+    pointerStart.current = {
+      id: event.pointerId,
+      x: event.clientX,
+      y: event.clientY,
+    };
+    setIsInteracting(true);
+    event.currentTarget.setPointerCapture?.(event.pointerId);
   };
 
-  const handleTouchEnd = () => {
-    if (!touchStartX.current || !touchEndX.current || !slides.length) return;
-    const diff = touchStartX.current - touchEndX.current;
-    if (Math.abs(diff) > 50) {
-      setIndex((prev) => diff > 0 ? (prev + 1) % slides.length : (prev - 1 + slides.length) % slides.length);
+  const finishPointerInteraction = (event) => {
+    const start = pointerStart.current;
+    pointerStart.current = null;
+    setIsInteracting(false);
+
+    if (!start || start.id !== event.pointerId || !slides.length) return;
+
+    const horizontalDistance = event.clientX - start.x;
+    const verticalDistance = event.clientY - start.y;
+    const minimumSwipeDistance = Math.max(50, event.currentTarget.clientWidth * 0.08);
+
+    if (Math.abs(horizontalDistance) >= minimumSwipeDistance && Math.abs(horizontalDistance) > Math.abs(verticalDistance)) {
+      changeSlide(index + (horizontalDistance < 0 ? 1 : -1));
     }
-    touchStartX.current = null;
-    touchEndX.current = null;
+  };
+
+  const cancelPointerInteraction = () => {
+    pointerStart.current = null;
+    setIsInteracting(false);
   };
 
   useEffect(() => {
@@ -58,12 +74,12 @@ export default function HeroSlider() {
   }, [index, slides.length]);
 
   useEffect(() => {
-    if (!slides.length || isSwiping) return;
+    if (!slides.length || isInteracting) return;
     const timer = setInterval(() => {
       setIndex((prev) => (prev + 1) % slides.length);
     }, 4000);
     return () => clearInterval(timer);
-  }, [slides, isSwiping]);
+  }, [slides.length, isInteracting]);
 
   const openSlideLink = (link) => {
     if (!link) {
@@ -81,10 +97,10 @@ export default function HeroSlider() {
 
   return (
     <div
-      className="hero-slider"
-      onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
-      onTouchEnd={handleTouchEnd}
+      className={`hero-slider ${isInteracting ? "is-dragging" : ""}`}
+      onPointerDown={handlePointerDown}
+      onPointerUp={finishPointerInteraction}
+      onPointerCancel={cancelPointerInteraction}
     >
       <img src="/Starry Nights Holidays.png" alt="Starry Nights Holidays" className="hero-corner-logo" />
 
@@ -116,7 +132,14 @@ export default function HeroSlider() {
 
       <div className="slider-indicators">
         {slides.map((_, i) => (
-          <span key={i} className={i === index ? "active" : ""} onClick={() => setIndex(i)}></span>
+          <button
+            key={i}
+            type="button"
+            className={i === index ? "active" : ""}
+            onClick={() => changeSlide(i)}
+            aria-label={`Show slide ${i + 1}`}
+            aria-current={i === index ? "true" : undefined}
+          />
         ))}
       </div>
     </div>

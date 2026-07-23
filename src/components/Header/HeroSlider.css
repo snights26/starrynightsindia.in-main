@@ -4,6 +4,12 @@
   position: relative;
   overflow: hidden;
   background: black;
+  touch-action: pan-y;
+  user-select: none;
+}
+
+.hero-slider.is-dragging {
+  cursor: grabbing;
 }
 
 .slide {
@@ -104,16 +110,26 @@
   z-index: 10;
 }
 
-.slider-indicators span {
- width: 28px;
+.slider-indicators button {
+  width: 28px;
   height: 3px;
+  padding: 0;
+  border: 0;
   background: rgba(255,255,255,0.3);
   border-radius: 2px;
   transition: 0.4s;
+  cursor: pointer;
 }
 
-.slider-indicators span.active {
+.slider-indicators button.active {
   background: white;
+}
+
+.slider-indicators button:hover,
+.slider-indicators button:focus-visible {
+  background: white;
+  outline: none;
+  transform: scaleY(1.8);
 }
 
 
@@ -255,7 +271,7 @@
   right: 40px;
 }
 
-.slider-indicators span {
+.slider-indicators button {
   width: 28px;
   height: 3px;
 }
@@ -292,7 +308,7 @@
     right: 20px;
   }
 
-  .slider-indicators span {
+  .slider-indicators button {
     width: 14px;
     height: 2px;
   }
@@ -424,4 +440,3 @@ transparent 55%
     line-height: 1.35;
   }
 }
-
