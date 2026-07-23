@@ -39,6 +39,17 @@
   justify-items:center;
 }
 
+.packages-empty-state{
+  margin-top:22px;
+  padding:44px 20px;
+  border:1px dashed rgba(255,255,255,.18);
+  border-radius:12px;
+  color:#b8b8b8;
+  font-size:14px;
+  text-align:center;
+  background:rgba(255,255,255,.025);
+}
+
 /* Back button small */
 .back-btn{
   padding:4px 10px;
@@ -72,6 +83,12 @@
     grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
 
     gap:10px;
+  }
+
+  .packages-empty-state{
+    margin-top:16px;
+    padding:32px 16px;
+    font-size:12px;
   }
 
   .back-btn{

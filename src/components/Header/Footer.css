@@ -212,10 +212,18 @@ flex-wrap:wrap;
 
 .snf-brand{
 position:relative;
+display:block;
 cursor:pointer;
 text-align:center;
+margin-bottom:0 !important;
+color:inherit !important;
+text-decoration:none;
 transition:.3s;
 z-index:1;
+}
+
+.footer .snf-brand::after{
+display:none;
 }
 
 .snf-brand img{

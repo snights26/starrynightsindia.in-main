@@ -2,12 +2,11 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { FaWhatsapp, FaInstagram, FaLinkedin } from "react-icons/fa";
 import "./Footer.css";
-import { useNavigate } from "react-router-dom";
+import { FOOTER_BRANDS } from "../../config/brands";
 
 export default function Footer() {
   const [showTerms, setShowTerms] = useState(false);
   const currentYear = new Date().getFullYear();
-  const navigate = useNavigate();
 
   const openModal = () => {
     setShowTerms(true);
@@ -46,71 +45,15 @@ export default function Footer() {
 
   <div className="snf-brands-row">
 
-    {/* 🔥 HOLIDAYS */}
-    <div
-      className="snf-brand"
-      onClick={() =>
-        navigate("/all-packages", {
-          state: {
-            title: "Starry Nights Holidays",
-            categoryCode: "HOLIDAYS"
-          }
-        })
-      }
-    >
-      <img src="/Starry-Nights-Holidays.png" alt="Starry Nights Holidays" />
-      <div className="snf-brand-info">
-        <h5>Starry Nights Holidays</h5>
-        <p>
-          Expertly curated premium tours covering leisure travel, weekend getaways,
-          and customized holiday experiences designed for comfort and memorable journeys.
-        </p>
-      </div>
-    </div>
-
-    {/* 🔥 ADVENTURES */}
-    <div
-      className="snf-brand"
-      onClick={() =>
-        navigate("/all-packages", {
-          state: {
-            title: "Starry Nights Adventures",
-            categoryCode: "ADVENTURE"
-          }
-        })
-      }
-    >
-      <img src="/Starry-Nights-Adventures.png" alt="Starry Nights Adventures" />
-      <div className="snf-brand-info">
-        <h5>Starry Nights Adventures</h5>
-        <p>
-          High-energy adventure experiences including trekking, camping, hiking,
-          and outdoor expeditions crafted for thrill seekers and nature lovers.
-        </p>
-      </div>
-    </div>
-
-    {/* 🔥 PAULKHUNA */}
-    <div
-      className="snf-brand"
-      onClick={() =>
-        navigate("/all-packages", {
-          state: {
-            title: "पाऊलखुणा",
-            categoryCode: "GROUP"
-          }
-        })
-      }
-    >
-      <img src="/Paulkhuna-By-Starry-Nights.png" alt="Paulkhuna by Starry Nights" />
-      <div className="snf-brand-info">
-        <h5>पाऊलखुणा</h5>
-        <p>
-          A specialized unit focused on group tours, cultural journeys,
-          and exclusive batch experiences that bring people together through travel.
-        </p>
-      </div>
-    </div>
+    {FOOTER_BRANDS.map((brand) => (
+      <Link key={brand.slug} className="snf-brand" to={`/brands/${brand.slug}`}>
+        <img src={brand.logo} alt={brand.title} />
+        <div className="snf-brand-info">
+          <h5>{brand.title}</h5>
+          <p>{brand.description}</p>
+        </div>
+      </Link>
+    ))}
 
   </div>
 </div>

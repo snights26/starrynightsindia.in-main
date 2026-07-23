@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import api from "../../utils/api";
 import PackageCard from "../../components/Common/PackageCard";
+import { brandBySlug } from "../../config/brands";
 import "./AllPackages.css";
 
 function normalizeCode(value) {
@@ -55,9 +56,15 @@ function exactRowPackages(apiPackages = [], packageCodes = [], stateItems = []) 
 export default function AllPackages() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { brandSlug } = useParams();
   const rowId = location.state?.rowId;
   const categoryCode = location.state?.categoryCode;
-  const pageTitle = location.state?.title || "All Packages";
+  const selectedBrand = brandBySlug(brandSlug);
+  const selectedBrandName = selectedBrand?.brandName || "";
+  const isBrandRoute = Boolean(brandSlug);
+  const pageTitle = isBrandRoute
+    ? selectedBrand?.title || "Brand Packages"
+    : location.state?.title || "All Packages";
   const stateItems = Array.isArray(location.state?.items) ? location.state.items : [];
   const statePackageCodes = Array.isArray(location.state?.packageCodes)
     ? location.state.packageCodes
@@ -66,7 +73,14 @@ export default function AllPackages() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    const url = categoryCode
+    if (isBrandRoute && !selectedBrand) {
+      setPackages([]);
+      return;
+    }
+
+    const url = selectedBrandName
+      ? `/packages?brand=${encodeURIComponent(selectedBrandName)}`
+      : categoryCode
       ? `/packages?category=${categoryCode}`
       : rowId
       ? `/packages?rowId=${rowId}`
@@ -74,7 +88,7 @@ export default function AllPackages() {
     api.get(url)
       .then((data) => setPackages(exactRowPackages(data, statePackageCodes, stateItems)))
       .catch(() => setPackages(packagesFromState(stateItems)));
-  }, [rowId, categoryCode, location.key]);
+  }, [rowId, categoryCode, brandSlug, selectedBrandName, location.key]);
 
   return (
     <div className="all-packages-page">
@@ -83,16 +97,24 @@ export default function AllPackages() {
         <button className="back-btn" onClick={() => navigate(-1)}>Back</button>
       </div>
 
-      <div className="packages-grid">
-        {packages.map((pkg, idx) => (
-          <PackageCard
-            key={pkg.packageCode || idx}
-            image={pkg.image}
-            name={pkg.name || pkg.title}
-            packageCode={pkg.packageCode}
-          />
-        ))}
-      </div>
+      {packages.length > 0 ? (
+        <div className="packages-grid">
+          {packages.map((pkg, idx) => (
+            <PackageCard
+              key={pkg.packageCode || idx}
+              image={pkg.image}
+              name={pkg.name || pkg.title}
+              packageCode={pkg.packageCode}
+            />
+          ))}
+        </div>
+      ) : (
+        <div className="packages-empty-state" role="status">
+          {isBrandRoute
+            ? "No packages available for this brand."
+            : "No packages are available right now."}
+        </div>
+      )}
     </div>
   );
 }

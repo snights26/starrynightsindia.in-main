@@ -71,6 +71,7 @@ function App() {
 
           {/* ================= PUBLIC PAGES ================= */}
           <Route path="/all-packages" element={<AllPackages />} />
+          <Route path="/brands/:brandSlug" element={<AllPackages />} />
           <Route path="/all-categories" element={<AllCategories />} />
           <Route path="/about" element={<AboutUs />} />
           <Route path="/contact" element={<Contact />} />
