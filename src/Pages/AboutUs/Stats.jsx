@@ -1,26 +1,53 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import api from "../../utils/api";
 import "./Stats.css";
 
 export default function Stats() {
   const navigate = useNavigate();
   const [zoom, setZoom] = useState(false);
-
-  const stats = [
-    { count: "8+", label: "Years of Building a Travel Legacy" },
-    { count: "98.9%", label: "Trusted by Every Guest" },
-    { count: "4.2K+", label: "Stories Across The Destinations" },
-    { count: "12K+", label: "Global Happy Travelers" },
-    { count: "800+", label: "Verified Hotel & Travel Partners" },
-  ];
+  const [stats, setStats] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const sectionRef = useRef(null);
 
   useEffect(() => {
-    const elements = document.querySelectorAll(".stat-number");
+    let isCurrent = true;
+    api.get("/homepage-statistics/public")
+      .then((data) => {
+        if (isCurrent) {
+          setStats(Array.isArray(data) ? data : []);
+        }
+      })
+      .catch((error) => {
+        console.error("Failed to load homepage statistics", error);
+        if (isCurrent) {
+          setStats([]);
+        }
+      })
+      .finally(() => {
+        if (isCurrent) {
+          setLoading(false);
+        }
+      });
+
+    return () => {
+      isCurrent = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    const elements = sectionRef.current?.querySelectorAll(".stat-number") || [];
+    const intervals = [];
 
     elements.forEach((el) => {
       const targetText = el.dataset.value;
       const num = parseFloat(targetText);
       const suffix = targetText.replace(/[0-9.]/g, "");
+
+      if (!Number.isFinite(num)) {
+        el.innerText = targetText;
+        return;
+      }
 
       let start = 0;
       const duration = 1500;
@@ -35,22 +62,27 @@ export default function Stats() {
           el.innerText = Math.floor(start) + suffix;
         }
       }, 20);
+      intervals.push(interval);
     });
-  }, []);
+
+    return () => intervals.forEach(clearInterval);
+  }, [stats]);
 
   const handleClick = () => {
     setZoom(true);
     setTimeout(() => navigate("/about"), 500);
   };
 
+  if (loading || stats.length === 0) return null;
+
   return (
-    <div className={`stats-section ${zoom ? "zoom-effect" : ""}`}>
+    <div ref={sectionRef} className={`stats-section ${zoom ? "zoom-effect" : ""}`}>
       <div className="stats-grid">
-        {stats.map((s, i) => (
-          <div className="stat-circle" key={i}>
+        {stats.map((statistic) => (
+          <div className="stat-circle" key={statistic.id}>
             <div className="stat-content">
-              <h2 className="stat-number" data-value={s.count}>0</h2>
-              <p>{s.label}</p>
+              <h2 className="stat-number" data-value={statistic.value}>0</h2>
+              <p>{statistic.title}</p>
             </div>
 
             {/* Orbit Dot */}
