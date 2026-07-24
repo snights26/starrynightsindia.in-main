@@ -23,6 +23,7 @@ import { AuthProvider } from "./context/AuthContext";
 import PrivateRoute from "./components/AuthFolder/PrivateRoute";
 import ProfileCompletionGuard from "./components/AuthFolder/ProfileCompletionGuard";
 import UserDashboard from "./components/Dashboard/Dashboard";
+import RecentlyViewedPackages from "./components/Dashboard/RecentlyViewedPackages";
 import MyPayments from "./components/Dashboard/MyPayments";
 import Invoice from "./components/Common/invoice";
 import DetailPage from "./components/Common/DetailPage";
@@ -108,6 +109,11 @@ function App() {
                 <UserDashboard />
               </PrivateRoute>
             }
+          />
+
+          <Route
+            path="/recently-viewed-packages"
+            element={<PrivateRoute><RecentlyViewedPackages /></PrivateRoute>}
           />
 
           <Route

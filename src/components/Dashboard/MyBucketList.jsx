@@ -1,16 +1,20 @@
-import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { MdChevronLeft, MdChevronRight } from "react-icons/md";
 import api from "../../utils/api";
 import PackageCard from "../Common/PackageCard";
+import PackageCategoryFilters, { packageMatchesCategoryFilters } from "./PackageCategoryFilters";
 import "./MyBucketList.css";
 
 export default function MyBucketList() {
-  const navigate = useNavigate();
   const scrollRef = useRef(null);
   const [showLeft, setShowLeft] = useState(false);
   const [showRight, setShowRight] = useState(true);
   const [packages, setPackages] = useState([]);
+  const [filters, setFilters] = useState({ parentCode: "", subcategoryCode: "" });
+
+  const filteredPackages = useMemo(() => packages.filter((pkg) => packageMatchesCategoryFilters(
+    pkg, filters.parentCode, filters.subcategoryCode
+  )), [filters, packages]);
 
   const scroll = (direction) => {
     scrollRef.current?.scrollBy({ left: direction === "right" ? 320 : -320, behavior: "smooth" });
@@ -35,7 +39,7 @@ export default function MyBucketList() {
       window.clearTimeout(timer);
       window.removeEventListener("resize", update);
     };
-  }, [packages.length]);
+  }, [filteredPackages.length]);
 
   return (
     <div className="bucketlist-row">
@@ -46,16 +50,18 @@ export default function MyBucketList() {
       )}
 
       <div className="bucketlist-row__header">
-        <h2 className="bucketlist-row__title">My Bucket List</h2>
-        <button className="bucketlist-row__view-all" onClick={() => navigate("/all-packages", { state: { title: "My Bucket List" } })}>
-          View All
-        </button>
+        <div>
+          <h2 className="bucketlist-row__title">My Bucket List</h2>
+          <p className="bucketlist-row__subtitle">Filter packages by the categories you care about.</p>
+        </div>
+        <PackageCategoryFilters {...filters} onChange={setFilters} />
       </div>
 
       <div className="bucketlist-row__scroll" ref={scrollRef} onScroll={handleScroll}>
-        {packages.map((pkg, idx) => (
+        {filteredPackages.map((pkg, idx) => (
           <PackageCard key={pkg.packageCode || idx} image={pkg.image} name={pkg.name} packageCode={pkg.packageCode} />
         ))}
+        {filteredPackages.length === 0 && <div className="bucketlist-row__empty">No packages found for the selected filters.</div>}
       </div>
 
       {showRight && (

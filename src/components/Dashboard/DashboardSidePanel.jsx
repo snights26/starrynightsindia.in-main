@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaCreditCard, FaEnvelope, FaFire, FaImage } from "react-icons/fa";
+import { FaCreditCard, FaEnvelope, FaHistory, FaImage } from "react-icons/fa";
 import { useAuth } from "../../context/AuthContext";
 import api, { resolveAssetUrl } from "../../utils/api";
 import "./DashboardSidePanel.css";
@@ -75,7 +75,7 @@ export default function DashboardSidePanel() {
         </div>
       </div>
 
-      <div className="side-card"><FaFire /> Trending</div>
+      <div className="side-card clickable" onClick={() => navigate("/recently-viewed-packages")}><FaHistory /> Recently Viewed Packages</div>
       <div className="side-card clickable" onClick={() => navigate("/myfeed")}><FaImage /> MY Gallery</div>
       <div className="side-card clickable" onClick={() => navigate("/payments")}><FaCreditCard /> Payments</div>
       <div className="side-card"><FaEnvelope /> Enquiry</div>

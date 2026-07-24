@@ -39,6 +39,22 @@
   background: var(--app-accent);
 }
 
+.bucketlist-row__subtitle {
+  margin: 9px 0 0;
+  color: var(--app-text-muted);
+  font-size: 0.86rem;
+}
+
+.bucketlist-row__empty {
+  width: 100%;
+  padding: 24px;
+  border: 1px dashed var(--app-border);
+  border-radius: 12px;
+  color: var(--app-text-muted);
+  font-weight: 700;
+  text-align: center;
+}
+
 .bucketlist-row__view-all {
   min-height: 40px;
   padding: 0 18px;
@@ -144,6 +160,10 @@
   .bucketlist-row__header {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .bucketlist-row__subtitle {
+    margin-bottom: 4px;
   }
 
   .bucketlist-row__view-all {

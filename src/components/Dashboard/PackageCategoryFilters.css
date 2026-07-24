@@ -1,0 +1,40 @@
+.package-category-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 10px;
+}
+
+.package-category-filters label {
+  display: grid;
+  gap: 5px;
+  min-width: 160px;
+  color: var(--app-text-muted);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.package-category-filters select {
+  min-height: 38px;
+  padding: 0 30px 0 10px;
+  border: 1px solid var(--app-border);
+  border-radius: 10px;
+  background: var(--app-card-soft);
+  color: var(--app-text);
+  font: inherit;
+  text-transform: none;
+}
+
+.package-category-filters select:focus {
+  outline: 2px solid var(--app-accent-soft);
+  border-color: var(--app-accent);
+}
+
+@media (max-width: 620px) {
+  .package-category-filters,
+  .package-category-filters label {
+    width: 100%;
+  }
+}

@@ -4,6 +4,17 @@ import api, { resolveAssetUrl } from "../../utils/api";
 import PackageCard from "./PackageCard";
 import "./DetailPage.css";
 
+const GUEST_VIEW_SESSION_KEY = "starry-nights-package-view-session";
+
+function guestSessionIdentifier() {
+  let sessionIdentifier = sessionStorage.getItem(GUEST_VIEW_SESSION_KEY);
+  if (!sessionIdentifier) {
+    sessionIdentifier = globalThis.crypto?.randomUUID?.() || `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+    sessionStorage.setItem(GUEST_VIEW_SESSION_KEY, sessionIdentifier);
+  }
+  return sessionIdentifier;
+}
+
 export default function DetailPage() {
   const navigate = useNavigate();
   const { code } = useParams();
@@ -16,6 +27,12 @@ export default function DetailPage() {
     if (!code || code === "undefined") return;
     api.get(`/packages/${code}`).then(setPackageData).catch(() => setPackageData(null));
   }, [code]);
+
+  useEffect(() => {
+    const packageCode = packageData?.packageCode || packageData?.code;
+    if (!packageCode) return;
+    api.post("/package-views", { packageCode, sessionIdentifier: guestSessionIdentifier() }).catch(() => {});
+  }, [packageData?.packageCode, packageData?.code]);
 
   useEffect(() => {
     if (isPaused || !packageData?.images?.length) return;
