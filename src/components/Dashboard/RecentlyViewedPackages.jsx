@@ -5,11 +5,6 @@ import { BackButton } from "../../common/buttons/AppButton";
 import api, { resolveAssetUrl } from "../../utils/api";
 import "./RecentlyViewedPackages.css";
 
-const categoryNames = (pkg = {}, type) => Array.from(new Set((pkg.categories || [])
-  .filter((category) => type === "parent" || category.isSubcategory)
-  .map((category) => type === "parent" ? category.parentName : category.name)
-  .filter(Boolean))).join(", ") || "Not assigned";
-
 const formatViewedAt = (value) => value ? new Intl.DateTimeFormat(undefined, {
   dateStyle: "medium", timeStyle: "short"
 }).format(new Date(value)) : "Not available";
@@ -125,28 +120,48 @@ export default function RecentlyViewedPackages() {
         {actionError && <div className="recently-viewed-error" role="alert">{actionError}</div>}
         {loading && <div className="recently-viewed-empty">Loading your recently viewed packages...</div>}
         {!loading && filteredHistory.length === 0 && (
-          <div className="recently-viewed-empty">No recently viewed packages match your search.</div>
+          <div className="recently-viewed-empty">
+            {history.length === 0
+              ? "No recently viewed packages yet."
+              : "No recently viewed packages match your search."}
+          </div>
         )}
         {!loading && filteredHistory.map((item) => {
           const image = resolveAssetUrl(item.image || item.thumbnailUrl);
+          const packageName = item.name || item.title || item.packageCode;
           return (
-            <article className="recently-viewed-card" key={item.id || item.packageCode} onClick={() => navigate(`/package/${item.packageCode}`)}>
+            <article
+              className="recently-viewed-card"
+              key={item.id || item.packageCode}
+              role="link"
+              tabIndex={0}
+              onClick={() => navigate(`/package/${item.packageCode}`)}
+              onKeyDown={(event) => {
+                if (event.target !== event.currentTarget || !["Enter", " "].includes(event.key)) return;
+                event.preventDefault();
+                navigate(`/package/${item.packageCode}`);
+              }}
+            >
               <div className="recently-viewed-card__media">
-                {image ? <img src={image} alt={item.name || "Package"} /> : <span>{(item.name || "P").charAt(0)}</span>}
+                {image ? <img src={image} alt={packageName || "Package"} /> : <span>{(packageName || "P").charAt(0)}</span>}
+                <button
+                  type="button"
+                  className="recently-viewed-card__remove"
+                  onClick={(event) => removeOne(event, item.packageCode)}
+                  disabled={busyCode === item.packageCode}
+                  aria-label={`Remove ${packageName} from recently viewed`}
+                >
+                  <FaRegTrashAlt />
+                </button>
               </div>
               <div className="recently-viewed-card__content">
-                <div>
-                  <span className="recently-viewed-card__code">{item.packageCode}</span>
-                  <h2>{item.name || item.title || item.packageCode}</h2>
+                <span className="recently-viewed-card__code">{item.packageCode}</span>
+                <h2 title={packageName}>{packageName}</h2>
+                <div className="recently-viewed-card__viewed">
+                  <span>Last viewed</span>
+                  <time dateTime={item.lastViewedAt || undefined}>{formatViewedAt(item.lastViewedAt)}</time>
                 </div>
-                <dl>
-                  <div><dt>Parent category</dt><dd>{categoryNames(item, "parent")}</dd></div>
-                  <div><dt>Last viewed</dt><dd>{formatViewedAt(item.lastViewedAt)}</dd></div>
-                </dl>
               </div>
-              <button type="button" className="recently-viewed-card__remove" onClick={(event) => removeOne(event, item.packageCode)} disabled={busyCode === item.packageCode} aria-label={`Remove ${item.name || item.packageCode} from history`}>
-                <FaRegTrashAlt />
-              </button>
             </article>
           );
         })}
