@@ -57,10 +57,18 @@
   backdrop-filter:blur(8px);
   transition:background .2s ease, color .2s ease, transform .2s ease, border-color .2s ease;
   z-index:2;
+  padding:0;
+  color:#fff;
+  cursor:pointer;
 }
 
 .favorite-btn:hover{
   transform:scale(1.08);
+}
+
+.favorite-btn:disabled{
+  cursor:wait;
+  opacity:.75;
 }
 
 .heart{
@@ -76,6 +84,14 @@
 
 .heart.active{
   color:#e50914;
+}
+
+.heart--loading{
+  animation:heart-spin .85s linear infinite;
+}
+
+@keyframes heart-spin{
+  to{ transform:rotate(360deg); }
 }
 
 /* Tight title */
