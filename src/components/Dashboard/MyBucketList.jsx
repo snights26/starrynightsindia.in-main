@@ -2,7 +2,6 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { MdChevronLeft, MdChevronRight } from "react-icons/md";
 import api from "../../utils/api";
 import PackageCard from "../Common/PackageCard";
-import PackageCategoryFilters, { packageMatchesCategoryFilters } from "./PackageCategoryFilters";
 import "./MyBucketList.css";
 
 export default function MyBucketList() {
@@ -10,11 +9,15 @@ export default function MyBucketList() {
   const [showLeft, setShowLeft] = useState(false);
   const [showRight, setShowRight] = useState(true);
   const [packages, setPackages] = useState([]);
-  const [filters, setFilters] = useState({ parentCode: "", subcategoryCode: "" });
+  const [search, setSearch] = useState("");
 
-  const filteredPackages = useMemo(() => packages.filter((pkg) => packageMatchesCategoryFilters(
-    pkg, filters.parentCode, filters.subcategoryCode
-  )), [filters, packages]);
+  const filteredPackages = useMemo(() => {
+    const query = search.trim().toLowerCase();
+    if (!query) return packages;
+    return packages.filter((pkg) => [pkg.name, pkg.title, pkg.packageCode, pkg.code]
+      .filter(Boolean)
+      .some((value) => String(value).toLowerCase().includes(query)));
+  }, [packages, search]);
 
   const scroll = (direction) => {
     scrollRef.current?.scrollBy({ left: direction === "right" ? 320 : -320, behavior: "smooth" });
@@ -52,16 +55,24 @@ export default function MyBucketList() {
       <div className="bucketlist-row__header">
         <div>
           <h2 className="bucketlist-row__title">My Bucket List</h2>
-          <p className="bucketlist-row__subtitle">Filter packages by the categories you care about.</p>
+          <p className="bucketlist-row__subtitle">Search through the packages you have saved.</p>
         </div>
-        <PackageCategoryFilters {...filters} onChange={setFilters} />
+        <label className="bucketlist-row__search">
+          <span>Search saved packages</span>
+          <input
+            type="search"
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+            placeholder="Search by package name or code..."
+          />
+        </label>
       </div>
 
       <div className="bucketlist-row__scroll" ref={scrollRef} onScroll={handleScroll}>
         {filteredPackages.map((pkg, idx) => (
           <PackageCard key={pkg.packageCode || idx} image={pkg.image} name={pkg.name} packageCode={pkg.packageCode} />
         ))}
-        {filteredPackages.length === 0 && <div className="bucketlist-row__empty">No packages found for the selected filters.</div>}
+        {filteredPackages.length === 0 && <div className="bucketlist-row__empty">No saved packages match your search.</div>}
       </div>
 
       {showRight && (
