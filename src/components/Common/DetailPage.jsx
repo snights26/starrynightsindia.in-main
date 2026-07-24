@@ -1,17 +1,19 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import api, { resolveAssetUrl } from "../../utils/api";
 import PackageCard from "./PackageCard";
 import "./DetailPage.css";
 
 const GUEST_VIEW_SESSION_KEY = "starry-nights-package-view-session";
+const GUEST_VIEWER_KEY = "starry-nights-package-viewer";
 
 function guestSessionIdentifier() {
-  let sessionIdentifier = sessionStorage.getItem(GUEST_VIEW_SESSION_KEY);
+  let sessionIdentifier = localStorage.getItem(GUEST_VIEWER_KEY) || sessionStorage.getItem(GUEST_VIEW_SESSION_KEY);
   if (!sessionIdentifier) {
     sessionIdentifier = globalThis.crypto?.randomUUID?.() || `${Date.now()}-${Math.random().toString(36).slice(2)}`;
-    sessionStorage.setItem(GUEST_VIEW_SESSION_KEY, sessionIdentifier);
   }
+  localStorage.setItem(GUEST_VIEWER_KEY, sessionIdentifier);
+  sessionStorage.setItem(GUEST_VIEW_SESSION_KEY, sessionIdentifier);
   return sessionIdentifier;
 }
 
@@ -21,6 +23,7 @@ export default function DetailPage() {
   const [selectedImage, setSelectedImage] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [packageData, setPackageData] = useState(null);
+  const trackedPackageRef = useRef("");
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -31,6 +34,8 @@ export default function DetailPage() {
   useEffect(() => {
     const packageCode = packageData?.packageCode || packageData?.code;
     if (!packageCode) return;
+    if (trackedPackageRef.current === packageCode) return;
+    trackedPackageRef.current = packageCode;
     api.post("/package-views", { packageCode, sessionIdentifier: guestSessionIdentifier() }).catch(() => {});
   }, [packageData?.packageCode, packageData?.code]);
 
