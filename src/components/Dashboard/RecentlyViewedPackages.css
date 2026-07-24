@@ -1,15 +1,31 @@
 .recently-viewed-page {
+  /* The public navbar has a 65px minimum height plus its vertical container padding. */
+  --recently-viewed-navbar-height: 66px;
   min-height: 100vh;
   box-sizing: border-box;
-  padding: clamp(18px, 4vw, 48px);
+  padding: calc(var(--recently-viewed-navbar-height) + clamp(28px, 3vw, 48px)) clamp(18px, 4vw, 48px) 64px;
   background: var(--app-page-gradient);
   color: var(--app-text);
 }
 
+.recently-viewed-page__topbar {
+  max-width: 1280px;
+  margin: 0 auto 18px;
+}
+
+.recently-viewed-page__back {
+  min-width: 92px;
+}
+
+.recently-viewed-page__back:focus-visible {
+  outline: 2px solid var(--app-accent);
+  outline-offset: 3px;
+}
+
 .recently-viewed-page__header {
-  display: flex;
-  justify-content: space-between;
-  gap: 28px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 360px);
+  gap: clamp(24px, 4vw, 56px);
   align-items: flex-start;
   margin: 0 auto 26px;
   max-width: 1280px;
@@ -39,11 +55,9 @@
 }
 
 .recently-viewed-page__actions {
-  display: flex;
-  align-items: end;
-  justify-content: end;
-  flex-wrap: wrap;
-  gap: 10px;
+  display: grid;
+  justify-items: end;
+  gap: 12px;
 }
 
 .recently-viewed-page__clear,
@@ -68,7 +82,8 @@
 .recently-viewed-page__search {
   display: grid;
   gap: 6px;
-  min-width: min(100%, 275px);
+  width: 100%;
+  max-width: 360px;
 }
 
 .recently-viewed-page__search span {
@@ -197,12 +212,25 @@
 }
 
 @media (max-width: 880px) {
-  .recently-viewed-page__header { flex-direction: column; }
-  .recently-viewed-page__actions { justify-content: start; width: 100%; }
+  .recently-viewed-page {
+    --recently-viewed-navbar-height: 55px;
+    padding-top: calc(var(--recently-viewed-navbar-height) + 28px);
+  }
+
+  .recently-viewed-page__header { grid-template-columns: 1fr; }
+  .recently-viewed-page__actions { justify-items: start; width: 100%; }
+  .recently-viewed-page__search { max-width: none; }
   .recently-viewed-card dl { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 @media (max-width: 620px) {
+  .recently-viewed-page {
+    padding-inline: 16px;
+    padding-bottom: 88px;
+  }
+
+  .recently-viewed-page__topbar { margin-bottom: 16px; }
+  .recently-viewed-page__clear { width: 100%; justify-content: center; }
   .recently-viewed-card { grid-template-columns: 96px minmax(0, 1fr) auto; }
   .recently-viewed-card__media { height: 96px; }
   .recently-viewed-card dl { grid-column: 1 / -1; }

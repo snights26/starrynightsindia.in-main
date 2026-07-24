@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaClock, FaRegTrashAlt, FaTrash } from "react-icons/fa";
+import { FaArrowLeft, FaClock, FaRegTrashAlt, FaTrash } from "react-icons/fa";
+import { BackButton } from "../../common/buttons/AppButton";
 import api, { resolveAssetUrl } from "../../utils/api";
 import "./RecentlyViewedPackages.css";
 
@@ -20,6 +21,29 @@ export default function RecentlyViewedPackages() {
   const [loading, setLoading] = useState(true);
   const [busyCode, setBusyCode] = useState("");
   const [actionError, setActionError] = useState("");
+
+  const goBack = () => {
+    const historyIndex = window.history.state?.idx;
+    let hasSameAppReferrer = false;
+
+    try {
+      const referrer = document.referrer ? new URL(document.referrer) : null;
+      hasSameAppReferrer = Boolean(
+        referrer
+        && referrer.origin === window.location.origin
+        && referrer.pathname !== window.location.pathname
+      );
+    } catch {
+      hasSameAppReferrer = false;
+    }
+
+    if ((typeof historyIndex === "number" && historyIndex > 0) || hasSameAppReferrer) {
+      navigate(-1);
+      return;
+    }
+
+    navigate("/", { replace: true });
+  };
 
   const loadHistory = () => {
     setLoading(true);
@@ -70,6 +94,11 @@ export default function RecentlyViewedPackages() {
 
   return (
     <main className="recently-viewed-page">
+      <div className="recently-viewed-page__topbar">
+        <BackButton className="recently-viewed-page__back" onClick={goBack}>
+          <FaArrowLeft aria-hidden="true" /> Back
+        </BackButton>
+      </div>
       <header className="recently-viewed-page__header">
         <div>
           <span className="recently-viewed-page__eyebrow"><FaClock /> Your travel activity</span>
