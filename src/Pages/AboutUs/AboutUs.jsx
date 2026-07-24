@@ -2,9 +2,56 @@
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
 
+const ABOUT_PAGE_TITLE = "About Starry Nights India | Domestic & International Tours";
+const ABOUT_PAGE_DESCRIPTION = "Learn about Starry Nights India, specialists in customized domestic and international tours, FIT and GIT travel, family holidays, honeymoons, corporate trips and adventure travel.";
+
+function upsertMetaTag(attribute, key, content) {
+  const selector = `meta[${attribute}="${key}"]`;
+  let element = document.head.querySelector(selector);
+  const created = !element;
+  const previousContent = element?.getAttribute("content");
+
+  if (!element) {
+    element = document.createElement("meta");
+    element.setAttribute(attribute, key);
+    document.head.appendChild(element);
+  }
+
+  element.setAttribute("content", content);
+
+  return () => {
+    if (created) {
+      element.remove();
+    } else if (previousContent === null) {
+      element.removeAttribute("content");
+    } else {
+      element.setAttribute("content", previousContent);
+    }
+  };
+}
+
 export default function AboutUs() {
   useEffect(() => {
     window.scrollTo(0, 0);
+
+    const previousTitle = document.title;
+    const pageUrl = `${window.location.origin}/about`;
+    const imageUrl = `${window.location.origin}/TEAM-STARRY-NIGHTS.jpg`;
+    document.title = ABOUT_PAGE_TITLE;
+
+    const removeMetaTags = [
+      upsertMetaTag("name", "description", ABOUT_PAGE_DESCRIPTION),
+      upsertMetaTag("property", "og:title", ABOUT_PAGE_TITLE),
+      upsertMetaTag("property", "og:description", ABOUT_PAGE_DESCRIPTION),
+      upsertMetaTag("property", "og:type", "website"),
+      upsertMetaTag("property", "og:url", pageUrl),
+      upsertMetaTag("property", "og:image", imageUrl),
+    ];
+
+    return () => {
+      document.title = previousTitle;
+      removeMetaTags.forEach((removeMetaTag) => removeMetaTag());
+    };
   }, []);
 
   return (
@@ -12,16 +59,16 @@ export default function AboutUs() {
 
       {/* TEAM IMAGE */}
 <section className="team-banner">
-  <img src="/TEAM-STARRY-NIGHTS.jpg" alt="Starry Nights Team" />
+  <img src="/TEAM-STARRY-NIGHTS.jpg" alt="Starry Nights India travel planning and tour operations team" />
 </section>
 
       {/* HERO */}
 <section className="about-hero">
   <h1>STARRY NIGHTS INDIA - India's Leading Travel Company</h1>
 
-  <q>
+  <p>
     STARRY NIGHTS INDIA is a trusted experiential travel company specializing in domestic and international tour packages, luxury honeymoon trips, corporate travel, group tours, and adventure tourism. We design personalized, safe, and premium travel experiences that go beyond destinations - turning every journey into unforgettable memories.
-  </q>
+  </p>
 </section>
 
 
@@ -29,57 +76,57 @@ export default function AboutUs() {
       <section className="about-section story-section">
   <h2>Our Journey Began With A Dream - The Story of STARRY NIGHTS INDIA</h2>
 
-  <q>
+  <p>
     STARRY NIGHTS INDIA was founded in September 2017 with a bold vision - to redefine the way India 
     experiences travel. While many travel agencies focused only on selling fixed tour packages and 
     discount-based deals, we believed travel should be emotional, immersive, and transformational. 
     Our mission from day one was clear: create personalized travel experiences that feel premium, safe, 
     and unforgettable.
-  </q>
+  </p>
 
-  <q>
+  <p>
     The journey began as a passionate trekking and adventure travel community in Maharashtra. 
     Weekend treks, night camping experiences, mountain expeditions, and raw nature escapes formed 
     the foundation of what STARRY NIGHTS INDIA stands for today - adventure tourism with safety, 
     professionalism, and emotional connection. Under open skies and around campfires, strangers 
     became friends, and a travel community was born.
-  </q>
+  </p>
 
-  <q>
+  <p>
     As trust grew, so did our vision. What started with trekking expeditions expanded into 
     structured domestic tour packages across India, student educational tours, corporate travel programs, 
     group departures, customized honeymoon packages, family vacation planning, and curated 
     international holiday packages. Every new service was added with one goal - deliver seamless 
     travel management backed by expert planning and verified partners.
-  </q>
+  </p>
 
-  <q>
+  <p>
     STARRY NIGHTS INDIA gradually evolved into a premium experiential travel company offering 
     complete travel solutions including hotel bookings, transport arrangements, visa assistance, 
     luxury honeymoon planning, corporate offsite coordination, and personalized international tours. 
     Our approach has always been detail-oriented, transparent, and traveler-first.
-  </q>
+  </p>
 
-  <q>
+  <p>
     Today, STARRY NIGHTS INDIA is recognized as a trusted travel brand serving families, couples, 
     students, corporates, and adventure enthusiasts. We do not simply sell travel packages - 
     we design meaningful journeys that inspire growth, strengthen relationships, and create 
     lifelong memories. Each itinerary carries our signature blend of strategic planning, 
     premium hospitality, safety standards, and emotional storytelling.
-  </q>
+  </p>
 
-  <q>
+  <p>
     Our journey continues with one powerful promise - every traveler who chooses STARRY NIGHTS INDIA 
     returns home not just with photographs, but with stories, friendships, personal growth, and 
     unforgettable experiences. We aim to build a global travel community rooted in responsible tourism, 
     cultural respect, sustainable travel practices, and world-class service excellence.
-  </q>
+  </p>
 
-  <q>
+  <p>
     STARRY NIGHTS INDIA is more than a travel company - it is a movement of explorers who believe 
     travel should transform perspectives, create purpose, and connect people beyond borders. 
     And this journey is only just beginning.
-  </q>
+  </p>
 
 </section>
 
@@ -91,7 +138,7 @@ export default function AboutUs() {
   <div className="timeline">
 
     <div className="timeline-item">
-      <span className="timeline-year">2017 - The Beginning</span>
+      <h3 className="timeline-year">2017 - The Beginning</h3>
       <p>
         STARRY NIGHTS INDIA was founded with a passion for trekking expeditions, adventure trips, 
         camping experiences, and weekend getaways across Maharashtra. What started as small-group 
@@ -101,7 +148,7 @@ export default function AboutUs() {
     </div>
 
     <div className="timeline-item">
-      <span className="timeline-year">2019 - Expansion into Domestic Tourism</span>
+      <h3 className="timeline-year">2019 - Expansion into Domestic Tourism</h3>
       <p>
         With increasing traveler trust, STARRY NIGHTS INDIA expanded into full-scale domestic tour 
         packages across India, including family vacation packages, student educational tours, 
@@ -111,7 +158,7 @@ export default function AboutUs() {
     </div>
 
     <div className="timeline-item">
-      <span className="timeline-year">2021 - Government Recognition & Credibility</span>
+      <h3 className="timeline-year">2021 - Government Recognition & Credibility</h3>
       <p>
         A major milestone came when STARRY NIGHTS INDIA received official recognition from 
         Maharashtra Tourism and was onboarded on the MahaBooking portal. This strengthened our 
@@ -121,7 +168,7 @@ export default function AboutUs() {
     </div>
 
     <div className="timeline-item">
-      <span className="timeline-year">2024 - Entering International & Luxury Travel</span>
+      <h3 className="timeline-year">2024 - Entering International & Luxury Travel</h3>
       <p>
         In 2024, STARRY NIGHTS INDIA entered the international tourism market, launching curated 
         international holiday packages, luxury honeymoon packages, premium couple getaways, and 
@@ -131,7 +178,7 @@ export default function AboutUs() {
     </div>
 
     <div className="timeline-item">
-      <span className="timeline-year">2026 & Beyond - Building a Global Travel Ecosystem</span>
+      <h3 className="timeline-year">2026 & Beyond - Building a Global Travel Ecosystem</h3>
       <p>
         Our future vision includes launching luxury resorts, transport services, adventure parks, 
         corporate travel solutions, destination wedding planning, and a global experiential travel 
@@ -248,6 +295,13 @@ export default function AboutUs() {
   </p>
 
   <p>
+    Whether you travel as a FIT (Free Independent Traveler) seeking a private customized tour or as part of
+    a GIT (Group Inclusive Tour), we plan domestic tours and international tours around your needs. Our
+    services include family tours, honeymoon packages, corporate tours, group tours, adventure tours,
+    pilgrimage tours, and weekend getaways with the same attention to safety and detail.
+  </p>
+
+  <p>
     Our team includes certified trek leaders, experienced travel consultants, professional tour planners, 
     and safety-trained trip coordinators who manage everything - from hotel bookings and transportation 
     arrangements to local guides and on-ground assistance. We focus on secure travel planning, verified 
@@ -277,87 +331,87 @@ export default function AboutUs() {
 <section className="about-section story-section">
   <h2>Our Premium Travel Services - STARRY NIGHTS INDIA</h2>
 
-  <q>
+  <p>
     STARRY NIGHTS INDIA is a leading travel company in India offering customized domestic and international tour packages, 
     luxury holidays, honeymoon trips, corporate travel solutions, group tours, adventure tourism, and complete travel management services. 
     As a trusted experiential travel brand, we design personalized travel experiences that combine comfort, safety, premium hospitality, 
     and seamless planning for families, couples, students, corporates, and global explorers.
-  </q>
+  </p>
 
-  <q>
+  <p>
     Our expert travel consultants carefully curate every itinerary to match your budget, preferences, and travel goals. 
     From hotel bookings and flight reservations to visa assistance, transport management, sightseeing tours, and 24/7 travel support, 
     STARRY NIGHTS INDIA provides end-to-end travel solutions across India and worldwide destinations.
-  </q>
+  </p>
 
   <h3> Luxury Honeymoon Tour Packages</h3>
-  <q>
+  <p>
     We specialize in romantic honeymoon packages and luxury couple getaways to destinations like Maldives, Bali, Thailand, Dubai, 
     Switzerland, Paris, Kashmir, Manali, Goa, and Kerala. Our honeymoon tours include premium resorts, private villa stays, 
     candlelight dinners, curated sightseeing, surprise decorations, and personalized romantic experiences designed for unforgettable memories.
-  </q>
+  </p>
 
   <h3>👨‍👩‍👧 Family Holiday & Vacation Packages</h3>
-  <q>
+  <p>
     Our family tour packages cover Rajasthan, Himachal Pradesh, Uttarakhand, Kerala, Andaman Islands, North East India, 
     Singapore, Dubai, and Europe. We provide family-friendly hotels, comfortable transport, guided sightseeing, 
     child-friendly activities, and safe travel arrangements to ensure stress-free vacations.
-  </q>
+  </p>
 
   <h3>🌿 Jungle Safari & Wildlife Tourism</h3>
-  <q>
+  <p>
     Experience thrilling wildlife safaris and eco-tourism adventures in Jim Corbett, Ranthambore, Gir National Park, 
     Bandhavgarh, Tadoba, Kaziranga, and African safari destinations. Our wildlife tours include jeep safaris, 
     nature walks, bird watching, forest stays, and wildlife photography expeditions guided by experts.
-  </q>
+  </p>
 
   <h3>💍 Anniversary & Romantic Getaways</h3>
-  <q>
+  <p>
     Celebrate anniversaries, birthdays, proposals, and special occasions with luxury romantic holidays in Udaipur, 
     Shimla, Ooty, Lonavala, Bali, Maldives, Santorini, and Dubai. We create curated romantic itineraries with 
     luxury stays, private experiences, and memorable surprises.
-  </q>
+  </p>
 
   <h3>🏫 School, College & Educational Tours</h3>
-  <q>
+  <p>
     STARRY NIGHTS INDIA organizes educational school tours, college trips, industrial visits, historical tours, 
     and student adventure camps across Delhi, Jaipur, Agra, Manali, Coorg, and international educational destinations. 
     Safety protocols, group management, and structured learning experiences are our top priorities.
-  </q>
+  </p>
 
   <h3>🏢 Corporate Tours, MICE & Incentive Travel</h3>
-  <q>
+  <p>
     Our corporate travel services include team outings, incentive tours, conferences, exhibitions, corporate retreats, 
     and MICE travel planning at premium destinations like Goa, Thailand, Dubai, Bali, and hill stations across India. 
     We professionally manage logistics, event coordination, hotel bookings, transport, and conference arrangements.
-  </q>
+  </p>
 
   <h3>🏔 Adventure Tourism & Trekking Expeditions</h3>
-  <q>
+  <p>
     We offer Himalayan treks, Ladakh bike trips, river rafting in Rishikesh, camping experiences, paragliding, 
     scuba diving in Andaman, desert safaris in Rajasthan, and international adventure tours in Nepal and beyond. 
     Our adventure travel packages are designed with certified trek leaders and strict safety standards.
-  </q>
+  </p>
 
   <h3> Domestic & International Tour Packages</h3>
-  <q>
+  <p>
     Explore India and global destinations with our customized domestic tour packages and international holiday packages. 
     Popular destinations include Kashmir, Kerala, Rajasthan, North East India, Dubai, Thailand, Singapore, Bali, Europe, Australia, and more. 
     We provide complete travel planning including itinerary customization, visa assistance, flights, hotels, sightseeing tours, and travel insurance.
-  </q>
+  </p>
 
   <h3>🚗 Complete Travel Support & Services</h3>
-  <q>
+  <p>
     STARRY NIGHTS INDIA offers complete travel solutions including hotel bookings, flight tickets, car rentals, 
     luxury transport, tour guides, travel insurance, and 24/7 on-trip assistance. Our verified vendors and trusted 
     partners ensure safe, comfortable, and premium travel experiences.
-  </q>
+  </p>
 
-  <q>
+  <p>
     Whether you are looking for budget travel packages, luxury holidays, private customized tours, group departures, 
     honeymoon trips, corporate travel management, or international vacations, STARRY NIGHTS INDIA is your trusted 
     travel partner delivering excellence, reliability, and unforgettable journeys.
-  </q>
+  </p>
 </section>
 
       {/* CTA */}

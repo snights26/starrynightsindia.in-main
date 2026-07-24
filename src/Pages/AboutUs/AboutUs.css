@@ -49,20 +49,13 @@
   max-width: 1240px;
 }
 
-.about-hero p,
-.about-hero q {
+.about-hero p {
   display: block;
   font-size: 18px;
   color: var(--app-text-muted, #d4d4d8);
   max-width: 1180px;
   margin: 0 auto;
   line-height: 1.75;
-  quotes: none;
-}
-
-.about-hero q::before,
-.about-hero q::after {
-  content: "";
 }
 
 .about-section {
@@ -92,8 +85,7 @@
   margin: 24px 0 10px;
 }
 
-.about-section p,
-.about-section q {
+.about-section p {
   font-size: 17px;
   line-height: 1.75;
   color: var(--app-text-muted, #d4d4d8);
@@ -102,20 +94,11 @@
 }
 
 .story-section p {
-  font-weight: 500;
-}
-
-.story-section q {
   display: block;
   font-size: 17px;
   line-height: 1.8;
   font-style: normal;
-  quotes: none;
-}
-
-.story-section q::before,
-.story-section q::after {
-  content: "";
+  font-weight: 400;
 }
 
 .timeline {
@@ -157,7 +140,7 @@
   font-weight: 800;
   color: var(--app-text, #f8fafc);
   display: block;
-  margin-bottom: 8px;
+  margin: 0 0 8px;
 }
 
 .timeline-item p {
@@ -284,8 +267,7 @@ html[data-theme="dark"] .about-page {
   }
 
   .about-section p,
-  .about-section q,
-  .about-hero q {
+  .about-hero p {
     font-size: 14px;
   }
 
