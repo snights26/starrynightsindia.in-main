@@ -41,13 +41,13 @@ export default function PackageCard({ image, name, packageCode }) {
 
         <button
           type="button"
-          className="favorite-btn"
+          className="package-card__favorite"
           onClick={handleFavorite}
           disabled={Boolean(user && (likedPackagesLoading || isPending))}
           aria-label={isFav ? "Remove from liked packages" : "Add to liked packages"}
           title={isFav ? "Remove from liked packages" : "Add to liked packages"}
         >
-          {user && likedPackagesLoading ? <FaSpinner className="heart heart--loading" /> : isFav ? <FaHeart className="heart active" /> : <FaRegHeart className="heart" />}
+          {user && likedPackagesLoading ? <FaSpinner className="package-card__favorite-icon package-card__favorite-icon--loading" /> : isFav ? <FaHeart className="package-card__favorite-icon package-card__favorite-icon--active" /> : <FaRegHeart className="package-card__favorite-icon" />}
         </button>
 
         <img

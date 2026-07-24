@@ -919,30 +919,30 @@ html[data-theme="dark"] :where(.view-all-btn, .dr-view-all, .bucketlist-row__vie
   color: #ffb3b8 !important;
 }
 
-html[data-theme] .favorite-btn {
+html[data-theme] .package-card__favorite {
   background: rgba(0,0,0,0.52) !important;
   border: 1px solid rgba(255,255,255,0.22) !important;
   color: #ffffff !important;
 }
 
-html[data-theme] .favorite-btn .heart {
+html[data-theme] .package-card__favorite-icon {
   background: transparent !important;
   color: inherit !important;
 }
 
-html[data-theme] .favorite-btn .heart.active {
+html[data-theme] .package-card__favorite-icon--active {
   color: var(--app-accent) !important;
 }
 
-html[data-theme="light"] .favorite-btn {
+html[data-theme="light"] .package-card__favorite {
   background: rgba(255,255,255,0.94) !important;
   border-color: rgba(15,23,42,0.14) !important;
   color: var(--app-accent) !important;
   box-shadow: 0 8px 20px rgba(15,23,42,0.16) !important;
 }
 
-html[data-theme="light"] .favorite-btn:hover,
-html[data-theme="dark"] .favorite-btn:hover {
+html[data-theme="light"] .package-card__favorite:hover,
+html[data-theme="dark"] .package-card__favorite:hover {
   background: var(--app-accent) !important;
   border-color: var(--app-accent) !important;
   color: #ffffff !important;
@@ -1188,7 +1188,7 @@ html[data-theme] :where(
   .create-user-page,
   .explore-container,
   .global-explorer-page
-) :where(button, .app-button, a[role="button"], .download-btn, .back-btn, .view-btn) {
+) :where(button:not(.package-card__favorite), .app-button, a[role="button"], .download-btn, .back-btn, .view-btn) {
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
@@ -1236,7 +1236,7 @@ html[data-theme] :where(
   .create-user-page,
   .explore-container,
   .global-explorer-page
-) :where(button:not(:disabled):hover, .app-button:not(:disabled):hover, a[role="button"]:hover, .download-btn:hover, .back-btn:hover, .view-btn:hover) {
+) :where(button:not(.package-card__favorite):not(:disabled):hover, .app-button:not(:disabled):hover, a[role="button"]:hover, .download-btn:hover, .back-btn:hover, .view-btn:hover) {
   transform: translateY(-1px) !important;
   box-shadow: var(--app-shadow) !important;
 }
