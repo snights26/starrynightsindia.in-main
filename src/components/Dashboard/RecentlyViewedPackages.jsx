@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaClock, FaRegTrashAlt, FaTrash } from "react-icons/fa";
 import api, { resolveAssetUrl } from "../../utils/api";
-import PackageCategoryFilters, { packageMatchesCategoryFilters } from "./PackageCategoryFilters";
 import "./RecentlyViewedPackages.css";
 
 const categoryNames = (pkg = {}, type) => Array.from(new Set((pkg.categories || [])
@@ -17,9 +16,10 @@ const formatViewedAt = (value) => value ? new Intl.DateTimeFormat(undefined, {
 export default function RecentlyViewedPackages() {
   const navigate = useNavigate();
   const [history, setHistory] = useState([]);
-  const [filters, setFilters] = useState({ parentCode: "", subcategoryCode: "" });
+  const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
   const [busyCode, setBusyCode] = useState("");
+  const [actionError, setActionError] = useState("");
 
   const loadHistory = () => {
     setLoading(true);
@@ -33,16 +33,22 @@ export default function RecentlyViewedPackages() {
     loadHistory();
   }, []);
 
-  const filteredHistory = useMemo(() => history.filter((item) => packageMatchesCategoryFilters(
-    item, filters.parentCode, filters.subcategoryCode
-  )), [filters, history]);
+  const filteredHistory = useMemo(() => {
+    const query = search.trim().toLowerCase();
+    if (!query) return history;
+    return history.filter((item) => [item.name, item.title, item.packageCode, item.code]
+      .some((value) => String(value || "").toLowerCase().includes(query)));
+  }, [history, search]);
 
   const removeOne = async (event, packageCode) => {
     event.stopPropagation();
     setBusyCode(packageCode);
+    setActionError("");
     try {
       await api.delete(`/package-views/me/${encodeURIComponent(packageCode)}`);
       setHistory((items) => items.filter((item) => item.packageCode !== packageCode));
+    } catch {
+      setActionError("Unable to remove this package from your recently viewed history. Please try again.");
     } finally {
       setBusyCode("");
     }
@@ -51,9 +57,12 @@ export default function RecentlyViewedPackages() {
   const clearAll = async () => {
     if (history.length === 0 || !window.confirm("Clear all recently viewed packages?")) return;
     setBusyCode("all");
+    setActionError("");
     try {
       await api.delete("/package-views/me");
       setHistory([]);
+    } catch {
+      setActionError("Unable to clear your recently viewed history. Please try again.");
     } finally {
       setBusyCode("");
     }
@@ -68,7 +77,15 @@ export default function RecentlyViewedPackages() {
           <p>Pick up where you left off. Revisited packages stay at the top of the list.</p>
         </div>
         <div className="recently-viewed-page__actions">
-          <PackageCategoryFilters {...filters} onChange={setFilters} />
+          <label className="recently-viewed-page__search">
+            <span>Search packages</span>
+            <input
+              type="search"
+              value={search}
+              onChange={(event) => setSearch(event.target.value)}
+              placeholder="Search by package name or code"
+            />
+          </label>
           <button type="button" className="recently-viewed-page__clear" onClick={clearAll} disabled={busyCode === "all" || history.length === 0}>
             <FaTrash /> {busyCode === "all" ? "Clearing..." : "Clear history"}
           </button>
@@ -76,9 +93,10 @@ export default function RecentlyViewedPackages() {
       </header>
 
       <section className="recently-viewed-list" aria-live="polite">
+        {actionError && <div className="recently-viewed-error" role="alert">{actionError}</div>}
         {loading && <div className="recently-viewed-empty">Loading your recently viewed packages...</div>}
         {!loading && filteredHistory.length === 0 && (
-          <div className="recently-viewed-empty">No packages found for the selected filters.</div>
+          <div className="recently-viewed-empty">No recently viewed packages match your search.</div>
         )}
         {!loading && filteredHistory.map((item) => {
           const image = resolveAssetUrl(item.image || item.thumbnailUrl);
@@ -94,9 +112,7 @@ export default function RecentlyViewedPackages() {
                 </div>
                 <dl>
                   <div><dt>Parent category</dt><dd>{categoryNames(item, "parent")}</dd></div>
-                  <div><dt>Subcategory</dt><dd>{categoryNames(item, "subcategory")}</dd></div>
                   <div><dt>Last viewed</dt><dd>{formatViewedAt(item.lastViewedAt)}</dd></div>
-                  <div><dt>View count</dt><dd>{item.viewCount || 0}</dd></div>
                 </dl>
               </div>
               <button type="button" className="recently-viewed-card__remove" onClick={(event) => removeOne(event, item.packageCode)} disabled={busyCode === item.packageCode} aria-label={`Remove ${item.name || item.packageCode} from history`}>
