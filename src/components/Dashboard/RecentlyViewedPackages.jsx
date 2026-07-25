@@ -42,9 +42,13 @@ export default function RecentlyViewedPackages() {
 
   const loadHistory = () => {
     setLoading(true);
+    setActionError("");
     api.get("/package-views/me")
       .then((data) => setHistory(Array.isArray(data) ? data : []))
-      .catch(() => setHistory([]))
+      .catch(() => {
+        setHistory([]);
+        setActionError("Unable to load your recently viewed packages. Please try again.");
+      })
       .finally(() => setLoading(false));
   };
 

@@ -24,6 +24,10 @@ export default function DetailPage() {
   const [isPaused, setIsPaused] = useState(false);
   const [packageData, setPackageData] = useState(null);
   const trackedPackageRef = useRef("");
+  const trackingInFlightRef = useRef("");
+  const trackingRetryCountRef = useRef(0);
+  const trackingRetryPackageRef = useRef("");
+  const [trackingAttempt, setTrackingAttempt] = useState(0);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -34,10 +38,37 @@ export default function DetailPage() {
   useEffect(() => {
     const packageCode = packageData?.packageCode || packageData?.code;
     if (!packageCode) return;
-    if (trackedPackageRef.current === packageCode) return;
-    trackedPackageRef.current = packageCode;
-    api.post("/package-views", { packageCode, sessionIdentifier: guestSessionIdentifier() }).catch(() => {});
-  }, [packageData?.packageCode, packageData?.code]);
+
+    if (trackingRetryPackageRef.current !== packageCode) {
+      trackingRetryPackageRef.current = packageCode;
+      trackingRetryCountRef.current = 0;
+    }
+    if (trackedPackageRef.current === packageCode || trackingInFlightRef.current === packageCode) return;
+
+    trackingInFlightRef.current = packageCode;
+    let retryTimer;
+
+    api.post("/package-views", { packageCode, sessionIdentifier: guestSessionIdentifier() })
+      .then(() => {
+        trackedPackageRef.current = packageCode;
+        trackingInFlightRef.current = "";
+        trackingRetryCountRef.current = 0;
+      })
+      .catch(() => {
+        trackingInFlightRef.current = "";
+
+        // A package view is recorded only after the server confirms it. This allows a
+        // short-lived API outage to recover without creating duplicate tracking calls.
+        if (trackingRetryCountRef.current < 1) {
+          trackingRetryCountRef.current += 1;
+          retryTimer = window.setTimeout(() => {
+            setTrackingAttempt((attempt) => attempt + 1);
+          }, 1000);
+        }
+      });
+
+    return () => window.clearTimeout(retryTimer);
+  }, [packageData?.packageCode, packageData?.code, trackingAttempt]);
 
   useEffect(() => {
     if (isPaused || !packageData?.images?.length) return;
