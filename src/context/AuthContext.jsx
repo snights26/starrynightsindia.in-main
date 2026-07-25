@@ -143,11 +143,9 @@ export function AuthProvider({ children }) {
         prepareLikedPackagesSync();
         setUser(stored.user);
         startTimers(stored);
-        if (stored.user?.profileCompleted === undefined) {
-          api.get("/users/me")
-            .then((freshUser) => updateStoredUser(freshUser))
-            .catch(() => {});
-        }
+        api.get("/users/me")
+          .then((freshUser) => updateStoredUser(freshUser))
+          .catch(() => {});
       } else if (stored.refreshExpiry > Date.now()) {
         refreshAccessToken(stored);
       } else {

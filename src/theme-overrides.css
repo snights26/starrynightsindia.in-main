@@ -491,7 +491,6 @@ html[data-theme] :where(
   .chatbot-input-button,
   .chatbot-fab,
   .stay-btn,
-  .side-action-btn,
   .side-logout-btn,
   .notif-download-btn,
   .eu-header button,
@@ -513,7 +512,6 @@ html[data-theme] :where(
   .chatbot-input-button:hover,
   .chatbot-fab:hover,
   .stay-btn:hover,
-  .side-action-btn:hover,
   .side-logout-btn:hover,
   .notif-download-btn:hover,
   .contact-form button:hover
@@ -1247,7 +1245,7 @@ html[data-theme] :where(.download-btn, .notif-download-btn, .upload-submit-btn, 
   color: #ffffff !important;
 }
 
-html[data-theme] :where(.back-btn, .notif-close-btn, .modal-cancel-btn, .secondary-btn, .side-action-btn) {
+html[data-theme] :where(.back-btn, .notif-close-btn, .modal-cancel-btn, .secondary-btn) {
   background: var(--app-card-soft) !important;
   border-color: var(--app-border) !important;
   color: var(--app-text) !important;
@@ -1313,14 +1311,10 @@ html[data-theme] .upload-modal {
   box-shadow: var(--app-shadow) !important;
 }
 
-html[data-theme] :where(.modal-actions, .side-profile-actions) {
+html[data-theme] .modal-actions {
   display: flex !important;
   gap: 10px !important;
   flex-wrap: wrap !important;
-}
-
-html[data-theme] .side-profile-actions > button {
-  flex: 1 1 120px !important;
 }
 
 /* Dashboard layout guard: keep dashboard cards inside their assigned columns. */

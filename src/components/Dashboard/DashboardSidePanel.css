@@ -81,12 +81,6 @@
   color: var(--app-accent);
 }
 
-.side-profile-actions {
-  margin-top: 14px;
-  display: flex;
-}
-
-.side-action-btn,
 .side-profile-note,
 .side-logout-btn {
   min-height: 40px;
@@ -98,13 +92,6 @@
   transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease, color 0.18s ease;
 }
 
-.side-action-btn {
-  width: 100%;
-  background: var(--app-card-soft);
-  color: var(--app-text);
-}
-
-.side-action-btn:hover,
 .side-profile-note:hover {
   transform: translateY(-1px);
   border-color: var(--app-accent);

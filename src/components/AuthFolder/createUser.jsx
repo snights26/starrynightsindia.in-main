@@ -1,15 +1,14 @@
-import { useEffect, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import api from "../../utils/api";
 import "./CreateUser.css";
 
 function CreateUser({ mode = "create" }) {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const userId = searchParams.get("userId");
   const { register, user: authUser, updateStoredUser, logout } = useAuth();
   const isCompleteProfile = mode === "complete";
+  const loadedProfileId = useRef(null);
 
   const [user, setUser] = useState({
     name: "",
@@ -32,24 +31,24 @@ function CreateUser({ mode = "create" }) {
   });
 
   const [preview, setPreview] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(isCompleteProfile);
 
   useEffect(() => {
-    if (isCompleteProfile && authUser) {
-      setUser((prev) => ({ ...prev, ...authUser }));
-      setPreview(authUser.profileImageUrl || authUser.profileImage || authUser.photo || "");
-      return;
-    }
-    if (!userId) return;
+    if (!isCompleteProfile || !authUser?.id) return;
+    if (loadedProfileId.current === authUser.id) return;
+    loadedProfileId.current = authUser.id;
 
+    setUser((prev) => ({ ...prev, ...authUser }));
+    setPreview(authUser.profileImage || authUser.profileImageUrl || authUser.photo || "");
     setLoading(true);
-    api.get(`/users/${userId}`)
+    api.get("/users/me")
       .then((data) => {
         setUser((prev) => ({ ...prev, ...data }));
-        setPreview(data.profileImage || data.photo || "");
+        setPreview(data.profileImage || data.profileImageUrl || data.photo || "");
+        updateStoredUser(data);
       })
       .finally(() => setLoading(false));
-  }, [authUser, isCompleteProfile, userId]);
+  }, [authUser?.id, isCompleteProfile, updateStoredUser]);
 
   const handleChange = (e) => {
     setUser({
@@ -70,24 +69,12 @@ function CreateUser({ mode = "create" }) {
 
     if (isCompleteProfile) {
       try {
-        const updateKey = authUser?.id || user.id || user.userId;
-        const updated = await api.put(`/users/${updateKey}`, user);
+        const updated = await api.put("/users/me/complete-profile", user);
         updateStoredUser(updated);
         alert(updated.profileCompleted ? "Profile completed" : "Profile saved. You can complete more details later.");
         navigate("/dashboard", { replace: true });
       } catch (error) {
         alert(error?.response?.data?.message || "Unable to save profile");
-      }
-      return;
-    }
-
-    if (userId) {
-      try {
-        await api.put(`/users/${userId}`, user);
-        alert("User Updated");
-        navigate("/dashboard");
-      } catch {
-        alert("Unable to update user");
       }
       return;
     }
@@ -117,8 +104,8 @@ function CreateUser({ mode = "create" }) {
       <form className="eu-card" onSubmit={handleSubmit}>
         <div className="eu-header">
           <div>
-            <h2>{isCompleteProfile ? "Profile Details" : userId ? "Update User" : "Create User"}</h2>
-            {isCompleteProfile && <p>Add details now or continue to the dashboard and complete them later.</p>}
+            <h2>{isCompleteProfile ? "Profile Details" : "Create User"}</h2>
+            {isCompleteProfile && <p>Keep your contact, travel, and emergency details up to date. Account ID and email are protected.</p>}
           </div>
           <div className="eu-header-actions">
             {isCompleteProfile && (
@@ -147,7 +134,7 @@ function CreateUser({ mode = "create" }) {
           <div className="eu-grid-2">
             <div className="eu-field">
               <label>User ID</label>
-              <input name="userId" value={user.userId || ""} readOnly />
+              <input name="userId" value={user.userId || ""} disabled={isCompleteProfile} readOnly={!isCompleteProfile} />
             </div>
             <div className="eu-field">
               <label>Name</label>
@@ -160,7 +147,7 @@ function CreateUser({ mode = "create" }) {
                 value={user.email || ""}
                 onChange={handleChange}
                 required
-                readOnly={isCompleteProfile && user.authProvider === "GOOGLE"}
+                disabled={isCompleteProfile}
               />
             </div>
             <div className="eu-field">
@@ -272,7 +259,7 @@ function CreateUser({ mode = "create" }) {
         </div>
 
         <button className="eu-delete-btn" type="submit">
-          {isCompleteProfile ? "Save Profile" : userId ? "Update User" : "Create User"}
+          {isCompleteProfile ? "Save Profile" : "Create User"}
         </button>
       </form>
     </div>

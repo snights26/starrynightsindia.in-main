@@ -18,7 +18,7 @@ export default function DashboardSidePanel() {
     api.get("/notifications/me").then(setNotifications).catch(() => setNotifications([]));
   }, []);
 
-  const openProfile = () => navigate(`/create-user?userId=${user?.id}`);
+  const openProfile = () => navigate("/complete-profile");
   const profileImage = resolveAssetUrl(user?.photo || user?.profileImageUrl || user?.profileImage) || DEFAULT_PROFILE_IMAGE;
 
   const handleLogout = () => {
@@ -58,10 +58,6 @@ export default function DashboardSidePanel() {
             <p>{user?.email || "No Email"}</p>
             <p>{user?.mobile || user?.contact || "No Mobile"}</p>
           </div>
-        </div>
-
-        <div className="side-profile-actions">
-          <button className="side-action-btn" onClick={openProfile}>Edit Profile</button>
         </div>
 
         <div className="side-profile-status-row">
