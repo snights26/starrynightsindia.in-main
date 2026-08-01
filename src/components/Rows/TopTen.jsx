@@ -4,7 +4,7 @@ import api from "../../utils/api";
 import PackageCard from "../Common/PackageCard";
 import "./TopTen.css";
 
-export default function TopTen() {
+export default function TopTen({ row = null }) {
   const scrollRef = useRef(null);
   const [showLeft, setShowLeft] = useState(false);
   const [showRight, setShowRight] = useState(false);
@@ -45,11 +45,17 @@ export default function TopTen() {
   };
 
   useEffect(() => {
+    if (row) {
+      setTopTenPackages(Array.isArray(row.items) ? row.items : []);
+      return undefined;
+    }
+
     api.get("/top10/public")
       .then((rows) => setTopTenPackages(rows.map((row) => row.package)))
       .catch(() => setTopTenPackages([]))
       .finally(checkScrollPosition);
-  }, []);
+    return undefined;
+  }, [row]);
 
   useEffect(() => {
     const update = () => checkScrollPosition();
@@ -63,7 +69,7 @@ export default function TopTen() {
 
   return (
     <div className="topten-container">
-      <h2 className="topten-title">Top 10 Destinations in India</h2>
+      <h2 className="topten-title">{row?.rowTitle || row?.title || "Top 10 Destinations in India"}</h2>
 
       {showLeft && (
         <button className="topten-scroll-btn left" type="button" aria-label="Scroll left" onClick={() => scroll("left")}>
