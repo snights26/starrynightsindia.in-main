@@ -437,7 +437,7 @@ export default function Click2Explore() {
 
   const selectedRegionName = selectedFeature ? resolveFeatureName(selectedFeature) : activeMap.label;
   const packages = packagesByRegion[selectedRegionCode] || [];
-  const { page, pageCount, pageItems, setPage } = usePagination(packages, 6);
+  const { page, pageCount, pageItems, setPage } = usePagination(packages, 2);
 
   useEffect(() => {
     MAPS.forEach((map) => {
