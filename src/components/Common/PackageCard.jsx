@@ -55,6 +55,10 @@ export default function PackageCard({ image, name, packageCode }) {
           alt={name || "Travel Package"}
           className="package-image"
           loading="lazy"
+          onError={(event) => {
+            event.currentTarget.onerror = null;
+            event.currentTarget.src = "/PackagecardFallback.png";
+          }}
         />
       </div>
 

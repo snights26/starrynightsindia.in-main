@@ -29,6 +29,11 @@ export const resolveAssetUrl = (url) => {
   if (url.startsWith("/api/")) {
     return `${apiBaseUrl.replace(/\/api$/, "")}${url}`;
   }
+  // Older records were persisted before the API context path was included.
+  // Keep those URLs working while all new uploads use /api/uploads/.
+  if (url.startsWith("/uploads/")) {
+    return `${apiBaseUrl}${url}`;
+  }
   return url;
 };
 

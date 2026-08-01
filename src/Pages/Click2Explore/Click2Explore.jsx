@@ -717,6 +717,10 @@ export default function Click2Explore() {
                       src={resolveAssetUrl(pkg.image || pkg.thumbnailUrl) || "/PackagecardFallback.png"}
                       alt={pkg.name || pkg.title || "Travel package"}
                       loading="lazy"
+                      onError={(event) => {
+                        event.currentTarget.onerror = null;
+                        event.currentTarget.src = "/PackagecardFallback.png";
+                      }}
                     />
                     <div className="explorer-package-body">
                       <h3>{pkg.name || pkg.title || "Travel Package"}</h3>
