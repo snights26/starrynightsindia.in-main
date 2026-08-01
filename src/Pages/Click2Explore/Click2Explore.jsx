@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { MdChevronLeft, MdChevronRight, MdLocationOn, MdPublic, MdTravelExplore } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { EmptyState } from "../../common";
+import Pagination, { usePagination } from "../../components/Common/Pagination";
 import api, { resolveAssetUrl } from "../../utils/api";
 import { indiaRegionsGeoJson, internationalRegionsGeoJson } from "./regionGeoJson";
 import "./Click2Explore.css";
@@ -436,6 +437,7 @@ export default function Click2Explore() {
 
   const selectedRegionName = selectedFeature ? resolveFeatureName(selectedFeature) : activeMap.label;
   const packages = packagesByRegion[selectedRegionCode] || [];
+  const { page, pageCount, pageItems, setPage } = usePagination(packages, 6);
 
   useEffect(() => {
     MAPS.forEach((map) => {
@@ -701,8 +703,9 @@ export default function Click2Explore() {
               ))}
             </div>
           ) : packages.length > 0 ? (
+            <>
             <div className="explorer-package-grid">
-              {packages.map((pkg) => {
+              {pageItems.map((pkg) => {
                 const packageCode = pkg.packageCode || pkg.code;
                 return (
                   <article
@@ -745,6 +748,8 @@ export default function Click2Explore() {
                 );
               })}
             </div>
+            <Pagination page={page} pageCount={pageCount} setPage={setPage} itemCount={packages.length} label="packages" />
+            </>
           ) : (
             <EmptyState
               title="No packages mapped yet"

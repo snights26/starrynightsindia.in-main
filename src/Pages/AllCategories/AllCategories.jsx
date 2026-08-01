@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import api from "../../utils/api";
 import CategoryCard from "../../components/Common/CategoryCard";
+import Pagination, { usePagination } from "../../components/Common/Pagination";
 import "./AllCategories.css";
 
 export default function AllCategories() {
@@ -9,6 +10,7 @@ export default function AllCategories() {
   const location = useLocation();
   const pageTitle = location.state?.title || "All Categories";
   const [categories, setCategories] = useState([]);
+  const { page, pageCount, pageItems, setPage } = usePagination(categories, 12);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -31,7 +33,7 @@ export default function AllCategories() {
       </div>
 
       <div className="categories-grid">
-        {categories.map((cat, idx) => {
+        {pageItems.map((cat, idx) => {
           const title = cat.title || cat.name || cat.categoryName;
           const code = cat.code || cat.categoryCode;
           return (
@@ -44,6 +46,7 @@ export default function AllCategories() {
           );
         })}
       </div>
+      <Pagination page={page} pageCount={pageCount} setPage={setPage} itemCount={categories.length} label="categories" />
     </div>
   );
 }

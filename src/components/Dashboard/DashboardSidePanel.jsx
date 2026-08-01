@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaCreditCard, FaEnvelope, FaHistory, FaImage } from "react-icons/fa";
+import { FaCreditCard, FaEnvelope, FaHistory } from "react-icons/fa";
 import { useAuth } from "../../context/AuthContext";
 import api, { resolveAssetUrl } from "../../utils/api";
 import "./DashboardSidePanel.css";
@@ -72,7 +72,6 @@ export default function DashboardSidePanel() {
       </div>
 
       <div className="side-card clickable" onClick={() => navigate("/recently-viewed-packages")}><FaHistory /> Recently Viewed Packages</div>
-      <div className="side-card clickable" onClick={() => navigate("/myfeed")}><FaImage /> MY Gallery</div>
       <div className="side-card clickable" onClick={() => navigate("/payments")}><FaCreditCard /> Payments</div>
       <div className="side-card"><FaEnvelope /> Enquiry</div>
 
@@ -101,9 +100,9 @@ export default function DashboardSidePanel() {
           <div className="notif-popup" onClick={(e) => e.stopPropagation()}>
             <h2>{selectedNotif.title}</h2>
             <p>{selectedNotif.message || selectedNotif.description}</p>
-            {selectedNotif.image && <img src={selectedNotif.image} alt="" className="notif-popup-img" />}
+            {selectedNotif.image && <img src={resolveAssetUrl(selectedNotif.image)} alt="" className="notif-popup-img" />}
             {selectedNotif.pdf && (
-              <a href={selectedNotif.pdf} target="_blank" rel="noopener noreferrer" className="notif-download-btn">Download PDF</a>
+              <a href={resolveAssetUrl(selectedNotif.pdf)} target="_blank" rel="noopener noreferrer" className="notif-download-btn">Download PDF</a>
             )}
             <button className="notif-close-btn" onClick={() => setSelectedNotif(null)}>Close</button>
           </div>

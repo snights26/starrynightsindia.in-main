@@ -29,7 +29,6 @@ import Invoice from "./components/Common/invoice";
 import DetailPage from "./components/Common/DetailPage";
 import TransportSlip from "./components/Common/TransportSlip";
 import CreateUser from "./components/AuthFolder/createUser"; 
-import MyFeed from "./components/Common/MyFeed";
 import Chatbot from "./components/Chatbot/Chatbot";
 import { Toaster } from "react-hot-toast";
 
@@ -115,15 +114,6 @@ function App() {
             path="/recently-viewed-packages"
             element={<PrivateRoute><RecentlyViewedPackages /></PrivateRoute>}
           />
-
-          <Route
-  path="/myfeed"
-  element={
-    <PrivateRoute>
-      <MyFeed />
-    </PrivateRoute>
-  }
-/>
 
           <Route
             path="/payments"

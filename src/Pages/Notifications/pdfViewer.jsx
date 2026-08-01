@@ -2,11 +2,7 @@ import React from "react";
 import "./PdfViewer.css";
 
 export default function PdfViewer({ file, onClose }) {
- const isExternal = file.startsWith("http");
-
- const viewerUrl = isExternal
-  ? `https://docs.google.com/gview?url=${encodeURIComponent(file)}&embedded=true`
-  : `${file}#toolbar=0&navpanes=0&scrollbar=1`;
+ const viewerUrl = `${file}#toolbar=0&navpanes=0&scrollbar=1`;
 
   return (
     <div className="pdf-overlay" onClick={onClose}>

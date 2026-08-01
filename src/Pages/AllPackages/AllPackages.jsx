@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import api from "../../utils/api";
 import PackageCard from "../../components/Common/PackageCard";
+import Pagination, { usePagination } from "../../components/Common/Pagination";
 import { brandBySlug } from "../../config/brands";
 import "./AllPackages.css";
 
@@ -70,6 +71,7 @@ export default function AllPackages() {
     ? location.state.packageCodes
     : stateItems.map(packageCodeOf).filter(Boolean);
   const [packages, setPackages] = useState([]);
+  const { page, pageCount, pageItems, setPage } = usePagination(packages, 12);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -99,7 +101,7 @@ export default function AllPackages() {
 
       {packages.length > 0 ? (
         <div className="packages-grid">
-          {packages.map((pkg, idx) => (
+          {pageItems.map((pkg, idx) => (
             <PackageCard
               key={pkg.packageCode || idx}
               image={pkg.image}
@@ -115,6 +117,7 @@ export default function AllPackages() {
             : "No packages are available right now."}
         </div>
       )}
+      <Pagination page={page} pageCount={pageCount} setPage={setPage} itemCount={packages.length} label="packages" />
     </div>
   );
 }
