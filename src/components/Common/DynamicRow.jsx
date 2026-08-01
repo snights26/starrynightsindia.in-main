@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { MdChevronLeft, MdChevronRight } from "react-icons/md";
 import CategoryCard from "./CategoryCard";
 import PackageCard from "./PackageCard";
-import TopTen from "../Rows/TopTen";
 import "./DynamicRow.css";
 
 export default function DynamicRow({ row }) {
@@ -12,7 +11,6 @@ export default function DynamicRow({ row }) {
   const [showLeft, setShowLeft] = useState(false);
   const [showRight, setShowRight] = useState(true);
   const isCategory = row.rowType === "category" || row.type === "category";
-  const isTopTen = row.rowType === "top10" || row.type === "top10";
   const items = row.items || [];
   const packageCodes = items
     .map((item) => item.code || item.id || item.packageCode)
@@ -38,10 +36,6 @@ export default function DynamicRow({ row }) {
       window.removeEventListener("resize", update);
     };
   }, [items.length]);
-
-  if (isTopTen) {
-    return <TopTen row={row} />;
-  }
 
   return (
     <div className="dr-row">

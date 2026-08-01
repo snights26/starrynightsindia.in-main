@@ -1,4 +1,3 @@
-import TopTen from "./TopTen";
 import DynamicRowsContainer from "./DynamicRowsContainer";
 
 import "./Trending.css";
@@ -15,7 +14,6 @@ export default function Trending() {
         <p>Discover what travelers are loving right now</p>
       </div>
 
-      <TopTen />
       <DynamicRowsContainer page="trending" />
 
     </div>

@@ -3,7 +3,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Header from "./components/Header/Header";
 import HeroSlider from "./components/Header/HeroSlider";
 import AllPackages from "./Pages/AllPackages/AllPackages";
-import TopTen from "./components/Rows/TopTen";
 import DynamicRowsContainer from "./components/Rows/DynamicRowsContainer";
 import AllCategories from "./Pages/AllCategories/AllCategories";
 import Stats from "./Pages/AboutUs/Stats";
@@ -59,7 +58,6 @@ function App() {
               <>
                 <HeroSlider />
                 <GlobalExplorerPromo />
-                <TopTen />
                 <DynamicRowsContainer page="home" />
                 <Stats />
               </>
