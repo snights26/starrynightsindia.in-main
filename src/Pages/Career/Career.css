@@ -1,6 +1,6 @@
 .career-page{
-background:#000;
-color:#fff;
+background:var(--app-page-gradient);
+color:var(--app-text);
 font-family:"Poppins",sans-serif;
 width:100%;
 line-height:1.5;
@@ -11,7 +11,7 @@ line-height:1.5;
 .career-hero{
 padding:80px 8% 40px;
 text-align:center;
-background:linear-gradient(180deg,#000,#050505);
+background:var(--app-surface-gradient);
 position:relative;
 overflow:hidden;
 }
@@ -19,13 +19,13 @@ overflow:hidden;
 .career-hero h1{
 font-size:38px;
 font-weight:900;
-color:#ff4c29;
+color:var(--app-accent);
 margin-bottom:12px;
 }
 
 .career-hero p{
 font-size:15px;
-color:#ddd;
+color:var(--app-text-muted);
 max-width:700px;
 margin:8px auto;
 }
@@ -60,20 +60,20 @@ padding:40px 8%;
 }
 
 .career-highlight{
-background:linear-gradient(180deg,#000,#060606);
-border-top:1px solid rgba(255,255,255,0.05);
+background:var(--app-card-soft);
+border-top:1px solid var(--app-border);
 }
 
 .career-section h2{
 font-size:28px;
-color:#ff4c29;
+color:var(--app-accent);
 margin-bottom:12px;
 font-weight:800;
 }
 
 .career-section p{
 font-size:15px;
-color:#ccc;
+color:var(--app-text-muted);
 max-width:800px;
 margin-bottom:10px;
 }
@@ -88,7 +88,7 @@ padding-left:18px;
 .career-list li{
 margin-bottom:12px;
 font-size:15px;
-color:#ddd;
+color:var(--app-text);
 }
 
 /* GRID */
@@ -103,28 +103,28 @@ margin-top:20px;
 /* CARD */
 
 .career-card{
-background:#111;
+background:var(--app-surface-gradient);
 padding:18px 20px;
 border-radius:8px;
-border:1px solid #222;
+border:1px solid var(--app-border);
 transition:0.3s;
 }
 
 .career-card:hover{
-background:#161616;
+background:var(--app-card-soft);
 transform:translateY(-3px);
 box-shadow:0 0 14px rgba(255,76,41,0.25);
 }
 
 .career-card h3{
 font-size:18px;
-color:#ff4c29;
+color:var(--app-accent);
 margin-bottom:8px;
 }
 
 .career-card p{
 font-size:14px;
-color:#ddd;
+color:var(--app-text-muted);
 }
 
 /* FAQ */
@@ -140,21 +140,21 @@ margin-bottom:4px;
 
 .faq p{
 font-size:14px;
-color:#ccc;
+color:var(--app-text-muted);
 }
 
 /* APPLY */
 
 .career-apply{
 padding:45px 8%;
-background:#050505;
+background:var(--app-card-soft);
 text-align:center;
  margin-bottom: 0px;
 }
 
 .career-apply h2{
 font-size:28px;
-color:#ff4c29;
+color:var(--app-accent);
 margin-bottom:12px;
 }
 
@@ -170,10 +170,10 @@ margin-top:20px;
 .career-form input,
 .career-form textarea{
 padding:12px;
-background:#111;
-border:1px solid #222;
+background:var(--app-input);
+border:1px solid var(--app-input-border);
 border-radius:6px;
-color:white;
+color:var(--app-text);
 font-size:14px;
 }
 
@@ -183,7 +183,7 @@ height:90px;
 
 .career-form button{
 padding:12px;
-background:#ff4c29;
+background:var(--app-accent);
 border:none;
 color:white;
 font-size:15px;
@@ -193,8 +193,8 @@ transition:0.3s;
 }
 
 .career-form button:hover{
-background:white;
-color:black;
+background:var(--app-accent-hover);
+color:#fff;
 }
 
 /* ANIMATION */
