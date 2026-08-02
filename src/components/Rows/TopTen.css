@@ -2,7 +2,7 @@
   position: relative;
   width: 100%;
   overflow: hidden;
-  padding: 26px 0 18px;
+  padding: 18px 0 10px;
 }
 
 .topten-title {
@@ -12,48 +12,46 @@
 .topten-scroll {
   display: flex;
   align-items: end;
-  gap: 92px;
-  overflow-x: auto;
-  padding: 0 clamp(32px, 5vw, 76px) 28px clamp(62px, 7vw, 108px);
+  gap: 64px;
+  overflow-x: hidden;
+  padding: 0 clamp(32px, 5vw, 76px) 12px clamp(62px, 7vw, 108px);
   scroll-behavior: smooth;
   scrollbar-width: none;
-  cursor: grab;
-  touch-action: pan-y;
+  cursor: default;
 }
 
 .topten-scroll::-webkit-scrollbar { display: none; }
-.topten-scroll:active { cursor: grabbing; }
 
 .topten-card-wrapper {
   position: relative;
   display: flex;
   align-items: end;
-  height: 305px;
+  height: 246px;
   flex: 0 0 auto;
 }
 
 .topten-index {
   position: absolute;
   z-index: 0;
-  left: -82px;
-  bottom: 8px;
+  left: -62px;
+  bottom: 3px;
   color: rgba(127, 135, 153, .18);
-  font-size: 242px;
+  font-size: 182px;
   font-weight: 900;
   line-height: .8;
   pointer-events: none;
   -webkit-text-stroke: 1px rgba(127, 135, 153, .28);
 }
 
-.topten-index.double-digit { left: -105px; font-size: 188px; }
+.topten-index.double-digit { left: -79px; font-size: 146px; }
 .topten-card-wrapper .package-card { position: relative; z-index: 1; }
 
 .topten-scroll-btn {
   position: absolute;
-  top: 54%;
+  top: 57%;
   z-index: 3;
   width: 44px;
-  height: 96px;
+  height: 74px;
   border: 1px solid var(--app-border, rgba(255,255,255,.18));
   border-radius: 999px;
   background: var(--app-card, rgba(18,18,18,.92));
@@ -70,11 +68,11 @@
 .topten-scroll-btn.right { right: 12px; }
 
 @media (max-width: 640px) {
-  .topten-container { padding-top: 20px; }
-  .topten-scroll { gap: 48px; padding-left: 58px; }
-  .topten-card-wrapper { height: 270px; }
-  .topten-index { font-size: 170px; left: -55px; }
-  .topten-index.double-digit { font-size: 136px; left: -70px; }
+  .topten-container { padding-top: 16px; }
+  .topten-scroll { gap: 42px; padding-left: 54px; overflow-x: auto; cursor: grab; touch-action: pan-x; }
+  .topten-card-wrapper { height: 212px; }
+  .topten-index { font-size: 142px; left: -48px; }
+  .topten-index.double-digit { font-size: 112px; left: -58px; }
   .topten-scroll-btn { width: 34px; height: 66px; font-size: 24px; }
   .topten-scroll-btn.left { left: 6px; }
   .topten-scroll-btn.right { right: 6px; }

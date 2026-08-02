@@ -7,7 +7,6 @@ export default function TopTen({ row }) {
   const scrollRef = useRef(null);
   const [showLeft, setShowLeft] = useState(false);
   const [showRight, setShowRight] = useState(false);
-  const [dragStart, setDragStart] = useState(null);
   const items = Array.isArray(row?.items) ? row.items.slice(0, 10) : [];
 
   const updateControls = () => {
@@ -38,14 +37,6 @@ export default function TopTen({ row }) {
         className="topten-scroll"
         ref={scrollRef}
         onScroll={updateControls}
-        onPointerDown={(event) => setDragStart({ x: event.clientX, left: event.currentTarget.scrollLeft })}
-        onPointerMove={(event) => {
-          if (!dragStart) return;
-          event.currentTarget.scrollLeft = dragStart.left - (event.clientX - dragStart.x);
-        }}
-        onPointerUp={() => setDragStart(null)}
-        onPointerCancel={() => setDragStart(null)}
-        onPointerLeave={() => setDragStart(null)}
       >
         {items.map((item, index) => {
           const packageCode = item.packageCode || item.code || item.id;
