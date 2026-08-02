@@ -120,6 +120,30 @@ button:focus-visible {
   outline: 2px solid var(--app-accent);
 }
 
+/* Shared search-field baseline for public listings and dashboard panels. */
+input[type="search"] {
+  -webkit-appearance: none;
+  appearance: none;
+  min-height: 42px;
+  padding: 9px 13px;
+  border: 1px solid var(--app-input-border);
+  border-radius: 10px;
+  background: var(--app-input);
+  color: var(--app-text);
+  font: inherit;
+  line-height: 1.35;
+}
+
+input[type="search"]::placeholder {
+  color: var(--app-text-muted);
+}
+
+input[type="search"]:focus {
+  border-color: var(--app-accent);
+  box-shadow: var(--app-focus);
+  outline: none;
+}
+
 /* Keep scrolling available while removing native scrollbar chrome. */
 html,
 body {
