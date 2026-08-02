@@ -46,6 +46,12 @@
 .topten-index.double-digit { left: -79px; font-size: 146px; }
 .topten-card-wrapper .package-card { position: relative; z-index: 1; }
 
+/* Keep the existing light surface; only give the rank a clearer brand contrast. */
+[data-theme="light"] .topten-index {
+  color: rgba(190, 18, 31, .16);
+  -webkit-text-stroke: 1px rgba(151, 16, 27, .42);
+}
+
 .topten-scroll-btn {
   position: absolute;
   top: 57%;
