@@ -951,6 +951,43 @@ html[data-theme] :where(.ns-badge, .notification-count, .countdown) {
   color: #ffffff !important;
 }
 
+/* Dynamic rows use a compact Netflix-style heading: title and action stay close to the cards. */
+html[data-theme] .dr-header {
+  border-bottom: 0 !important;
+  margin-bottom: 10px !important;
+  padding-bottom: 0 !important;
+}
+
+html[data-theme] .dr-title::after {
+  display: none !important;
+}
+
+html[data-theme] .dr-view-all {
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  color: var(--app-accent) !important;
+  padding: 0 !important;
+  font-weight: 700 !important;
+}
+
+html[data-theme] .dr-view-all:hover {
+  background: transparent !important;
+  color: var(--app-accent-hover) !important;
+  transform: none !important;
+}
+
+html[data-theme] .dr-scroll {
+  padding-top: 0 !important;
+  padding-bottom: 14px !important;
+}
+
+/* Preserve the dark Top 10 treatment while giving ranks contrast on light surfaces. */
+html[data-theme="light"] .topten-index {
+  color: rgba(190, 18, 31, .16) !important;
+  -webkit-text-stroke: 1px rgba(151, 16, 27, .42) !important;
+}
+
 /* Tables outside PDF/invoice/transport slip templates */
 html[data-theme] :where(
   .mytours-table-wrapper,

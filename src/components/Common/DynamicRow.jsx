@@ -65,7 +65,7 @@ export default function DynamicRow({ row }) {
             },
           })}
         >
-          View All
+          View All <span aria-hidden="true">→</span>
         </button>
       </div>
 
