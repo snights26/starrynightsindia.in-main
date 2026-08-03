@@ -8,7 +8,7 @@ export const indiaRegionsGeoJson = {
     },
     {
       type: "Feature",
-      properties: { code: "DOM-LD", name: "Ladakh", label: "Ladakh", color: "#f5b14c", labelPoint: [90, 23] },
+      properties: { code: "DOM-LA", name: "Ladakh", label: "Ladakh", color: "#f5b14c", labelPoint: [90, 23] },
       geometry: { type: "Polygon", coordinates: [[[67, 9], [83, 5], [101, 9], [118, 20], [113, 34], [97, 42], [80, 38], [67, 35], [74, 27], [72, 16], [67, 9]]] }
     },
     {

@@ -16,7 +16,6 @@ const MAPS = [
     title: "India Travel Atlas",
     eyebrow: "Domestic journeys",
     description: "Explore India by state and uncover handpicked domestic itineraries for the selected region.",
-    referenceImage: "/maps/india-reference.png",
     assetUrl: "/maps/india-states.geojson",
     coordinateMode: "svg",
     fallbackTransform: "translate(11 13) scale(0.89)",
@@ -99,7 +98,7 @@ const DOMESTIC_REGION_CODES_BY_NAME = {
   "jammu and kashmir": "DOM-JK",
   "jammu & kashmir": "DOM-JK",
   "kashmir": "DOM-JK",
-  "ladakh": "DOM-LD",
+  "ladakh": "DOM-LA",
   "jharkhand": "DOM-JH",
   "karnataka": "DOM-KA",
   "kerala": "DOM-KL",
@@ -196,7 +195,7 @@ Object.assign(STATIC_REGION_NAMES_BY_CODE, {
   "DOM-JK": "Jammu and Kashmir",
   "DOM-KA": "Karnataka",
   "DOM-KL": "Kerala",
-  "DOM-LD": "Ladakh",
+  "DOM-LA": "Ladakh",
   "DOM-LK": "Lakshadweep",
   "DOM-MG": "Meghalaya",
   "DOM-MH": "Maharashtra",
@@ -370,11 +369,6 @@ function flattenCategories(items = []) {
   return items.flatMap((item) => [item, ...flattenCategories(item.children || [])]);
 }
 
-function featureName(feature, categoriesByCode) {
-  const code = featureCode(feature);
-  return categoriesByCode.get(code)?.name || featureTitle(feature);
-}
-
 export default function Click2Explore() {
   const navigate = useNavigate();
   const [slideIndex, setSlideIndex] = useState(0);
@@ -394,7 +388,6 @@ export default function Click2Explore() {
   const activeMap = MAPS[slideIndex];
   const activeGeoData = geoDataByMap[activeMap.key] || { geoJson: activeMap.geoJson, coordinateMode: activeMap.coordinateMode || "svg" };
   const activeGeoJson = activeGeoData.geoJson;
-  const showReferenceImage = Boolean(activeMap.referenceImage);
   const showLandmass = Boolean(activeMap.landmassPath) && activeGeoData.coordinateMode !== "geo";
   const mapProjection = useMemo(
     () => createProjection(activeGeoJson, activeMap.viewBox, activeGeoData.coordinateMode),
@@ -567,24 +560,13 @@ export default function Click2Explore() {
               </div>
 
               <svg
-                  className={`explorer-map explorer-map--${activeMap.key} ${showReferenceImage ? "has-reference-image" : ""}`}
+                  className={`explorer-map explorer-map--${activeMap.key}`}
                 viewBox={activeMap.viewBox}
                 role="img"
                 aria-label={`${activeMap.label} region map`}
                 preserveAspectRatio="xMidYMid meet"
               >
                 <rect {...activeMap.backdrop} className="map-backdrop" style={{ "--map-bg": activeMap.background }} />
-                {showReferenceImage && (
-                  <image
-                    href={activeMap.referenceImage}
-                    x={activeMap.backdrop.x}
-                    y={activeMap.backdrop.y}
-                    width={activeMap.backdrop.width}
-                    height={activeMap.backdrop.height}
-                    preserveAspectRatio="xMidYMid meet"
-                    className="map-reference-image"
-                  />
-                )}
                 {showLandmass && (
                   <path
                     className={`map-landmass map-landmass--${activeMap.key}`}

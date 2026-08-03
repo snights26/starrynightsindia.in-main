@@ -112,7 +112,15 @@ export default function Chatbot() {
               if (msg.type === "packages") {
                 return (
                   <div className="chatbot-packages" key={i}>
-                    <button className="chatbot-scroll-btn left" onClick={() => scroll("left")}>{"<"}</button>
+                    <button
+                      type="button"
+                      className="chatbot-scroll-btn left"
+                      onClick={() => scroll("left")}
+                      aria-label="Show previous recommended packages"
+                      title="Previous packages"
+                    >
+                      <span aria-hidden="true">‹</span>
+                    </button>
                     <div className="chatbot-packages-row" ref={scrollRef}>
                       {msg.data.map((pkg) => (
                         <div className="chatbot-card-wrapper" key={pkg.packageCode || pkg.code || pkg.id}>
@@ -124,7 +132,15 @@ export default function Chatbot() {
                         </div>
                       ))}
                     </div>
-                    <button className="chatbot-scroll-btn right" onClick={() => scroll("right")}>{">"}</button>
+                    <button
+                      type="button"
+                      className="chatbot-scroll-btn right"
+                      onClick={() => scroll("right")}
+                      aria-label="Show more recommended packages"
+                      title="More packages"
+                    >
+                      <span aria-hidden="true">›</span>
+                    </button>
                   </div>
                 );
               }
