@@ -78,8 +78,11 @@ export default function DynamicRow({ row }) {
                 key={code || idx}
                 title={item.title || code}
                 image={item.image || item.thumbnailUrl}
-                onClick={() => navigate("/all-packages", {
-                  state: { title: item.title || code, categoryCode: code },
+                onClick={() => navigate("/all-categories", {
+                  state: {
+                    title: item.title || code,
+                    drilldownCategoryCode: code,
+                  },
                 })}
               />
             );

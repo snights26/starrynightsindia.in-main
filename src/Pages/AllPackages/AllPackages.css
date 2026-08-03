@@ -31,12 +31,10 @@
 .packages-grid{
   margin-top:22px;
   display:grid;
-
-  /* 280 -> 220 */
-  grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
-
-  gap:14px; /* 20 se kam */
-  justify-items:center;
+  grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
+  gap:18px;
+  align-items:start;
+  justify-items:start;
 }
 
 .packages-empty-state{
@@ -79,10 +77,8 @@
   .packages-grid{
     margin-top:16px;
 
-    /* jitne fit ho sake utne */
-    grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
-
-    gap:10px;
+    grid-template-columns:repeat(auto-fill,minmax(135px,1fr));
+    gap:14px;
   }
 
   .packages-empty-state{
@@ -109,10 +105,14 @@
    .packages-grid{
     margin-top:14px;
 
-    /* small phones pe bhi dynamic */
-    grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:12px;
+  }
 
-    gap:8px;
+  .packages-grid .package-card{
+    min-width:0;
+    width:100%;
+    max-width:none;
   }
 
   .back-btn{

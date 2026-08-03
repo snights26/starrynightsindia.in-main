@@ -4,7 +4,7 @@
 
 .dr-row{
   width:100%;
-  padding:50px 14px 0 14px;
+  padding:28px 24px 18px;
   position:relative;
   color:var(--app-text, #fff);
   background:var(--app-bg, #000);
@@ -50,7 +50,7 @@
   display:flex;
   gap:18px;
   overflow-x:auto;
-  padding-bottom:14px;
+  padding-bottom:4px;
   scroll-behavior:smooth;
   scrollbar-width:none;
   -ms-overflow-style:none;
@@ -119,7 +119,7 @@ html[data-theme] .dr-row .dr-btn{
 @media (max-width:768px){
 
   .dr-row{
-    padding:35px 10px 0 10px;
+    padding:24px 16px 16px;
   }
 
   .dr-title{
@@ -146,7 +146,7 @@ html[data-theme] .dr-row .dr-btn{
 @media (max-width:480px){
 
   .dr-row{
-    padding:28px 8px 0 8px;
+    padding:20px 12px 14px;
   }
 
   .dr-title{
