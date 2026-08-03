@@ -216,10 +216,8 @@
   transition: fill 0.18s ease, stroke 0.18s ease, filter 0.18s ease;
 }
 
-/* The reference image provides the readable labelled state map. The available
-   GeoJSON uses a different projection, so it remains an invisible interaction
-   layer: drawing its selected outline over the image would falsely place the
-   state border away from the actual printed border. */
+/* The reference image provides the readable labelled state map.  GeoJSON is
+   intentionally an invisible interaction layer until a state is hovered or selected. */
 .explorer-map.has-reference-image .map-backdrop {
   fill: #fff;
 }
@@ -238,22 +236,16 @@
 
 .explorer-map.has-reference-image .geo-region:hover,
 .explorer-map.has-reference-image .geo-region:focus-visible {
-  fill: transparent;
-  stroke: transparent;
+  fill: rgba(229, 9, 20, 0.1);
+  stroke: var(--app-accent);
+  stroke-width: 0.7;
 }
 
 .explorer-map.has-reference-image .geo-region.selected {
-  fill: transparent;
-  stroke: transparent;
-  filter: none;
-}
-
-.explorer-map.has-reference-image .geo-region-hit:hover,
-.explorer-map.has-reference-image .geo-region-hit:focus-visible,
-.explorer-map.has-reference-image .geo-region-hit.selected {
-  fill: transparent;
-  stroke: transparent;
-  filter: none;
+  fill: rgba(229, 9, 20, 0.12);
+  stroke: var(--app-accent);
+  stroke-width: 0.75;
+  filter: drop-shadow(0 4px 7px rgba(229, 9, 20, 0.2));
 }
 
 .geo-region:hover,
