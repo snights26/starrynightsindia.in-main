@@ -986,6 +986,7 @@ html[data-theme] .dr-scroll {
    separate the content; row-level borders and inset highlights created visible
    seams between consecutive rows. */
 html[data-theme] .dr-row {
+  background: var(--app-bg) !important;
   border: 0 !important;
   box-shadow: none !important;
 }
