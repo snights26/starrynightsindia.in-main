@@ -16,6 +16,9 @@ const MAPS = [
     title: "India Travel Atlas",
     eyebrow: "Domestic journeys",
     description: "Explore India by state and uncover handpicked domestic itineraries for the selected region.",
+    // Keep the labelled reference atlas as the visible domestic map.  The GeoJSON
+    // layer remains above it solely for state selection and its border highlight.
+    referenceImage: "/maps/india-reference.png",
     assetUrl: "/maps/india-states.geojson",
     coordinateMode: "svg",
     fallbackTransform: "translate(11 13) scale(0.89)",
@@ -388,6 +391,7 @@ export default function Click2Explore() {
   const activeMap = MAPS[slideIndex];
   const activeGeoData = geoDataByMap[activeMap.key] || { geoJson: activeMap.geoJson, coordinateMode: activeMap.coordinateMode || "svg" };
   const activeGeoJson = activeGeoData.geoJson;
+  const showReferenceImage = Boolean(activeMap.referenceImage);
   const showLandmass = Boolean(activeMap.landmassPath) && activeGeoData.coordinateMode !== "geo";
   const mapProjection = useMemo(
     () => createProjection(activeGeoJson, activeMap.viewBox, activeGeoData.coordinateMode),
@@ -560,13 +564,24 @@ export default function Click2Explore() {
               </div>
 
               <svg
-                  className={`explorer-map explorer-map--${activeMap.key}`}
+                  className={`explorer-map explorer-map--${activeMap.key} ${showReferenceImage ? "has-reference-image" : ""}`}
                 viewBox={activeMap.viewBox}
                 role="img"
                 aria-label={`${activeMap.label} region map`}
                 preserveAspectRatio="xMidYMid meet"
               >
                 <rect {...activeMap.backdrop} className="map-backdrop" style={{ "--map-bg": activeMap.background }} />
+                {showReferenceImage && (
+                  <image
+                    href={activeMap.referenceImage}
+                    x={activeMap.backdrop.x}
+                    y={activeMap.backdrop.y}
+                    width={activeMap.backdrop.width}
+                    height={activeMap.backdrop.height}
+                    preserveAspectRatio="xMidYMid meet"
+                    className="map-reference-image"
+                  />
+                )}
                 {showLandmass && (
                   <path
                     className={`map-landmass map-landmass--${activeMap.key}`}

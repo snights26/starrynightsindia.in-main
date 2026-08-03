@@ -216,6 +216,38 @@
   transition: fill 0.18s ease, stroke 0.18s ease, filter 0.18s ease;
 }
 
+/* The reference image provides the readable labelled state map.  GeoJSON is
+   intentionally an invisible interaction layer until a state is hovered or selected. */
+.explorer-map.has-reference-image .map-backdrop {
+  fill: #fff;
+}
+
+.explorer-map.has-reference-image .map-landmass {
+  display: none;
+}
+
+.explorer-map.has-reference-image .geo-region {
+  fill: transparent;
+  stroke: transparent;
+  stroke-width: 0.8;
+  mix-blend-mode: normal;
+  pointer-events: all;
+}
+
+.explorer-map.has-reference-image .geo-region:hover,
+.explorer-map.has-reference-image .geo-region:focus-visible {
+  fill: rgba(229, 9, 20, 0.1);
+  stroke: var(--app-accent);
+  stroke-width: 0.7;
+}
+
+.explorer-map.has-reference-image .geo-region.selected {
+  fill: rgba(229, 9, 20, 0.12);
+  stroke: var(--app-accent);
+  stroke-width: 0.75;
+  filter: drop-shadow(0 4px 7px rgba(229, 9, 20, 0.2));
+}
+
 .geo-region:hover,
 .geo-region:focus-visible {
   fill: var(--app-hover-panel-bg);
