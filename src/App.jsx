@@ -1,38 +1,42 @@
+import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Header from "./components/Header/Header";
 import HeroSlider from "./components/Header/HeroSlider";
-import AllPackages from "./Pages/AllPackages/AllPackages";
 import DynamicRowsContainer from "./components/Rows/DynamicRowsContainer";
-import AllCategories from "./Pages/AllCategories/AllCategories";
 import Stats from "./Pages/AboutUs/Stats";
-import AboutUs from "./Pages/AboutUs/AboutUs";
 import Footer from "./components/Header/Footer";
-import Contact from "./Pages/Contact/Contact";
-import Trending from "./components/Rows/Trending";
-import Gallery from "./Pages/Gallery/Gallery";
-import Career from "./Pages/Career/Career";
-import NewEnquiry from "./Pages/Enquiry/NewEnquiry";
-import Notifications from "./Pages/Notifications/Notifications";
-import Click2Explore from "./Pages/Click2Explore/Click2Explore";
 import GlobalExplorerPromo from "./Pages/Click2Explore/GlobalExplorerPromo";
 
 import { AuthProvider } from "./context/AuthContext";
 import PrivateRoute from "./components/AuthFolder/PrivateRoute";
 import ProfileCompletionGuard from "./components/AuthFolder/ProfileCompletionGuard";
-import UserDashboard from "./components/Dashboard/Dashboard";
-import RecentlyViewedPackages from "./components/Dashboard/RecentlyViewedPackages";
-import MyPayments from "./components/Dashboard/MyPayments";
-import Invoice from "./components/Common/invoice";
-import DetailPage from "./components/Common/DetailPage";
-import TransportSlip from "./components/Common/TransportSlip";
-import CreateUser from "./components/AuthFolder/createUser"; 
 import Chatbot from "./components/Chatbot/Chatbot";
 import { Toaster } from "react-hot-toast";
 
 import ScrollToTop from "./components/ScrollToTop";
 import { CustomAlertProvider, ThemeProvider, ThemeToggle } from "./common";
 import "./theme-overrides.css";
+
+// Route-only modules (including PDF and dashboard code) must not inflate the
+// homepage download. Each module is loaded only after its route is opened.
+const AllPackages = lazy(() => import("./Pages/AllPackages/AllPackages"));
+const AllCategories = lazy(() => import("./Pages/AllCategories/AllCategories"));
+const AboutUs = lazy(() => import("./Pages/AboutUs/AboutUs"));
+const Contact = lazy(() => import("./Pages/Contact/Contact"));
+const Trending = lazy(() => import("./components/Rows/Trending"));
+const Gallery = lazy(() => import("./Pages/Gallery/Gallery"));
+const Career = lazy(() => import("./Pages/Career/Career"));
+const NewEnquiry = lazy(() => import("./Pages/Enquiry/NewEnquiry"));
+const Notifications = lazy(() => import("./Pages/Notifications/Notifications"));
+const Click2Explore = lazy(() => import("./Pages/Click2Explore/Click2Explore"));
+const UserDashboard = lazy(() => import("./components/Dashboard/Dashboard"));
+const RecentlyViewedPackages = lazy(() => import("./components/Dashboard/RecentlyViewedPackages"));
+const MyPayments = lazy(() => import("./components/Dashboard/MyPayments"));
+const Invoice = lazy(() => import("./components/Common/invoice"));
+const DetailPage = lazy(() => import("./components/Common/DetailPage"));
+const TransportSlip = lazy(() => import("./components/Common/TransportSlip"));
+const CreateUser = lazy(() => import("./components/AuthFolder/createUser"));
 
 function App() {
   return (
@@ -49,6 +53,7 @@ function App() {
         <Header />
 
         <ProfileCompletionGuard>
+        <Suspense fallback={<main className="ui-loader" aria-live="polite">Loading page…</main>}>
         <Routes>
           
           {/* ================= HOME ================= */}
@@ -130,6 +135,7 @@ function App() {
           />
 
         </Routes>
+        </Suspense>
         </ProfileCompletionGuard>
 
         <Footer />
