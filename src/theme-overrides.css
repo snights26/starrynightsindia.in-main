@@ -982,6 +982,14 @@ html[data-theme] .dr-scroll {
   padding-bottom: 14px !important;
 }
 
+/* Dynamic catalogue rows form one continuous browsing surface.  Their headings
+   separate the content; row-level borders and inset highlights created visible
+   seams between consecutive rows. */
+html[data-theme] .dr-row {
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
 /* Preserve the dark Top 10 treatment while giving ranks contrast on light surfaces. */
 html[data-theme="light"] .topten-index {
   color: rgba(190, 18, 31, .16) !important;
