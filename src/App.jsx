@@ -37,6 +37,7 @@ const Invoice = lazy(() => import("./components/Common/invoice"));
 const DetailPage = lazy(() => import("./components/Common/DetailPage"));
 const TransportSlip = lazy(() => import("./components/Common/TransportSlip"));
 const CreateUser = lazy(() => import("./components/AuthFolder/createUser"));
+const TimeZones = lazy(() => import("./Pages/TimeZones/TimeZones"));
 
 function App() {
   return (
@@ -74,6 +75,7 @@ function App() {
           <Route path="/all-packages" element={<AllPackages />} />
           <Route path="/brands/:brandSlug" element={<AllPackages />} />
           <Route path="/all-categories" element={<AllCategories />} />
+          <Route path="/time-zones" element={<TimeZones />} />
           <Route path="/about" element={<AboutUs />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/trending" element={<Trending />} />

@@ -73,6 +73,32 @@
   gap: 24px;
 }
 
+.header-utilities{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.ist-live-clock{
+  display:inline-flex;
+  align-items:baseline;
+  gap:5px;
+  padding:7px 9px;
+  border:1px solid rgba(255,255,255,.2);
+  border-radius:7px;
+  background:rgba(0,0,0,.22);
+  color:#fff;
+  font:inherit;
+  font-size:12px;
+  font-variant-numeric:tabular-nums;
+  font-weight:700;
+  letter-spacing:.04em;
+  cursor:pointer;
+}
+
+.ist-live-clock:hover,.ist-live-clock:focus-visible{border-color:#e50914;color:#fff;outline:none;}
+.ist-live-clock__label{color:#ff6b72;font-size:10px;font-weight:800;}
+
 .nav-menu a {
   font-family: "Inter", sans-serif;
   font-size: 14px;
@@ -234,6 +260,8 @@
     display: none;
   }
 
+  .header-utilities{margin-left:auto;}
+
   /* 🔥 MOBILE HEADER HEIGHT */
   .luxury-header {
     min-height: 55px;
@@ -257,6 +285,11 @@
   .luxury-header.scrolled .header-logo-img{
     height: 40px;
   }
+}
+
+@media(max-width:480px){
+  .ist-live-clock{padding:6px;font-size:11px;}
+  .ist-live-clock__label{display:none;}
 }
 
 /* ================= MOBILE BOTTOM NAV ================= */

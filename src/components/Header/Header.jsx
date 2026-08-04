@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import "./Header.css";
 import LoginPopup from "../AuthFolder/Login";
 import { useAuth } from "../../context/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FiHome, FiUser } from "react-icons/fi";
 import { MdExplore } from "react-icons/md";     
 import { FaPlane } from "react-icons/fa";      
-import { useLocation } from "react-router-dom";
+import LiveIstClock from "./LiveIstClock";
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
@@ -74,18 +74,20 @@ export default function Header() {
 
           {/* DESKTOP NAV */}
           <nav className="nav-menu">
-            <a href="/">Home</a>
-            <a href="/trending">Trending</a>
-            <a href="/gallery">Gallery</a>
-            <a href="/updates">What's New</a>
-            <a href="/about">About Us</a>
-            <a href="/careers">Careers</a>
-            <a href="/contact">Contact</a>
-            <a href="/Enquiry" className="nav-cta">Enquire Now</a>
+            <Link to="/">Home</Link>
+            <Link to="/trending">Trending</Link>
+            <Link to="/gallery">Gallery</Link>
+            <Link to="/updates">What's New</Link>
+            <Link to="/about">About Us</Link>
+            <Link to="/careers">Careers</Link>
+            <Link to="/contact">Contact</Link>
+            <Link to="/Enquiry" className="nav-cta">Enquire Now</Link>
           </nav>
 
           {/* RIGHT SIDE */}
-          <div className="desktop-auth">
+          <div className="header-utilities">
+            <LiveIstClock />
+            <div className="desktop-auth">
   {user ? (
     <div className="profile-wrapper">
       <button
@@ -112,22 +114,23 @@ export default function Header() {
       Sign In
     </button>
   )}
-</div>
+            </div>
+          </div>
         </div>
       </header>
 
       {/* SIDEBAR */}
       <div className={`sidebar ${menuOpen ? "active" : ""}`}>
-        <a href="/"  className={location.pathname === "/" ? "active-link" : ""} onClick={() => setMenuOpen(false)}>Home</a>
-        <a href="/trending" className={location.pathname === "/trending" ? "active-link" : ""} onClick={() => setMenuOpen(false)}>Trending</a>
-        <a href="/gallery" className={location.pathname === "/gallery" ? "active-link" : ""} onClick={() => setMenuOpen(false)}>Gallery</a>
-        <a href="/updates" className={location.pathname === "/updates" ? "active-link" : ""} onClick={() => setMenuOpen(false)}>What's New</a>
-        <a href="/about" className={location.pathname === "/about" ? "active-link" : ""} onClick={() => setMenuOpen(false)}>About Us</a>
-        <a href="/careers" className={location.pathname === "/careers" ? "active-link" : ""} onClick={() => setMenuOpen(false)}>Careers</a>
-        <a href="/contact" className={location.pathname === "/contact" ? "active-link" : ""} onClick={() => setMenuOpen(false)}>Contact</a>
-        <a href="/Enquiry" className={location.pathname === "/Enquiry" ? "active-link" : ""} onClick={() => setMenuOpen(false)}>
+        <Link to="/"  className={location.pathname === "/" ? "active-link" : ""} onClick={() => setMenuOpen(false)}>Home</Link>
+        <Link to="/trending" className={location.pathname === "/trending" ? "active-link" : ""} onClick={() => setMenuOpen(false)}>Trending</Link>
+        <Link to="/gallery" className={location.pathname === "/gallery" ? "active-link" : ""} onClick={() => setMenuOpen(false)}>Gallery</Link>
+        <Link to="/updates" className={location.pathname === "/updates" ? "active-link" : ""} onClick={() => setMenuOpen(false)}>What's New</Link>
+        <Link to="/about" className={location.pathname === "/about" ? "active-link" : ""} onClick={() => setMenuOpen(false)}>About Us</Link>
+        <Link to="/careers" className={location.pathname === "/careers" ? "active-link" : ""} onClick={() => setMenuOpen(false)}>Careers</Link>
+        <Link to="/contact" className={location.pathname === "/contact" ? "active-link" : ""} onClick={() => setMenuOpen(false)}>Contact</Link>
+        <Link to="/Enquiry" className={location.pathname === "/Enquiry" ? "active-link" : ""} onClick={() => setMenuOpen(false)}>
           Enquire Now
-        </a>
+        </Link>
       </div>
 
       {/* OVERLAY */}

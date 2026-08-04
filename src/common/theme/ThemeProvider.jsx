@@ -5,6 +5,9 @@ import { getScheduledTheme } from "./themeConfig";
 
 const ThemeContext = createContext(null);
 const themes = { dark: darkTheme, light: lightTheme };
+// Kept only in the current JavaScript document. This deliberately survives
+// component remounts and in-app navigation, but resets on a browser refresh.
+let manualThemeOverride = null;
 
 const applyTheme = (theme) => {
   const root = document.documentElement;
@@ -14,7 +17,7 @@ const applyTheme = (theme) => {
 };
 
 export function ThemeProvider({ children }) {
-  const [preference, setPreferenceState] = useState(null);
+  const [preference, setPreferenceState] = useState(() => manualThemeOverride);
   const [scheduledTheme, setScheduledTheme] = useState(getScheduledTheme);
 
   const activeThemeName = preference || scheduledTheme;
@@ -32,6 +35,7 @@ export function ThemeProvider({ children }) {
   }, []);
 
   const setPreference = (nextPreference) => {
+    manualThemeOverride = nextPreference;
     setPreferenceState(nextPreference);
   };
 
