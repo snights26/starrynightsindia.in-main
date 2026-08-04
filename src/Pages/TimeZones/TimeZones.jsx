@@ -6,34 +6,52 @@ import "./TimeZones.css";
 
 const TIME_ZONE_REGIONS = [
   {
-    timeZone: "Asia/Kolkata",
-    zoneLabel: "India Standard Time",
-    regionName: "India",
-    categoryCodes: ["REGION-CENTRAL", "REGION-SOUTH", "REGION-NORTHEAST", "REGION-WEST", "REGION-EAST", "REGION-NORTH"],
-  },
-  {
-    timeZone: "Europe/London",
-    zoneLabel: "Greenwich Mean Time",
-    regionName: "Europe & Africa",
-    categoryCodes: ["REGION-EUROPE", "REGION-AFRICA"],
+    timeZone: "America/Los_Angeles",
+    zoneLabel: "Pacific Time",
+    regionName: "Los Angeles",
+    categoryCodes: ["REGION-NORTH-AMERICA"],
   },
   {
     timeZone: "America/New_York",
     zoneLabel: "Eastern Time",
-    regionName: "The Americas",
+    regionName: "New York",
     categoryCodes: ["REGION-NORTH-AMERICA", "REGION-SOUTH-AMERICA"],
+  },
+  {
+    timeZone: "Europe/London",
+    zoneLabel: "Greenwich Mean Time",
+    regionName: "London",
+    categoryCodes: ["REGION-EUROPE", "REGION-AFRICA"],
+  },
+  {
+    timeZone: "Asia/Dubai",
+    zoneLabel: "Gulf Standard Time",
+    regionName: "Dubai",
+    categoryCodes: ["REGION-AFRICA", "REGION-ASIA"],
+  },
+  {
+    timeZone: "Asia/Kolkata",
+    zoneLabel: "India Standard Time",
+    regionName: "Kolkata",
+    categoryCodes: ["REGION-CENTRAL", "REGION-SOUTH", "REGION-NORTHEAST", "REGION-WEST", "REGION-EAST", "REGION-NORTH", "REGION-ASIA"],
   },
   {
     timeZone: "Asia/Singapore",
     zoneLabel: "Singapore Standard Time",
-    regionName: "Asia & Islands",
+    regionName: "Singapore",
     categoryCodes: ["REGION-ASIA", "REGION-ISLANDS"],
+  },
+  {
+    timeZone: "Asia/Tokyo",
+    zoneLabel: "Japan Standard Time",
+    regionName: "Tokyo",
+    categoryCodes: ["REGION-ASIA"],
   },
   {
     timeZone: "Australia/Sydney",
     zoneLabel: "Australian Eastern Time",
-    regionName: "Oceania & Antarctica",
-    categoryCodes: ["REGION-OCEANIA", "REGION-ANTARCTICA"],
+    regionName: "Sydney",
+    categoryCodes: ["REGION-OCEANIA", "REGION-ISLANDS", "REGION-ANTARCTICA"],
   },
 ];
 
@@ -103,16 +121,13 @@ export default function TimeZones() {
   }, []);
 
   const timeZones = useMemo(() => {
-    const usedCodes = new Set();
-
     return TIME_ZONE_REGIONS.reduce((resolved, definition) => {
       const availableCategories = categoryTree.flatMap((parent) => [parent, ...(parent.children || [])]);
       const categories = definition.categoryCodes
         .map((code) => availableCategories.find((item) => (item.code || item.categoryCode) === code))
-        .filter((category) => category && !usedCodes.has(category.code || category.categoryCode));
+        .filter(Boolean);
       if (!categories.length) return resolved;
 
-      categories.forEach((category) => usedCodes.add(category.code || category.categoryCode));
       resolved.push({
         ...definition,
         categories,
