@@ -5,7 +5,10 @@ import api from "../../utils/api";
 import "./TimeZones.css";
 
 const TIME_ZONE_REGIONS = [
-  { timeZone: "Asia/Kolkata", zoneLabel: "India Standard Time", categoryNames: ["Maharashtra", "Delhi", "Goa"] },
+  // DOM is the existing parent category for every domestic Indian region.
+  // Selecting it intentionally includes North, South, North-East and all
+  // other India packages instead of narrowing the IST clock to Maharashtra.
+  { timeZone: "Asia/Kolkata", zoneLabel: "India Standard Time", parentCode: "DOM", regionName: "India" },
   { timeZone: "Asia/Dubai", zoneLabel: "Gulf Standard Time", categoryNames: ["Dubai", "United Arab Emirates"] },
   { timeZone: "Asia/Singapore", zoneLabel: "Singapore Standard Time", categoryNames: ["Singapore"] },
   { timeZone: "Europe/London", zoneLabel: "United Kingdom Time", categoryNames: ["United Kingdom"] },
@@ -59,7 +62,7 @@ function AnalogClock({ timeZone, now }) {
 export default function TimeZones() {
   const navigate = useNavigate();
   const [now, setNow] = useState(() => new Date());
-  const [categories, setCategories] = useState([]);
+  const [categoryTree, setCategoryTree] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -72,12 +75,9 @@ export default function TimeZones() {
     api.get("/categories/tree")
       .then((tree) => {
         if (!active) return;
-        const regions = (Array.isArray(tree) ? tree : [])
-          .filter((parent) => ["DOM", "INT"].includes(parent.code || parent.categoryCode))
-          .flatMap((parent) => parent.children || []);
-        setCategories(regions);
+        setCategoryTree(Array.isArray(tree) ? tree : []);
       })
-      .catch(() => active && setCategories([]))
+      .catch(() => active && setCategoryTree([]))
       .finally(() => active && setLoading(false));
     return () => { active = false; };
   }, []);
@@ -88,8 +88,14 @@ export default function TimeZones() {
 
     return TIME_ZONE_REGIONS.reduce((resolved, definition) => {
       if (usedZones.has(definition.timeZone)) return resolved;
-      const category = definition.categoryNames
-        .map((candidate) => categories.find((item) => normalize(item.name || item.title || item.categoryName) === normalize(candidate)))
+      const domesticParent = definition.parentCode
+        ? categoryTree.find((item) => (item.code || item.categoryCode) === definition.parentCode)
+        : null;
+      const regions = categoryTree
+        .filter((parent) => ["DOM", "INT"].includes(parent.code || parent.categoryCode))
+        .flatMap((parent) => parent.children || []);
+      const category = domesticParent || definition.categoryNames
+        .map((candidate) => regions.find((item) => normalize(item.name || item.title || item.categoryName) === normalize(candidate)))
         .find((item) => item && !usedCodes.has(item.code || item.categoryCode));
       if (!category) return resolved;
 
@@ -98,11 +104,11 @@ export default function TimeZones() {
       resolved.push({
         ...definition,
         categoryCode: category.code || category.categoryCode,
-        regionName: category.name || category.title || category.categoryName,
+        regionName: definition.regionName || category.name || category.title || category.categoryName,
       });
       return resolved;
     }, []);
-  }, [categories]);
+  }, [categoryTree]);
 
   return (
     <main className="timezones-page">
