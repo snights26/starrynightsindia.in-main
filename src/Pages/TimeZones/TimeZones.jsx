@@ -5,17 +5,37 @@ import api from "../../utils/api";
 import "./TimeZones.css";
 
 const TIME_ZONE_REGIONS = [
-  // DOM is the existing parent category for every domestic Indian region.
-  // Selecting it intentionally includes North, South, North-East and all
-  // other India packages instead of narrowing the IST clock to Maharashtra.
-  { timeZone: "Asia/Kolkata", zoneLabel: "India Standard Time", parentCode: "DOM", regionName: "India" },
-  { timeZone: "Asia/Dubai", zoneLabel: "Gulf Standard Time", categoryNames: ["Dubai", "United Arab Emirates"] },
-  { timeZone: "Asia/Singapore", zoneLabel: "Singapore Standard Time", categoryNames: ["Singapore"] },
-  { timeZone: "Europe/London", zoneLabel: "United Kingdom Time", categoryNames: ["United Kingdom"] },
-  { timeZone: "America/New_York", zoneLabel: "Eastern Time", categoryNames: ["United States"] },
+  {
+    timeZone: "Asia/Kolkata",
+    zoneLabel: "India Standard Time",
+    regionName: "India",
+    categoryCodes: ["REGION-CENTRAL", "REGION-SOUTH", "REGION-NORTHEAST", "REGION-WEST", "REGION-EAST", "REGION-NORTH"],
+  },
+  {
+    timeZone: "Europe/London",
+    zoneLabel: "Greenwich Mean Time",
+    regionName: "Europe & Africa",
+    categoryCodes: ["REGION-EUROPE", "REGION-AFRICA"],
+  },
+  {
+    timeZone: "America/New_York",
+    zoneLabel: "Eastern Time",
+    regionName: "The Americas",
+    categoryCodes: ["REGION-NORTH-AMERICA", "REGION-SOUTH-AMERICA"],
+  },
+  {
+    timeZone: "Asia/Singapore",
+    zoneLabel: "Singapore Standard Time",
+    regionName: "Asia & Islands",
+    categoryCodes: ["REGION-ASIA", "REGION-ISLANDS"],
+  },
+  {
+    timeZone: "Australia/Sydney",
+    zoneLabel: "Australian Eastern Time",
+    regionName: "Oceania & Antarctica",
+    categoryCodes: ["REGION-OCEANIA", "REGION-ANTARCTICA"],
+  },
 ];
-
-const normalize = (value) => String(value || "").trim().toLocaleLowerCase();
 
 function clockParts(timeZone, date) {
   const parts = new Intl.DateTimeFormat("en-GB", {
@@ -84,27 +104,18 @@ export default function TimeZones() {
 
   const timeZones = useMemo(() => {
     const usedCodes = new Set();
-    const usedZones = new Set();
 
     return TIME_ZONE_REGIONS.reduce((resolved, definition) => {
-      if (usedZones.has(definition.timeZone)) return resolved;
-      const domesticParent = definition.parentCode
-        ? categoryTree.find((item) => (item.code || item.categoryCode) === definition.parentCode)
-        : null;
-      const regions = categoryTree
-        .filter((parent) => ["DOM", "INT"].includes(parent.code || parent.categoryCode))
-        .flatMap((parent) => parent.children || []);
-      const category = domesticParent || (definition.categoryNames || [])
-        .map((candidate) => regions.find((item) => normalize(item.name || item.title || item.categoryName) === normalize(candidate)))
-        .find((item) => item && !usedCodes.has(item.code || item.categoryCode));
-      if (!category) return resolved;
+      const availableCategories = categoryTree.flatMap((parent) => [parent, ...(parent.children || [])]);
+      const categories = definition.categoryCodes
+        .map((code) => availableCategories.find((item) => (item.code || item.categoryCode) === code))
+        .filter((category) => category && !usedCodes.has(category.code || category.categoryCode));
+      if (!categories.length) return resolved;
 
-      usedZones.add(definition.timeZone);
-      usedCodes.add(category.code || category.categoryCode);
+      categories.forEach((category) => usedCodes.add(category.code || category.categoryCode));
       resolved.push({
         ...definition,
-        categoryCode: category.code || category.categoryCode,
-        regionName: definition.regionName || category.name || category.title || category.categoryName,
+        categories,
       });
       return resolved;
     }, []);
@@ -117,7 +128,7 @@ export default function TimeZones() {
         <div>
           <p className="timezones-page__eyebrow">Live travel time</p>
           <h1>Explore packages by time zone</h1>
-          <p>Choose a regional clock to open its existing package collection.</p>
+          <p>Choose a regional clock, then select a region to view its package collection.</p>
         </div>
       </div>
 
@@ -130,10 +141,13 @@ export default function TimeZones() {
               className="timezone-card"
               key={zone.timeZone}
               type="button"
-              onClick={() => navigate("/all-packages", {
-                state: { title: `${zone.regionName} packages`, categoryCode: zone.categoryCode },
+              onClick={() => navigate("/all-categories", {
+                state: {
+                  title: `${zone.regionName} regions`,
+                  items: zone.categories,
+                },
               })}
-              aria-label={`View ${zone.regionName} packages for ${zone.zoneLabel}`}
+              aria-label={`View ${zone.regionName} regions for ${zone.zoneLabel}`}
             >
               <AnalogClock timeZone={zone.timeZone} now={now} />
               <span className="timezone-card__time">{formattedTime(zone.timeZone, now)}</span>
