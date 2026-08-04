@@ -6,16 +6,13 @@ import "./TimeZones.css";
 
 const TIME_ZONE_REGIONS = [
   {
-    timeZone: "America/Los_Angeles",
-    zoneLabel: "Pacific Time",
-    regionName: "Los Angeles",
-    categoryCodes: ["REGION-NORTH-AMERICA"],
-  },
-  {
-    timeZone: "America/New_York",
-    zoneLabel: "Eastern Time",
-    regionName: "New York",
-    categoryCodes: ["REGION-NORTH-AMERICA", "REGION-SOUTH-AMERICA"],
+    timeZone: "Asia/Kolkata",
+    zoneLabel: "India Standard Time",
+    regionName: "India — Kolkata",
+    categoryCodes: [
+      "REGION-CENTRAL", "REGION-SOUTH", "REGION-NORTHEAST", "REGION-WEST",
+      "REGION-EAST", "REGION-NORTH", "REGION-ASIA",
+    ],
   },
   {
     timeZone: "Europe/London",
@@ -24,34 +21,22 @@ const TIME_ZONE_REGIONS = [
     categoryCodes: ["REGION-EUROPE", "REGION-AFRICA"],
   },
   {
-    timeZone: "Asia/Dubai",
-    zoneLabel: "Gulf Standard Time",
-    regionName: "Dubai",
-    categoryCodes: ["REGION-AFRICA", "REGION-ASIA"],
+    timeZone: "America/New_York",
+    zoneLabel: "Eastern Time",
+    regionName: "New York",
+    categoryCodes: ["REGION-NORTH-AMERICA", "REGION-SOUTH-AMERICA"],
   },
   {
-    timeZone: "Asia/Kolkata",
-    zoneLabel: "India Standard Time",
-    regionName: "Kolkata",
-    categoryCodes: ["REGION-CENTRAL", "REGION-SOUTH", "REGION-NORTHEAST", "REGION-WEST", "REGION-EAST", "REGION-NORTH", "REGION-ASIA"],
-  },
-  {
-    timeZone: "Asia/Singapore",
-    zoneLabel: "Singapore Standard Time",
-    regionName: "Singapore",
-    categoryCodes: ["REGION-ASIA", "REGION-ISLANDS"],
+    timeZone: "America/Los_Angeles",
+    zoneLabel: "Pacific Time",
+    regionName: "Los Angeles",
+    categoryCodes: ["REGION-NORTH-AMERICA"],
   },
   {
     timeZone: "Asia/Tokyo",
     zoneLabel: "Japan Standard Time",
     regionName: "Tokyo",
-    categoryCodes: ["REGION-ASIA"],
-  },
-  {
-    timeZone: "Australia/Sydney",
-    zoneLabel: "Australian Eastern Time",
-    regionName: "Sydney",
-    categoryCodes: ["REGION-OCEANIA", "REGION-ISLANDS", "REGION-ANTARCTICA"],
+    categoryCodes: ["REGION-ASIA", "REGION-ISLANDS", "REGION-OCEANIA", "REGION-ANTARCTICA"],
   },
 ];
 
