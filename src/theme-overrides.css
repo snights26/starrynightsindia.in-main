@@ -1472,7 +1472,7 @@ html[data-theme] *::-webkit-scrollbar {
 /* Top 10 is a dedicated ranked rail. The card sits over the right-hand side
    of its large outlined numeral, like the familiar streaming-service layout. */
 html[data-theme="dark"] .topten-container {
-  background: #151515 !important;
+  background: transparent !important;
   border-color: transparent !important;
   box-shadow: none !important;
   padding: 12px 0 0 !important;
@@ -1484,7 +1484,7 @@ html[data-theme="dark"] .topten-index {
 }
 
 html[data-theme="light"] .topten-container {
-  background: #f7f8fa !important;
+  background: transparent !important;
   border-color: transparent !important;
   box-shadow: none !important;
   padding: 12px 0 0 !important;
