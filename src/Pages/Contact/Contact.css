@@ -123,6 +123,12 @@
   transform: translateY(-2px);
 }
 
+.contact-form button:disabled {
+  cursor: wait;
+  opacity: .7;
+  transform: none;
+}
+
 /* TOAST */
 .toast {
   position: fixed;

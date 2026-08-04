@@ -11,6 +11,7 @@ export default function Contact() {
   });
 
   const [showToast, setShowToast] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -18,8 +19,10 @@ export default function Contact() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isSubmitting) return;
 
     try {
+      setIsSubmitting(true);
       await api.post("/contact", formData);
       setShowToast(true);
       setFormData({
@@ -30,6 +33,8 @@ export default function Contact() {
       });
     } catch {
       alert("Unable to send message");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -128,7 +133,9 @@ export default function Contact() {
               required
             ></textarea>
 
-            <button type="submit">Send Message</button>
+            <button type="submit" disabled={isSubmitting} aria-busy={isSubmitting}>
+              {isSubmitting ? "Sending message…" : "Send Message"}
+            </button>
           </form>
         </div>
 

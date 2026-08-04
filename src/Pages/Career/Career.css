@@ -197,6 +197,11 @@ background:var(--app-accent-hover);
 color:#fff;
 }
 
+.career-form button:disabled{
+cursor:wait;
+opacity:.7;
+}
+
 /* ANIMATION */
 
 @keyframes logoRotate{

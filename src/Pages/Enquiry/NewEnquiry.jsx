@@ -36,6 +36,7 @@ function NewEnquiry() {
 
   const [form, setForm] = useState(initialForm);
   const [showPopup, setShowPopup] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // HANDLE CHANGE
   const handleChange = (e) => {
@@ -54,6 +55,7 @@ function NewEnquiry() {
   // SUBMIT
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isSubmitting) return;
 
     if (!form.name || !form.contact || !form.destination) {
       alert("Please fill required fields");
@@ -61,6 +63,7 @@ function NewEnquiry() {
     }
 
     try {
+      setIsSubmitting(true);
       await api.post("/enquiries", form);
       setShowPopup(true);
       setForm(initialForm);
@@ -70,6 +73,8 @@ function NewEnquiry() {
       }, 2000);
     } catch {
       alert("Unable to submit enquiry");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -218,8 +223,8 @@ function NewEnquiry() {
             Back
           </button>
 
-          <button className="submit-btn">
-            Submit Enquiry
+          <button className="submit-btn" type="submit" disabled={isSubmitting} aria-busy={isSubmitting}>
+            {isSubmitting ? "Submitting enquiry…" : "Submit Enquiry"}
           </button>
         </div>
 

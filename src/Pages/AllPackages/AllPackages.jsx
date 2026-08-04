@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import api from "../../utils/api";
 import PackageCard from "../../components/Common/PackageCard";
@@ -71,7 +71,16 @@ export default function AllPackages() {
     ? location.state.packageCodes
     : stateItems.map(packageCodeOf).filter(Boolean);
   const [packages, setPackages] = useState([]);
-  const { page, pageCount, pageItems, setPage } = usePagination(packages, 12);
+  const [searchInput, setSearchInput] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const filteredPackages = useMemo(() => {
+    const query = searchQuery.trim().toLowerCase();
+    if (!query) return packages;
+    return packages.filter((pkg) => JSON.stringify(pkg).toLowerCase().includes(query));
+  }, [packages, searchQuery]);
+  const { page, pageCount, pageItems, setPage } = usePagination(filteredPackages, 12);
+
+  useEffect(() => setPage(1), [searchQuery, setPage]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -96,10 +105,30 @@ export default function AllPackages() {
     <div className="all-packages-page">
       <div className="all-packages-topbar">
         <h1 className="page-title">{pageTitle}</h1>
-        <button className="back-btn" onClick={() => navigate(-1)}>Back</button>
+        <div className="catalogue-actions">
+          <form
+            className="catalogue-search"
+            role="search"
+            onSubmit={(event) => {
+              event.preventDefault();
+              setSearchQuery(searchInput);
+            }}
+          >
+            <label className="catalogue-search__label" htmlFor="package-search">Search packages</label>
+            <input
+              id="package-search"
+              value={searchInput}
+              onChange={(event) => setSearchInput(event.target.value)}
+              placeholder="Name, code, destination…"
+            />
+            <button type="submit">Search</button>
+            {searchQuery && <button type="button" className="catalogue-search__clear" onClick={() => { setSearchInput(""); setSearchQuery(""); }}>Clear</button>}
+          </form>
+          <button className="back-btn" onClick={() => navigate(-1)}>Back</button>
+        </div>
       </div>
 
-      {packages.length > 0 ? (
+      {filteredPackages.length > 0 ? (
         <div className="packages-grid">
           {pageItems.map((pkg, idx) => (
             <PackageCard
@@ -114,10 +143,12 @@ export default function AllPackages() {
         <div className="packages-empty-state" role="status">
           {isBrandRoute
             ? "No packages available for this brand."
-            : "No packages are available right now."}
+            : searchQuery
+              ? "No packages match your search."
+              : "No packages are available right now."}
         </div>
       )}
-      <Pagination page={page} pageCount={pageCount} setPage={setPage} itemCount={packages.length} label="packages" />
+      <Pagination page={page} pageCount={pageCount} setPage={setPage} itemCount={filteredPackages.length} label="packages" />
     </div>
   );
 }

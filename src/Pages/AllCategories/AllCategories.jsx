@@ -25,10 +25,19 @@ export default function AllCategories() {
     ? rowCategories
     : categories;
   const [resolvedDrilldownCode, setResolvedDrilldownCode] = useState("");
+  const [searchInput, setSearchInput] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
   const isResolvingDrilldown = Boolean(
     drilldownCategoryCode && resolvedDrilldownCode !== drilldownCategoryCode
   );
-  const { page, pageCount, pageItems, setPage } = usePagination(displayedCategories, 12);
+  const filteredCategories = useMemo(() => {
+    const query = searchQuery.trim().toLowerCase();
+    if (!query) return displayedCategories;
+    return displayedCategories.filter((category) => JSON.stringify(category).toLowerCase().includes(query));
+  }, [displayedCategories, searchQuery]);
+  const { page, pageCount, pageItems, setPage } = usePagination(filteredCategories, 12);
+
+  useEffect(() => setPage(1), [searchQuery, setPage]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -78,7 +87,27 @@ export default function AllCategories() {
     <div className="all-categories-page">
       <div className="all-categories-topbar">
         <h1 className="page-title">{pageTitle}</h1>
-        <button className="back-btn" onClick={() => navigate(-1)}>Back</button>
+        <div className="catalogue-actions">
+          <form
+            className="catalogue-search"
+            role="search"
+            onSubmit={(event) => {
+              event.preventDefault();
+              setSearchQuery(searchInput);
+            }}
+          >
+            <label className="catalogue-search__label" htmlFor="category-search">Search categories</label>
+            <input
+              id="category-search"
+              value={searchInput}
+              onChange={(event) => setSearchInput(event.target.value)}
+              placeholder="Name or category code…"
+            />
+            <button type="submit">Search</button>
+            {searchQuery && <button type="button" className="catalogue-search__clear" onClick={() => { setSearchInput(""); setSearchQuery(""); }}>Clear</button>}
+          </form>
+          <button className="back-btn" onClick={() => navigate(-1)}>Back</button>
+        </div>
       </div>
 
       {isResolvingDrilldown ? (
@@ -101,8 +130,8 @@ export default function AllCategories() {
               );
             })}
           </div>
-          {displayedCategories.length === 0 && <div className="categories-empty-state">No subcategories are available.</div>}
-          <Pagination page={page} pageCount={pageCount} setPage={setPage} itemCount={displayedCategories.length} label="categories" />
+          {filteredCategories.length === 0 && <div className="categories-empty-state">{searchQuery ? "No categories match your search." : "No subcategories are available."}</div>}
+          <Pagination page={page} pageCount={pageCount} setPage={setPage} itemCount={filteredCategories.length} label="categories" />
         </>
       )}
     </div>

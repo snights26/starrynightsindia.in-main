@@ -19,6 +19,7 @@ position:"",
 about:"",
 resume:null
 });
+const [isSubmitting, setIsSubmitting] = useState(false);
 
 
 /* INPUT CHANGE */
@@ -38,6 +39,7 @@ setFormData({...formData,[name]:value});
 
 const handleSubmit=async(e)=>{
 e.preventDefault();
+if (isSubmitting) return;
 
 const data=new FormData();
 
@@ -49,6 +51,8 @@ data.append("about",formData.about);
 data.append("resume",formData.resume);
 
 try{
+
+setIsSubmitting(true);
 
 await fetch(`${apiBaseUrl}/career-apply`,{
 method:"POST",
@@ -75,6 +79,8 @@ e.target.reset();
 console.error(err);
 alert("Error submitting application");
 
+} finally {
+setIsSubmitting(false);
 }
 
 };
@@ -558,7 +564,9 @@ placeholder="Tell us about yourself"
 onChange={handleChange}
 />
 
-<button type="submit">Submit Application</button>
+<button type="submit" disabled={isSubmitting} aria-busy={isSubmitting}>
+{isSubmitting ? "Submitting application…" : "Submit Application"}
+</button>
 
 </form>
 
