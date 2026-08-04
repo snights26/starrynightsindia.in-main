@@ -1475,6 +1475,7 @@ html[data-theme="dark"] .topten-container {
   background: #151515 !important;
   border-color: transparent !important;
   box-shadow: none !important;
+  padding: 12px 0 0 !important;
 }
 
 html[data-theme="dark"] .topten-index {
@@ -1486,6 +1487,7 @@ html[data-theme="light"] .topten-container {
   background: #f7f8fa !important;
   border-color: transparent !important;
   box-shadow: none !important;
+  padding: 12px 0 0 !important;
 }
 
 html[data-theme="light"] .topten-title {
@@ -1499,7 +1501,8 @@ html[data-theme="light"] .topten-index {
 
 html[data-theme] .topten-scroll {
   gap: 10px !important;
-  padding: 0 clamp(20px, 4vw, 56px) 8px !important;
+  overflow-y: hidden !important;
+  padding: 0 clamp(20px, 4vw, 56px) !important;
 }
 
 html[data-theme] .topten-card-wrapper {
@@ -1530,7 +1533,8 @@ html[data-theme] .topten-index.double-digit {
 }
 
 @media (max-width: 640px) {
-  html[data-theme] .topten-scroll { gap: 4px !important; padding-left: 16px !important; }
+  html[data-theme] .topten-container { padding-top: 10px !important; }
+  html[data-theme] .topten-scroll { gap: 4px !important; overflow-y: hidden !important; padding: 0 16px !important; }
   html[data-theme] .topten-card-wrapper { width: 170px !important; height: 202px !important; flex-basis: 170px !important; }
   html[data-theme] .topten-card-wrapper .package-card { min-width: 120px !important; max-width: 120px !important; min-height: 180px !important; }
   html[data-theme] .topten-card-wrapper .package-image-wrapper { height: 135px !important; }
