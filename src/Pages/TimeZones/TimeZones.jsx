@@ -8,7 +8,7 @@ const TIME_ZONE_REGIONS = [
   {
     timeZone: "Asia/Kolkata",
     zoneLabel: "India Standard Time",
-    regionName: "India — Kolkata",
+    regionName: "Kolkata",
     categoryCodes: [
       "REGION-CENTRAL", "REGION-SOUTH", "REGION-NORTHEAST", "REGION-WEST",
       "REGION-EAST", "REGION-NORTH", "REGION-ASIA",
@@ -128,7 +128,7 @@ export default function TimeZones() {
         <div>
           <p className="timezones-page__eyebrow">Live travel time</p>
           <h1>Explore packages by time zone</h1>
-          <p>Choose a regional clock, then select a region to view its package collection.</p>
+          <p>Choose an IANA time zone clock, then select a region to view its package collection.</p>
         </div>
       </div>
 
