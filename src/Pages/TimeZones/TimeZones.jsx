@@ -94,7 +94,7 @@ export default function TimeZones() {
       const regions = categoryTree
         .filter((parent) => ["DOM", "INT"].includes(parent.code || parent.categoryCode))
         .flatMap((parent) => parent.children || []);
-      const category = domesticParent || definition.categoryNames
+      const category = domesticParent || (definition.categoryNames || [])
         .map((candidate) => regions.find((item) => normalize(item.name || item.title || item.categoryName) === normalize(candidate)))
         .find((item) => item && !usedCodes.has(item.code || item.categoryCode));
       if (!category) return resolved;

@@ -28,7 +28,6 @@ export default function LiveIstClock() {
       className="ist-live-clock"
       onClick={() => navigate("/time-zones")}
       aria-label="Open world time zones and region packages"
-      title="India Standard Time — browse time zones"
     >
       <span className="ist-live-clock__label">IST</span>
       <time dateTime={now.toISOString()}>{getIstTime(now)}</time>

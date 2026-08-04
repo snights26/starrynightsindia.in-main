@@ -89,15 +89,15 @@
   background:transparent;
   color:#e50914;
   font:inherit;
-  font-size:12px;
+  font-size:17px;
   font-variant-numeric:tabular-nums;
   font-weight:800;
   letter-spacing:.04em;
   cursor:pointer;
 }
 
-.ist-live-clock:hover,.ist-live-clock:focus-visible{color:#ff4650;outline:2px solid rgba(229,9,20,.55);outline-offset:4px;}
-.ist-live-clock__label{color:inherit;font-size:10px;font-weight:800;}
+.ist-live-clock:hover,.ist-live-clock:focus-visible{color:#ff4650;outline:none;}
+.ist-live-clock__label{color:inherit;font-size:11px;font-weight:800;}
 
 .nav-menu a {
   font-family: "Inter", sans-serif;
@@ -288,7 +288,7 @@
 }
 
 @media(max-width:480px){
-  .ist-live-clock{padding:6px;font-size:11px;}
+  .ist-live-clock{padding:6px;font-size:14px;}
   .ist-live-clock__label{display:none;}
 }
 
