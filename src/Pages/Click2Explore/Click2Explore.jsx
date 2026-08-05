@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { EmptyState } from "../../common";
 import Pagination, { usePagination } from "../../components/Common/Pagination";
 import api, { resolveAssetUrl } from "../../utils/api";
-import { indiaRegionsGeoJson, internationalRegionsGeoJson } from "./regionGeoJson";
 import "./Click2Explore.css";
 
 const MAPS = [
@@ -16,18 +15,13 @@ const MAPS = [
     title: "India Travel Atlas",
     eyebrow: "Domestic journeys",
     description: "Explore India by state and uncover handpicked domestic itineraries for the selected region.",
-    // Keep the labelled reference atlas as the visible domestic map.  The GeoJSON
-    // layer remains above it solely for state selection and its border highlight.
-    referenceImage: "/maps/india-reference.png",
     assetUrl: "/maps/india-states.geojson",
-    coordinateMode: "svg",
-    fallbackTransform: "translate(11 13) scale(0.89)",
+    coordinateMode: "geo",
     viewBox: "0 0 202 258",
     backdrop: { x: 1, y: 1, width: 200, height: 256, rx: 18 },
     background: "#f8fafc",
     landmassPath: "",
     annotations: [],
-    geoJson: indiaRegionsGeoJson
   },
   {
     key: "international",
@@ -38,7 +32,7 @@ const MAPS = [
     eyebrow: "International journeys",
     description: "Move across the international atlas and open journeys curated for the country you select.",
     assetUrl: "/maps/world-countries.geojson",
-    coordinateMode: "svg",
+    coordinateMode: "geo",
     viewBox: "0 0 248 168",
     backdrop: { x: 1, y: 1, width: 246, height: 166, rx: 18 },
     background: "#28abc2",
@@ -50,7 +44,6 @@ const MAPS = [
       { label: "INDIAN OCEAN", x: 162, y: 128 },
       { label: "ARABIAN SEA", x: 147, y: 97 }
     ],
-    geoJson: internationalRegionsGeoJson
   }
 ];
 
@@ -228,12 +221,44 @@ function parseViewBox(viewBox) {
   return { x, y, width, height };
 }
 
-function collectRings(feature) {
-  const geometry = feature.geometry;
+function polygonRings(feature) {
+  const geometry = feature?.geometry;
   if (!geometry) return [];
-  if (geometry.type === "Polygon") return geometry.coordinates;
-  if (geometry.type === "MultiPolygon") return geometry.coordinates.flat();
+  if (geometry.type === "Polygon") return [geometry.coordinates];
+  if (geometry.type === "MultiPolygon") return geometry.coordinates;
   return [];
+}
+
+function collectRings(feature) {
+  return polygonRings(feature).flat();
+}
+
+function isValidRing(ring) {
+  if (!Array.isArray(ring) || ring.length < 4) return false;
+  const first = ring[0];
+  const last = ring[ring.length - 1];
+  return ring.every((point) => Array.isArray(point)
+    && point.length >= 2
+    && Number.isFinite(point[0])
+    && Number.isFinite(point[1]))
+    && first[0] === last[0]
+    && first[1] === last[1];
+}
+
+function validateMapFeature(feature, map) {
+  const geometry = feature?.geometry;
+  const stableId = featureCode(feature) || featureTitle(feature);
+  const regionCode = featureCode(feature) || resolveStaticRegionCode(map, feature);
+  const valid = Boolean(stableId)
+    && Boolean(regionCode)
+    && (geometry?.type === "Polygon" || geometry?.type === "MultiPolygon")
+    && collectRings(feature).length > 0
+    && collectRings(feature).every(isValidRing);
+
+  if (!valid) {
+    console.warn(`[GlobalExplorer] Invalid geometry for ${featureTitle(feature) || "unknown region"}`, feature);
+  }
+  return valid;
 }
 
 function collectPoints(geoJson, coordinateMode) {
@@ -343,11 +368,9 @@ function formatRegionName(value) {
 }
 
 function featurePath(feature, projection) {
-  return collectRings(feature)
-    .map((ring) => {
-      const points = ring.map((point) => formatPoint(projection(point))).join(" L ");
-      return `M ${points} Z`;
-    })
+  return polygonRings(feature)
+    .flatMap((polygon) => polygon.filter(isValidRing))
+    .map((ring) => `M ${ring.map((point) => formatPoint(projection(point))).join(" L ")} Z`)
     .join(" ");
 }
 
@@ -368,6 +391,14 @@ function fallbackRegionCenter(code, projection) {
   return coordinate ? projection(coordinate) : null;
 }
 
+function featureLabelPoint(feature, projection) {
+  const configuredPoint = featureProperties(feature).labelPoint;
+  if (Array.isArray(configuredPoint) && configuredPoint.length >= 2) {
+    return projection(configuredPoint);
+  }
+  return featureCenter(feature, projection);
+}
+
 function flattenCategories(items = []) {
   return items.flatMap((item) => [item, ...flattenCategories(item.children || [])]);
 }
@@ -376,7 +407,7 @@ export default function Click2Explore() {
   const navigate = useNavigate();
   const [slideIndex, setSlideIndex] = useState(0);
   const [geoDataByMap, setGeoDataByMap] = useState(() => (
-    Object.fromEntries(MAPS.map((map) => [map.key, { geoJson: map.geoJson, coordinateMode: map.coordinateMode || "svg" }]))
+    Object.fromEntries(MAPS.map((map) => [map.key, { geoJson: null, coordinateMode: "geo" }]))
   ));
   const [categoryTree, setCategoryTree] = useState([]);
   const [categoryLoadFailed, setCategoryLoadFailed] = useState(false);
@@ -389,12 +420,12 @@ export default function Click2Explore() {
   const [packageLoadFailed, setPackageLoadFailed] = useState(false);
 
   const activeMap = MAPS[slideIndex];
-  const activeGeoData = geoDataByMap[activeMap.key] || { geoJson: activeMap.geoJson, coordinateMode: activeMap.coordinateMode || "svg" };
+  const activeGeoData = geoDataByMap[activeMap.key] || { geoJson: null, coordinateMode: "geo" };
   const activeGeoJson = activeGeoData.geoJson;
-  const showReferenceImage = Boolean(activeMap.referenceImage);
+  const mapReady = Boolean(activeGeoJson?.features?.length);
   const showLandmass = Boolean(activeMap.landmassPath) && activeGeoData.coordinateMode !== "geo";
   const mapProjection = useMemo(
-    () => createProjection(activeGeoJson, activeMap.viewBox, activeGeoData.coordinateMode),
+    () => createProjection(activeGeoJson || { features: [] }, activeMap.viewBox, activeGeoData.coordinateMode),
     [activeGeoJson, activeMap.viewBox, activeGeoData.coordinateMode]
   );
   const selectedRegionCode = selectedByMap[activeMap.key] || activeMap.defaultRegionCode;
@@ -428,8 +459,8 @@ export default function Click2Explore() {
   };
 
   const selectedFeature = useMemo(() => {
-    return activeGeoJson.features.find((feature) => resolveFeatureCode(feature) === selectedRegionCode)
-      || activeGeoJson.features[0];
+    return activeGeoJson?.features?.find((feature) => resolveFeatureCode(feature) === selectedRegionCode)
+      || activeGeoJson?.features?.[0];
   }, [activeGeoJson, selectedRegionCode, categoriesByCode, categoriesByName]);
 
   const selectedRegionName = selectedFeature ? resolveFeatureName(selectedFeature) : activeMap.label;
@@ -439,20 +470,25 @@ export default function Click2Explore() {
   useEffect(() => {
     MAPS.forEach((map) => {
       if (!map.assetUrl) return;
-      fetch(map.assetUrl)
+      fetch(map.assetUrl, { cache: "no-store" })
         .then((response) => {
           if (!response.ok) throw new Error("Map asset not found");
           return response.json();
         })
         .then((geoJson) => {
           if (!geoJson?.features?.length) return;
+          const validFeatures = geoJson.features.filter((feature) => validateMapFeature(feature, map));
+          if (!validFeatures.length) return;
           setGeoDataByMap((previous) => ({
             ...previous,
-            [map.key]: { geoJson, coordinateMode: "geo" }
+            [map.key]: {
+              geoJson: { ...geoJson, features: validFeatures },
+              coordinateMode: "geo"
+            }
           }));
         })
         .catch(() => {
-          // Fallback map remains active when a precise GeoJSON asset is not available locally.
+          console.warn(`[GlobalExplorer] Unable to load ${map.key} GeoJSON asset.`);
         });
     });
   }, []);
@@ -564,34 +600,21 @@ export default function Click2Explore() {
               </div>
 
               <svg
-                  className={`explorer-map explorer-map--${activeMap.key} ${showReferenceImage ? "has-reference-image" : ""}`}
+                className={`explorer-map explorer-map--${activeMap.key}`}
                 viewBox={activeMap.viewBox}
                 role="img"
                 aria-label={`${activeMap.label} region map`}
                 preserveAspectRatio="xMidYMid meet"
               >
                 <rect {...activeMap.backdrop} className="map-backdrop" style={{ "--map-bg": activeMap.background }} />
-                {showReferenceImage && (
-                  <image
-                    href={activeMap.referenceImage}
-                    x={activeMap.backdrop.x}
-                    y={activeMap.backdrop.y}
-                    width={activeMap.backdrop.width}
-                    height={activeMap.backdrop.height}
-                    preserveAspectRatio="xMidYMid meet"
-                    className="map-reference-image"
-                  />
-                )}
                 {showLandmass && (
                   <path
                     className={`map-landmass map-landmass--${activeMap.key}`}
                     d={activeMap.landmassPath}
                   />
                 )}
-                <g
-                  className="map-regions-layer"
-                  transform={activeGeoData.coordinateMode === "svg" ? activeMap.fallbackTransform : undefined}
-                >
+                {mapReady ? (
+                <g className="map-regions-layer">
                   {activeGeoJson.features.map((feature, index) => {
                     const properties = featureProperties(feature);
                     const code = resolveFeatureCode(feature) || `${activeMap.key}-${index}`;
@@ -605,6 +628,8 @@ export default function Click2Explore() {
                           d={featurePath(feature, mapProjection)}
                           className={`geo-region ${isSelected ? "selected" : ""}`}
                           style={{ "--region-fill": properties.color || REGION_COLOR_FALLBACKS[index % REGION_COLOR_FALLBACKS.length] }}
+                          fillRule="evenodd"
+                          clipRule="evenodd"
                           onClick={() => selectRegion(feature, activeMap.key)}
                           onKeyDown={(event) => {
                             if (event.key === "Enter" || event.key === " ") {
@@ -627,12 +652,11 @@ export default function Click2Explore() {
                       const center =
                         featureCenter(feature, mapProjection) || fallbackRegionCenter(code, mapProjection);
                       if (!center) return null;
-                      const isSelected = selectedByMap[activeMap.key] === code;
                       const name = resolveFeatureName(feature);
                       return (
                         <circle
                           key={`${code}-hit`}
-                          className={`geo-region-hit ${isSelected ? "selected" : ""}`}
+                          className="geo-region-hit"
                           cx={center[0]}
                           cy={center[1]}
                           r={4.6}
@@ -650,13 +674,27 @@ export default function Click2Explore() {
                       );
                     })}
                   </g>
+                  <g className="india-label-layer" aria-hidden="true">
+                    {activeMap.key === "domestic" && activeGeoJson.features.map((feature) => {
+                      const point = featureLabelPoint(feature, mapProjection);
+                      if (!point) return null;
+                      return (
+                        <text key={`${resolveFeatureCode(feature)}-label`} x={point[0]} y={point[1]}>
+                          {resolveFeatureName(feature)}
+                        </text>
+                      );
+                    })}
+                  </g>
                 </g>
+                ) : (
+                  <text className="map-loading-label" x="50%" y="50%">Loading map…</text>
+                )}
               </svg>
             </article>
           </div>
 
           <div className="explorer-region-strip" aria-label={`${activeMap.label} regions`}>
-            {activeGeoJson.features.map((feature) => {
+            {(activeGeoJson?.features || []).map((feature) => {
               const code = resolveFeatureCode(feature);
               if (!code) return null;
               const isSelected = selectedRegionCode === code;
