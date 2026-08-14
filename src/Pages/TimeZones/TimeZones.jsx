@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { MdArrowBack, MdLocationOn } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
-import api from "../../utils/api";
+import { publicCatalogService } from "../../public-cache/publicData";
 import "./TimeZones.css";
 
 const TIME_ZONE_REGIONS = [
@@ -95,7 +95,7 @@ export default function TimeZones() {
 
   useEffect(() => {
     let active = true;
-    api.get("/categories/tree")
+    publicCatalogService.getCategoryTree()
       .then((tree) => {
         if (!active) return;
         setCategoryTree(Array.isArray(tree) ? tree : []);

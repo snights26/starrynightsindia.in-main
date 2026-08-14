@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import "./Gallery.css";
-import api, { resolveAssetUrl } from "../../utils/api";
+import { resolveAssetUrl } from "../../utils/api";
+import { publicContentService } from "../../public-cache/publicData";
 
 const IMAGES_PER_PAGE = 7;
 
@@ -10,7 +11,7 @@ export default function Gallery({ images = [] }) {
   const [galleryImages, setGalleryImages] = useState(images);
 
   useEffect(() => {
-    api.get("/gallery/public")
+    publicContentService.getGallery()
       .then((data) => setGalleryImages(data.map((item) => resolveAssetUrl(item.image || item.url))))
       .catch(() => setGalleryImages(images));
   }, [images]);

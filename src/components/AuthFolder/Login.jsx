@@ -5,22 +5,10 @@ import { useNavigate } from "react-router-dom";
 import { GOOGLE_AUTH_ENABLED, GOOGLE_CLIENT_ID } from "../../config/authConfig";
 
 export default function LoginPopup({ onClose }) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const { login, googleLogin } = useAuth();
+  const { googleLogin } = useAuth();
   const navigate = useNavigate();
   const googleButtonRef = useRef(null);
   const [googleStatus, setGoogleStatus] = useState(GOOGLE_CLIENT_ID ? "loading" : "unconfigured");
-
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    if (await login(email, password)) {
-      onClose();
-      navigate("/dashboard");
-    } else {
-      alert("Wrong Email or Password");
-    }
-  };
 
   useEffect(() => {
     if (!GOOGLE_AUTH_ENABLED || !GOOGLE_CLIENT_ID || !googleButtonRef.current) {
@@ -50,11 +38,11 @@ export default function LoginPopup({ onClose }) {
           },
         });
         window.google.accounts.id.renderButton(googleButtonRef.current, {
-          theme: "outline",
+          theme: "filled_black",
           size: "large",
           type: "standard",
-          text: "signin_with",
-          width: 270,
+          text: "continue_with",
+          width: 320,
         });
         setGoogleStatus("ready");
       } catch (error) {
@@ -97,36 +85,29 @@ export default function LoginPopup({ onClose }) {
 
   return (
     <div className="netflix-modal-overlay" onClick={onClose}>
-      <div className="netflix-modal-box" onClick={(e) => e.stopPropagation()}>
-        <span className="netflix-close" onClick={onClose}>x</span>
+      <section
+        className="netflix-modal-box"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="google-sign-in-title"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="netflix-modal-glow" aria-hidden="true" />
+        <button className="netflix-close" type="button" onClick={onClose} aria-label="Close sign in dialog">
+          <span aria-hidden="true">×</span>
+        </button>
 
-        <h1>Sign In</h1>
+        <div className="netflix-auth-brand" aria-label="Starry Nights">
+          <span className="netflix-auth-brand-mark" aria-hidden="true">✦</span>
+          <img
+            src="/Starry-Nights-Header.png"
+            className="netflix-auth-logo"
+            alt="Starry Nights"
+          />
+        </div>
 
-        <form onSubmit={handleLogin}>
-          <div className="netflix-input">
-            <input
-              type="email"
-              required
-              placeholder=" "
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <label>Email or phone number</label>
-          </div>
-
-          <div className="netflix-input">
-            <input
-              type="password"
-              required
-              placeholder=" "
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <label>Password</label>
-          </div>
-
-          <button className="netflix-login-btn">Sign In</button>
-        </form>
+        <h1 id="google-sign-in-title">Welcome back</h1>
+        <p className="google-only-auth-copy">Sign in to save your journeys, favourites, and travel plans.</p>
 
         {GOOGLE_AUTH_ENABLED && GOOGLE_CLIENT_ID ? (
           <div className="google-login-wrapper">
@@ -135,9 +116,9 @@ export default function LoginPopup({ onClose }) {
               <div className="google-login-status">Loading Google sign-in...</div>
             )}
             {googleStatus === "error" && (
-              <div className="google-login-status error">
-                Google sign-in could not load. Check the Google OAuth JavaScript origin.
-              </div>
+            <div className="google-login-status error">
+              Google sign-in could not load. Check the Google OAuth JavaScript origin.
+            </div>
             )}
           </div>
         ) : (
@@ -145,22 +126,8 @@ export default function LoginPopup({ onClose }) {
             Google Sign-In disabled
           </button>
         )}
-
-        <div className="netflix-options">
-          <label><input type="checkbox" /> Remember me</label>
-          <span>Need help?</span>
-        </div>
-
-        <p className="netflix-signup">
-          New to Starry Nights?{" "}
-          <span onClick={() => {
-            onClose();
-            navigate("/create-user");
-          }}>
-            Sign up now
-          </span>
-        </p>
-      </div>
+        <p className="netflix-auth-footnote">Secure sign-in powered by Google</p>
+      </section>
     </div>
   );
 }

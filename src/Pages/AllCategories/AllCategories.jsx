@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import api from "../../utils/api";
+import { publicCatalogService } from "../../public-cache/publicData";
 import CategoryCard from "../../components/Common/CategoryCard";
 import Pagination, { usePagination } from "../../components/Common/Pagination";
 import "./AllCategories.css";
@@ -45,7 +45,7 @@ export default function AllCategories() {
     if (drilldownCategoryCode) {
       let isCurrent = true;
 
-      api.get("/categories/tree")
+      publicCatalogService.getCategoryTree()
         .then((tree) => {
           if (!isCurrent) return;
           const parent = (Array.isArray(tree) ? tree : []).find(
@@ -80,7 +80,7 @@ export default function AllCategories() {
     }
 
     if (rowCategories.length) return;
-    api.get("/categories").then(setCategories).catch(() => setCategories([]));
+    publicCatalogService.getCategories().then(setCategories).catch(() => setCategories([]));
   }, [drilldownCategoryCode, location.key, navigate, pageTitle, rowCategories]);
 
   return (

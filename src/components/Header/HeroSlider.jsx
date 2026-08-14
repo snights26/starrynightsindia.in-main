@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import api, { resolveAssetUrl } from "../../utils/api";
+import { resolveAssetUrl } from "../../utils/api";
+import { publicContentService } from "../../public-cache/publicData";
 import "./HeroSlider.css";
 
 export default function HeroSlider() {
@@ -53,7 +54,7 @@ export default function HeroSlider() {
   };
 
   useEffect(() => {
-    api.get("/hero-sliders/public")
+    publicContentService.getHero()
       .then((data) => {
         const mappedSlides = Array.isArray(data)
           ? data

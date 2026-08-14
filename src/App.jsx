@@ -1,5 +1,5 @@
 import { lazy, Suspense } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
 
 import Header from "./components/Header/Header";
 import HeroSlider from "./components/Header/HeroSlider";
@@ -7,6 +7,7 @@ import DynamicRowsContainer from "./components/Rows/DynamicRowsContainer";
 import Stats from "./Pages/AboutUs/Stats";
 import Footer from "./components/Header/Footer";
 import GlobalExplorerPromo from "./Pages/Click2Explore/GlobalExplorerPromo";
+import OccasionPopup from "./components/OccasionPopup/OccasionPopup";
 
 import { AuthProvider } from "./context/AuthContext";
 import PrivateRoute from "./components/AuthFolder/PrivateRoute";
@@ -38,6 +39,7 @@ const DetailPage = lazy(() => import("./components/Common/DetailPage"));
 const TransportSlip = lazy(() => import("./components/Common/TransportSlip"));
 const CreateUser = lazy(() => import("./components/AuthFolder/createUser"));
 const TimeZones = lazy(() => import("./Pages/TimeZones/TimeZones"));
+const LegalPolicy = lazy(() => import("./Pages/LegalPolicies/LegalPolicy"));
 
 function App() {
   return (
@@ -52,6 +54,7 @@ function App() {
   }}
 />
         <Header />
+        <OccasionPopup />
 
         <ProfileCompletionGuard>
         <Suspense fallback={<main className="ui-loader" aria-live="polite">Loading page…</main>}>
@@ -84,7 +87,14 @@ function App() {
           <Route path="/careers" element={<Career />} />
           <Route path="/Enquiry" element={<NewEnquiry />} />
           <Route path="/updates" element={<Notifications />} />
-          <Route path="/create-user" element={<CreateUser />} />
+          <Route path="/privacy-policy" element={<LegalPolicy policy="privacy" />} />
+          <Route path="/terms-and-conditions" element={<LegalPolicy policy="terms" />} />
+          <Route path="/cancellation-refund-policy" element={<LegalPolicy policy="cancellation" />} />
+          <Route path="/payment-policy" element={<LegalPolicy policy="payment" />} />
+          <Route path="/service-delivery-policy" element={<LegalPolicy policy="delivery" />} />
+          <Route path="/booking-terms" element={<Navigate to="/terms-and-conditions" replace />} />
+          <Route path="/cancellation-policy" element={<Navigate to="/cancellation-refund-policy" replace />} />
+          <Route path="/create-user" element={<Navigate to="/" replace />} />
           <Route
             path="/complete-profile"
             element={<PrivateRoute><CreateUser mode="complete" /></PrivateRoute>}

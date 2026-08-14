@@ -4,10 +4,9 @@ import { useAuth } from "../../context/AuthContext";
 import api from "../../utils/api";
 import "./CreateUser.css";
 
-function CreateUser({ mode = "create" }) {
+function CreateUser() {
   const navigate = useNavigate();
-  const { register, user: authUser, updateStoredUser, logout } = useAuth();
-  const isCompleteProfile = mode === "complete";
+  const { user: authUser, updateStoredUser, logout } = useAuth();
   const loadedProfileId = useRef(null);
 
   const [user, setUser] = useState({
@@ -31,16 +30,13 @@ function CreateUser({ mode = "create" }) {
   });
 
   const [preview, setPreview] = useState("");
-  const [loading, setLoading] = useState(isCompleteProfile);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!isCompleteProfile || !authUser?.id) return;
+    if (!authUser?.id) return;
     if (loadedProfileId.current === authUser.id) return;
     loadedProfileId.current = authUser.id;
 
-    setUser((prev) => ({ ...prev, ...authUser }));
-    setPreview(authUser.profileImage || authUser.profileImageUrl || authUser.photo || "");
-    setLoading(true);
     api.get("/users/me")
       .then((data) => {
         setUser((prev) => ({ ...prev, ...data }));
@@ -48,7 +44,7 @@ function CreateUser({ mode = "create" }) {
         updateStoredUser(data);
       })
       .finally(() => setLoading(false));
-  }, [authUser?.id, isCompleteProfile, updateStoredUser]);
+  }, [authUser, updateStoredUser]);
 
   const handleChange = (e) => {
     setUser({
@@ -67,33 +63,13 @@ function CreateUser({ mode = "create" }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (isCompleteProfile) {
-      try {
-        const updated = await api.put("/users/me/complete-profile", user);
-        updateStoredUser(updated);
-        alert(updated.profileCompleted ? "Profile completed" : "Profile saved. You can complete more details later.");
-        navigate("/dashboard", { replace: true });
-      } catch (error) {
-        alert(error?.response?.data?.message || "Unable to save profile");
-      }
-      return;
-    }
-
     try {
-      await register({
-        name: user.name,
-        email: user.email,
-        password: "User@123",
-        contact: user.contact,
-        city: user.city,
-        state: user.state,
-        country: user.country,
-        pincode: user.pincode,
-      });
-      alert("User Created. Temporary password: User@123");
-      navigate("/");
-    } catch {
-      alert("Unable to create user");
+      const updated = await api.put("/users/me/complete-profile", user);
+      updateStoredUser(updated);
+      alert(updated.profileCompleted ? "Profile completed" : "Profile saved. You can complete more details later.");
+      navigate("/dashboard", { replace: true });
+    } catch (error) {
+      alert(error?.response?.data?.message || "Unable to save profile");
     }
   };
 
@@ -104,20 +80,14 @@ function CreateUser({ mode = "create" }) {
       <form className="eu-card" onSubmit={handleSubmit}>
         <div className="eu-header">
           <div>
-            <h2>{isCompleteProfile ? "Profile Details" : "Create User"}</h2>
-            {isCompleteProfile && <p>Keep your contact, travel, and emergency details up to date. Account ID and email are protected.</p>}
+            <h2>Profile Details</h2>
+            <p>Keep your contact, travel, and emergency details up to date. Account ID and email are protected.</p>
           </div>
           <div className="eu-header-actions">
-            {isCompleteProfile && (
-              <button type="button" onClick={() => navigate("/dashboard", { replace: true })}>
-                Continue
-              </button>
-            )}
-            {isCompleteProfile ? (
-              <button type="button" onClick={() => logout(false)}>Logout</button>
-            ) : (
-              <button type="button" onClick={() => navigate(-1)}>Back</button>
-            )}
+            <button type="button" onClick={() => navigate("/dashboard", { replace: true })}>
+              Continue
+            </button>
+            <button type="button" onClick={() => logout(false)}>Logout</button>
           </div>
         </div>
 
@@ -134,7 +104,7 @@ function CreateUser({ mode = "create" }) {
           <div className="eu-grid-2">
             <div className="eu-field">
               <label>User ID</label>
-              <input name="userId" value={user.userId || ""} disabled={isCompleteProfile} readOnly={!isCompleteProfile} />
+              <input name="userId" value={user.userId || ""} disabled readOnly />
             </div>
             <div className="eu-field">
               <label>Name</label>
@@ -147,7 +117,7 @@ function CreateUser({ mode = "create" }) {
                 value={user.email || ""}
                 onChange={handleChange}
                 required
-                disabled={isCompleteProfile}
+                disabled
               />
             </div>
             <div className="eu-field">
@@ -171,8 +141,7 @@ function CreateUser({ mode = "create" }) {
           </div>
         </div>
 
-        {isCompleteProfile && (
-          <div className="eu-section">
+        <div className="eu-section">
             <h3>Travel Preferences</h3>
             <div className="eu-grid-2">
               <div className="eu-field">
@@ -205,8 +174,7 @@ function CreateUser({ mode = "create" }) {
                 />
               </div>
             </div>
-          </div>
-        )}
+        </div>
 
         <div className="eu-section">
           <h3>Identity</h3>
@@ -259,7 +227,7 @@ function CreateUser({ mode = "create" }) {
         </div>
 
         <button className="eu-delete-btn" type="submit">
-          {isCompleteProfile ? "Save Profile" : "Create User"}
+          Save Profile
         </button>
       </form>
     </div>

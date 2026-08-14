@@ -54,10 +54,15 @@ try{
 
 setIsSubmitting(true);
 
-await fetch(`${apiBaseUrl}/career-apply`,{
-method:"POST",
-body:data
-});
+    const response = await fetch(`${apiBaseUrl}/career-apply`,{
+      method:"POST",
+      body:data
+    });
+
+    if (!response.ok) {
+      const payload = await response.json().catch(() => null);
+      throw new Error(payload?.message || "Unable to submit your application. Please try again.");
+    }
 
 alert("Application Submitted Successfully");
 
@@ -77,7 +82,7 @@ e.target.reset();
 }catch(err){
 
 console.error(err);
-alert("Error submitting application");
+  alert(err.message || "Error submitting application");
 
 } finally {
 setIsSubmitting(false);
@@ -555,6 +560,8 @@ onChange={handleChange}
 <input
 type="file"
 name="resume"
+accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+required
 onChange={handleChange}
 />
 

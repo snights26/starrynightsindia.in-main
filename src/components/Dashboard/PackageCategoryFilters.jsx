@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import api from "../../utils/api";
+import { publicCatalogService } from "../../public-cache/publicData";
 import "./PackageCategoryFilters.css";
 
 const codeOf = (category = {}) => String(category.code || category.categoryCode || "").trim();
@@ -20,7 +20,7 @@ export default function PackageCategoryFilters({ parentCode, subcategoryCode, on
 
   useEffect(() => {
     let active = true;
-    api.get("/categories/tree")
+    publicCatalogService.getCategoryTree()
       .then((data) => active && setTree(Array.isArray(data) ? data : []))
       .catch(() => active && setTree([]));
     return () => {

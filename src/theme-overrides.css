@@ -423,14 +423,17 @@ html[data-theme] :where(input, select, textarea):focus {
 
 /* Sign-in modal */
 html[data-theme] .netflix-modal-overlay {
-  background: var(--app-overlay) !important;
+  background:
+    radial-gradient(circle at 84% 8%, rgba(229, 9, 20, 0.28), transparent 27rem),
+    radial-gradient(circle at 8% 92%, rgba(87, 20, 42, 0.32), transparent 30rem),
+    rgba(0, 0, 0, 0.82) !important;
   z-index: 1000010 !important;
 }
 
 html[data-theme] .netflix-modal-box {
-  background: var(--app-card) !important;
-  border-color: var(--app-border) !important;
-  color: var(--app-text) !important;
+  background: linear-gradient(150deg, rgba(30, 30, 30, 0.98), rgba(10, 10, 10, 0.99)) !important;
+  border-color: rgba(255, 255, 255, 0.13) !important;
+  color: #ffffff !important;
 }
 
 html[data-theme] .netflix-modal-box h1,
@@ -440,7 +443,7 @@ html[data-theme] .netflix-options label,
 html[data-theme] .netflix-options span,
 html[data-theme] .netflix-signup,
 html[data-theme] .netflix-signup span {
-  color: var(--app-text) !important;
+  color: #ffffff !important;
 }
 
 html[data-theme] .netflix-close:hover,

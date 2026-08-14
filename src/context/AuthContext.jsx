@@ -131,7 +131,7 @@ export function AuthProvider({ children }) {
     try {
       const data = await api.post("/auth/refresh", { refreshToken: stored.refreshToken });
       saveAuth(data);
-    } catch (error) {
+    } catch {
       logout(true);
     }
   };
@@ -154,7 +154,7 @@ export function AuthProvider({ children }) {
     }
     setLoading(false);
     return () => clearTimers();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps -- bootstrap intentionally runs once
 
   useEffect(() => {
     if (!user?.id) {
@@ -171,7 +171,7 @@ export function AuthProvider({ children }) {
     return () => {
       active = false;
     };
-  }, [user?.id, loading, likedPackagesSyncVersion]);
+  }, [user?.id, loading, likedPackagesSyncVersion]); // eslint-disable-line react-hooks/exhaustive-deps -- reloads are explicitly user/version keyed
 
   const toggleLikedPackage = async (value) => {
     const code = String(value || "").trim();
@@ -192,24 +192,9 @@ export function AuthProvider({ children }) {
     }
   };
 
-  const login = async (email, password) => {
-    try {
-      const data = await api.post("/auth/login", { email, username: email, password });
-      saveAuth(data);
-      return true;
-    } catch (error) {
-      return false;
-    }
-  };
-
   const googleLogin = async (idToken) => {
     const data = await api.post("/auth/google", { idToken });
     saveAuth(data);
-    return data.user;
-  };
-
-  const register = async (payload) => {
-    const data = await api.post("/auth/register", payload);
     return data.user;
   };
 
@@ -222,9 +207,7 @@ export function AuthProvider({ children }) {
         likedPackagesLoading,
         pendingLikeCodes,
         toggleLikedPackage,
-        login,
         googleLogin,
-        register,
         logout,
         loading,
         showWarning,
@@ -240,4 +223,6 @@ export function AuthProvider({ children }) {
   );
 }
 
+// This hook intentionally shares the provider module with AuthProvider.
+// eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = () => useContext(AuthContext);

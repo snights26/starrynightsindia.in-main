@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "../../utils/api";
+import { publicContentService } from "../../public-cache/publicData";
 import "./Stats.css";
 
 export default function Stats() {
@@ -12,7 +12,7 @@ export default function Stats() {
 
   useEffect(() => {
     let isCurrent = true;
-    api.get("/homepage-statistics/public")
+    publicContentService.getStatistics()
       .then((data) => {
         if (isCurrent) {
           setStats(Array.isArray(data) ? data : []);

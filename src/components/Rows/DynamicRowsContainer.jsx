@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import api from "../../utils/api";
+import { publicFeaturedRowsService } from "../../public-cache/publicData";
 import DynamicRow from "../Common/DynamicRow";
 
 export default function DynamicRowsContainer({ page = "home" }) {
@@ -8,7 +8,7 @@ export default function DynamicRowsContainer({ page = "home" }) {
   useEffect(() => {
     let isCurrent = true;
 
-    api.get(`/featured-rows/public?visibleOn=${page}`)
+    publicFeaturedRowsService.getRows(page)
       .then((data) => {
         if (isCurrent) {
           setRows(Array.isArray(data) ? data : []);

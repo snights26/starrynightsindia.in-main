@@ -3,7 +3,8 @@ import { MdChevronLeft, MdChevronRight, MdLocationOn, MdPublic, MdTravelExplore 
 import { useNavigate } from "react-router-dom";
 import { EmptyState } from "../../common";
 import Pagination, { usePagination } from "../../components/Common/Pagination";
-import api, { resolveAssetUrl } from "../../utils/api";
+import { resolveAssetUrl } from "../../utils/api";
+import { publicCatalogService } from "../../public-cache/publicData";
 import "./Click2Explore.css";
 
 const MAPS = [
@@ -494,7 +495,7 @@ export default function Click2Explore() {
   }, []);
 
   useEffect(() => {
-    api.get("/categories/tree")
+    publicCatalogService.getCategoryTree()
       .then((data) => {
         setCategoryTree(Array.isArray(data) ? data : []);
         setCategoryLoadFailed(false);
@@ -516,7 +517,7 @@ export default function Click2Explore() {
     setLoadingPackages(true);
     setPackageLoadFailed(false);
 
-    api.get(`/packages?regionCode=${encodeURIComponent(selectedRegionCode)}`)
+    publicCatalogService.getPackages({ regionCode: selectedRegionCode })
       .then((data) => {
         if (!active) return;
         setPackagesByRegion((previous) => ({

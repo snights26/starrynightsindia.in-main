@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import api from "../../utils/api";
+import { publicCatalogService } from "../../public-cache/publicData";
 import PackageCard from "../../components/Common/PackageCard";
 import Pagination, { usePagination } from "../../components/Common/Pagination";
 import { brandBySlug } from "../../config/brands";
@@ -89,14 +89,11 @@ export default function AllPackages() {
       return;
     }
 
-    const url = selectedBrandName
-      ? `/packages?brand=${encodeURIComponent(selectedBrandName)}`
-      : categoryCode
-      ? `/packages?category=${categoryCode}`
-      : rowId
-      ? `/packages?rowId=${rowId}`
-      : "/packages";
-    api.get(url)
+    publicCatalogService.getPackages({
+      brand: selectedBrandName || undefined,
+      category: categoryCode || undefined,
+      rowId: rowId || undefined,
+    })
       .then((data) => setPackages(exactRowPackages(data, statePackageCodes, stateItems)))
       .catch(() => setPackages(packagesFromState(stateItems)));
   }, [rowId, categoryCode, brandSlug, selectedBrandName, location.key]);
