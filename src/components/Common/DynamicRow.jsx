@@ -15,7 +15,7 @@ export default function DynamicRow({ row }) {
   const isTopTen = row.rowType === "top10" || row.type === "top10";
   const items = row.items || [];
   const packageCodes = items
-    .map((item) => item.code || item.id || item.packageCode)
+    .map((item) => item.packageCode || item.code || item.id)
     .filter(Boolean);
 
   const scroll = (dir) => {
@@ -71,7 +71,7 @@ export default function DynamicRow({ row }) {
 
       <div className="dr-scroll" ref={scrollRef} onScroll={handleScroll}>
         {items.map((item, idx) => {
-          const code = item.code || item.id;
+          const code = item.packageCode || item.code || item.id;
           if (isCategory) {
             return (
               <CategoryCard

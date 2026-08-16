@@ -2,19 +2,49 @@
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
-  padding: 24px;
+  padding: 26px 28px 28px;
   border: 1px solid var(--app-border);
-  border-radius: 18px;
-  background: var(--app-card);
+  border-radius: 22px;
+  background: linear-gradient(135deg, var(--app-card), var(--app-card-soft));
   color: var(--app-text);
   box-shadow: var(--app-shadow);
 }
 
+.mytours-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
 .mytours-container h2 {
-  margin: 0 0 18px;
+  margin: 0;
   color: var(--app-text);
   font-size: clamp(1.45rem, 2vw, 1.9rem);
   font-weight: 800;
+}
+
+.mytours-heading p {
+  margin: 9px 0 0;
+  color: var(--app-text-muted);
+  font-size: 0.86rem;
+}
+
+.mytours-count {
+  display: inline-flex;
+  min-height: 26px;
+  align-items: center;
+  padding: 0 10px;
+  border: 1px solid var(--app-border);
+  border-radius: 999px;
+  margin-top: 3px;
+  background: var(--app-card-soft);
+  color: var(--app-text-muted);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
 }
 
 .mytours-container h2::after {
@@ -131,5 +161,10 @@
 @media (max-width: 768px) {
   .mytours-container {
     padding: 18px 14px;
+  }
+
+  .mytours-heading {
+    align-items: flex-start;
+    flex-direction: column;
   }
 }

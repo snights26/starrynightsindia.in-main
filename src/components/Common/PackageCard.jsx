@@ -28,7 +28,13 @@ export default function PackageCard({ image, name, packageCode }) {
     if (likedPackagesLoading || isPending) return;
 
     try {
-      await toggleLikedPackage(packageCode);
+      await toggleLikedPackage(packageCode, {
+        packageCode,
+        code: packageCode,
+        name,
+        title: name,
+        image,
+      });
     } catch {
       toast.error("Unable to update favourites");
     }

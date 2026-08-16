@@ -492,7 +492,6 @@ html[data-theme] :where(
   .upload-submit-btn,
   .mf-upload-btn,
   .chatbot-input-button,
-  .chatbot-fab,
   .stay-btn,
   .side-logout-btn,
   .notif-download-btn,
@@ -513,7 +512,6 @@ html[data-theme] :where(
   .upload-submit-btn:hover,
   .mf-upload-btn:hover,
   .chatbot-input-button:hover,
-  .chatbot-fab:hover,
   .stay-btn:hover,
   .side-logout-btn:hover,
   .notif-download-btn:hover,
@@ -715,7 +713,7 @@ html[data-theme="dark"] .dr-row {
 }
 
 html[data-theme="dark"] .bucketlist-row {
-  padding: 24px 20px 10px !important;
+  padding: 26px 28px 22px !important;
 }
 
 html[data-theme="dark"] :where(.packages-header, .dr-header, .bucketlist-row__header) {
@@ -809,7 +807,7 @@ html[data-theme="light"] .dr-row {
 }
 
 html[data-theme="light"] .bucketlist-row {
-  padding: 24px 20px 10px !important;
+  padding: 26px 28px 22px !important;
 }
 
 html[data-theme="light"] :where(.packages-header, .dr-header, .bucketlist-row__header) {
@@ -1369,7 +1367,7 @@ html[data-theme] .modal-actions {
 /* Dashboard layout guard: keep dashboard cards inside their assigned columns. */
 html[data-theme] .dashboard-container {
   display: grid !important;
-  grid-template-columns: minmax(0, 3fr) minmax(340px, 1fr) !important;
+  grid-template-columns: minmax(0, 1fr) minmax(340px, 410px) !important;
   grid-template-areas: "main side" !important;
   align-items: start !important;
   column-gap: 24px !important;
@@ -1398,7 +1396,7 @@ html[data-theme] .dashboard-side {
   box-sizing: border-box !important;
   padding: 0 !important;
   border: 1px solid var(--app-border) !important;
-  border-radius: 18px !important;
+  border-radius: 22px !important;
   background: var(--app-card) !important;
   box-shadow: var(--app-shadow) !important;
 }

@@ -21,11 +21,15 @@ export function AuthProvider({ children }) {
   const logoutTimerRef = useRef(null);
   const countdownIntervalRef = useRef(null);
   const pendingLikeCodesRef = useRef(new Set());
+  const likedPackagesRef = useRef([]);
 
-  const packageCode = (pkg) => String(pkg?.packageCode || pkg?.code || "").trim().toUpperCase();
+  const packageCode = (pkg) => String(
+    typeof pkg === "string" ? pkg : pkg?.packageCode || pkg?.code || "",
+  ).trim().toUpperCase();
 
   const applyLikedPackages = (packages) => {
     const nextPackages = Array.isArray(packages) ? packages : [];
+    likedPackagesRef.current = nextPackages;
     setLikedPackages(nextPackages);
     setLikedPackageCodes([...new Set(nextPackages.map(packageCode).filter(Boolean))]);
   };
@@ -173,19 +177,51 @@ export function AuthProvider({ children }) {
     };
   }, [user?.id, loading, likedPackagesSyncVersion]); // eslint-disable-line react-hooks/exhaustive-deps -- reloads are explicitly user/version keyed
 
-  const toggleLikedPackage = async (value) => {
+  const toggleLikedPackage = async (value, packageSummary) => {
     const code = String(value || "").trim();
     const normalizedCode = code.toUpperCase();
     if (!user || !code || pendingLikeCodesRef.current.has(normalizedCode)) {
       return null;
     }
 
+    const previousPackages = likedPackagesRef.current;
+    const existingPackage = previousPackages.find((pkg) => packageCode(pkg) === normalizedCode);
+    const alreadyLiked = Boolean(existingPackage);
+    const optimisticPackage = {
+      ...(packageSummary || {}),
+      packageCode: normalizedCode,
+      code: normalizedCode,
+      name: packageSummary?.name || packageSummary?.title || normalizedCode,
+      title: packageSummary?.title || packageSummary?.name || normalizedCode,
+      image: packageSummary?.image || packageSummary?.thumbnailUrl || "",
+    };
+
     pendingLikeCodesRef.current.add(normalizedCode);
     setPendingLikeCodes([...pendingLikeCodesRef.current]);
+    applyLikedPackages(
+      alreadyLiked
+        ? previousPackages.filter((pkg) => packageCode(pkg) !== normalizedCode)
+        : [...previousPackages, optimisticPackage],
+    );
+
     try {
       const packages = await api.post(`/users/me/bucket-list/${encodeURIComponent(code)}`);
-      applyLikedPackages(packages);
+      // Keep any other in-flight heart action visible. The last outstanding
+      // request reconciles the list with the authoritative server response.
+      if (pendingLikeCodesRef.current.size === 1) {
+        applyLikedPackages(packages);
+      }
       return packages;
+    } catch (error) {
+      const currentPackages = likedPackagesRef.current;
+      applyLikedPackages(
+        alreadyLiked
+          ? (currentPackages.some((pkg) => packageCode(pkg) === normalizedCode)
+            ? currentPackages
+            : [...currentPackages, existingPackage])
+          : currentPackages.filter((pkg) => packageCode(pkg) !== normalizedCode),
+      );
+      throw error;
     } finally {
       pendingLikeCodesRef.current.delete(normalizedCode);
       setPendingLikeCodes([...pendingLikeCodesRef.current]);

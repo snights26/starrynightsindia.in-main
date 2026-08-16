@@ -1,18 +1,19 @@
 .dashboard-side {
   color: var(--app-text);
   font-family: "Poppins", sans-serif;
+  background: linear-gradient(180deg, var(--app-card), var(--app-card-soft));
 }
 
 .side-profile-card {
   width: 100%;
   box-sizing: border-box;
-  padding: 16px;
+  padding: 20px;
   margin: 0;
   border: 0;
   border-bottom: 1px solid var(--app-border);
   border-radius: 0;
-  background: var(--app-card);
-  box-shadow: var(--app-shadow);
+  background: linear-gradient(135deg, var(--app-card), var(--app-card-soft));
+  box-shadow: none;
 }
 
 .side-profile-summary {
@@ -20,7 +21,7 @@
   grid-template-columns: 76px minmax(0, 1fr);
   gap: 14px;
   align-items: center;
-  padding: 8px;
+  padding: 2px;
   cursor: pointer;
   border-radius: 12px;
   transition: background 0.18s ease, transform 0.18s ease;
@@ -40,7 +41,7 @@
   border: 2px solid var(--app-accent);
   border-radius: 50%;
   object-fit: cover;
-  box-shadow: 0 0 18px rgba(229, 9, 20, 0.28);
+  box-shadow: 0 0 0 5px var(--app-accent-soft), 0 12px 28px rgba(229, 9, 20, 0.22);
 }
 
 .side-profile-info {
@@ -48,11 +49,20 @@
 }
 
 .side-profile-info h3 {
-  margin: 0 0 8px;
+  margin: 3px 0 8px;
   color: var(--app-text);
   font-size: 1rem;
   line-height: 1.2;
   overflow-wrap: anywhere;
+}
+
+.side-profile-eyebrow {
+  margin: 0 !important;
+  color: var(--app-accent) !important;
+  font-size: 0.66rem !important;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
 }
 
 .side-profile-info p {
@@ -84,7 +94,7 @@
 .side-profile-note,
 .side-logout-btn {
   min-height: 40px;
-  border-radius: 10px;
+  border-radius: 12px;
   border: 1px solid var(--app-border);
   cursor: pointer;
   font-size: 0.86rem;
@@ -129,13 +139,13 @@
 .side-card {
   width: 100%;
   box-sizing: border-box;
-  min-height: 52px;
+  min-height: 58px;
   margin: 0;
   padding: 0 16px;
   border: 0;
   border-bottom: 1px solid var(--app-border);
   border-radius: 0;
-  background: var(--app-card);
+  background: transparent;
   color: var(--app-text);
   cursor: pointer;
   display: flex;
@@ -147,7 +157,7 @@
 
 .side-card:hover,
 .side-card.clickable:hover {
-  transform: translateX(3px);
+  transform: translateX(4px);
   border-color: var(--app-accent);
   background: var(--app-hover-panel-bg);
 }
@@ -161,7 +171,7 @@
   min-height: auto;
   flex-direction: column;
   align-items: stretch;
-  padding: 14px 16px;
+  padding: 16px 20px;
   border-bottom: 0;
 }
 

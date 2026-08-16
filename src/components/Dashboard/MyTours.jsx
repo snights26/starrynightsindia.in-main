@@ -17,7 +17,13 @@ export default function MyTours() {
 
   return (
     <div className="mytours-container">
-      <h2>My Tours</h2>
+      <div className="mytours-heading">
+        <div>
+          <h2>My Tours</h2>
+          <p>Keep track of your upcoming and completed travel plans.</p>
+        </div>
+        <span className="mytours-count">{tours.length} {tours.length === 1 ? "tour" : "tours"}</span>
+      </div>
       <div className="mytours-table-wrapper">
         <table className="mytours-table">
           <thead>

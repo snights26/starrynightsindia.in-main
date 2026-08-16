@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { FaCompass } from "react-icons/fa";
 import "./Chatbot.css";
 import PackageCard from "../Common/PackageCard";
 import api from "../../utils/api";
@@ -11,6 +12,23 @@ const getSessionId = () => {
   return next;
 };
 
+const getStoredPosition = (key) => {
+  try {
+    const saved = JSON.parse(localStorage.getItem(key) || "null");
+    if (Number.isFinite(saved?.x) && Number.isFinite(saved?.y)) return saved;
+  } catch {
+    // A malformed local preference must not prevent the assistant loading.
+  }
+  return null;
+};
+
+const positionStyle = (position) => (position ? {
+  left: `${position.x}px`,
+  top: `${position.y}px`,
+  right: "auto",
+  bottom: "auto",
+} : undefined);
+
 export default function Chatbot() {
   const [isOpen, setIsOpen] = useState(() => {
     const saved = localStorage.getItem("chatbotOpen");
@@ -21,6 +39,12 @@ export default function Chatbot() {
   const [sessionId, setSessionId] = useState(() => getSessionId());
   const scrollRef = useRef(null);
   const messagesEndRef = useRef(null);
+  const fabRef = useRef(null);
+  const panelRef = useRef(null);
+  const dragRef = useRef(null);
+  const draggedRef = useRef(false);
+  const [fabPosition, setFabPosition] = useState(() => getStoredPosition("atlasChatFabPosition"));
+  const [panelPosition, setPanelPosition] = useState(() => getStoredPosition("atlasChatPanelPosition"));
   const [messages, setMessages] = useState([
     { sender: "chatbot-bot", text: "Hi. Tell me where you want to travel." }
   ]);
@@ -28,6 +52,39 @@ export default function Chatbot() {
   useEffect(() => {
     localStorage.setItem("chatbotOpen", JSON.stringify(isOpen));
   }, [isOpen]);
+
+  useEffect(() => {
+    if (fabPosition) localStorage.setItem("atlasChatFabPosition", JSON.stringify(fabPosition));
+  }, [fabPosition]);
+
+  useEffect(() => {
+    if (panelPosition) localStorage.setItem("atlasChatPanelPosition", JSON.stringify(panelPosition));
+  }, [panelPosition]);
+
+  useEffect(() => {
+    const move = (event) => {
+      const drag = dragRef.current;
+      if (!drag) return;
+
+      const nextPosition = {
+        x: Math.max(8, Math.min(event.clientX - drag.offsetX, window.innerWidth - drag.width - 8)),
+        y: Math.max(8, Math.min(event.clientY - drag.offsetY, window.innerHeight - drag.height - 8)),
+      };
+      if (Math.abs(nextPosition.x - drag.startX) > 3 || Math.abs(nextPosition.y - drag.startY) > 3) {
+        draggedRef.current = true;
+      }
+      if (drag.target === "fab") setFabPosition(nextPosition);
+      else setPanelPosition(nextPosition);
+    };
+    const stop = () => { dragRef.current = null; };
+
+    window.addEventListener("pointermove", move);
+    window.addEventListener("pointerup", stop);
+    return () => {
+      window.removeEventListener("pointermove", move);
+      window.removeEventListener("pointerup", stop);
+    };
+  }, []);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
@@ -79,21 +136,61 @@ export default function Chatbot() {
     });
   };
 
+  const startDrag = (event, target) => {
+    if (event.button !== 0 || (target === "panel" && event.target.closest("button"))) return;
+    const element = target === "fab" ? fabRef.current : panelRef.current;
+    if (!element) return;
+    const bounds = element.getBoundingClientRect();
+    dragRef.current = {
+      target,
+      offsetX: event.clientX - bounds.left,
+      offsetY: event.clientY - bounds.top,
+      startX: bounds.left,
+      startY: bounds.top,
+      width: bounds.width,
+      height: bounds.height,
+    };
+    draggedRef.current = false;
+  };
+
+  const openAssistant = (event) => {
+    if (draggedRef.current) {
+      event.preventDefault();
+      draggedRef.current = false;
+      return;
+    }
+    setIsOpen(true);
+  };
+
   return (
     <>
       {!isOpen && (
-        <button type="button" className="chatbot-fab" onClick={() => setIsOpen(true)} aria-label="Open travel assistant">
-          <img src="/chat-bot.png" alt="Route Icon" className="chatbot-fab-icon" />
+        <button
+          ref={fabRef}
+          type="button"
+          className="chatbot-fab"
+          style={positionStyle(fabPosition)}
+          onPointerDown={(event) => startDrag(event, "fab")}
+          onClick={openAssistant}
+          aria-label="Open ATLAS travel assistant. Drag to move."
+          title="Open ATLAS — drag to move"
+        >
+          <span className="chatbot-fab__mark" aria-hidden="true"><FaCompass /></span>
+          <span className="chatbot-fab__copy">
+            <strong>ATLAS</strong>
+            <small>Travel assistant</small>
+          </span>
+          <span className="chatbot-fab__pulse" aria-hidden="true" />
         </button>
       )}
 
       {isOpen && (
-        <div className="chatbot-container">
-          <div className="chatbot-header">
+        <div ref={panelRef} className="chatbot-container" style={positionStyle(panelPosition)}>
+          <div className="chatbot-header" onPointerDown={(event) => startDrag(event, "panel")} title="Drag to move ATLAS">
             <div className="chatbot-header-content">
-              <div className="chatbot-header-title">ORIX by STARRY NIGHTS</div>
+              <div className="chatbot-header-title">ATLAS</div>
               <div className="chatbot-header-subtitle">
-                Optimized Route & Itinerary eXpert by Starry Nights
+                Advanced Travel &amp; Location Assistance System
               </div>
             </div>
 
@@ -101,7 +198,7 @@ export default function Chatbot() {
               type="button"
               className="chatbot-close-btn"
               onClick={() => setIsOpen(false)}
-              aria-label="Close ORIX assistant"
+              aria-label="Close ATLAS assistant"
             >
               X
             </button>

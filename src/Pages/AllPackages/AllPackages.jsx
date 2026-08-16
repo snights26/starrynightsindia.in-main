@@ -89,6 +89,14 @@ export default function AllPackages() {
       return;
     }
 
+    // A View All action from a featured row or a user's bucket list already carries the
+    // exact package membership and display order. Do not replace that scoped list with the
+    // general catalogue: doing so can show packages that do not belong to the clicked row.
+    if (statePackageCodes.length > 0) {
+      setPackages(exactRowPackages(stateItems, statePackageCodes, stateItems));
+      return;
+    }
+
     publicCatalogService.getPackages({
       brand: selectedBrandName || undefined,
       category: categoryCode || undefined,

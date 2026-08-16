@@ -2,24 +2,31 @@
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
-  padding: 24px;
+  padding: 26px 28px 22px;
   position: relative;
   overflow: hidden;
   border: 1px solid var(--app-border);
-  border-radius: 18px;
-  background: var(--app-card);
+  border-radius: 22px;
+  background: linear-gradient(135deg, var(--app-card), var(--app-card-soft));
   color: var(--app-text);
   box-shadow: var(--app-shadow);
 }
 
 .bucketlist-row__header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 18px;
-  padding-bottom: 14px;
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) minmax(300px, 0.9fr);
+  align-items: end;
+  gap: 22px;
+  margin-bottom: 14px;
+  padding-bottom: 16px;
   border-bottom: 1px solid var(--app-border);
+}
+
+.bucketlist-row__title-line {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
 .bucketlist-row__title {
@@ -39,16 +46,39 @@
   background: var(--app-accent);
 }
 
+.bucketlist-row__count {
+  display: inline-flex;
+  min-height: 26px;
+  align-items: center;
+  padding: 0 10px;
+  border: 1px solid var(--app-border);
+  border-radius: 999px;
+  background: var(--app-accent-soft);
+  color: var(--app-accent);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
 .bucketlist-row__subtitle {
   margin: 9px 0 0;
   color: var(--app-text-muted);
   font-size: 0.86rem;
 }
 
+.bucketlist-row__actions {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 10px;
+  min-width: 0;
+}
+
 .bucketlist-row__search {
   display: grid;
   gap: 5px;
-  min-width: min(100%, 330px);
+  min-width: 0;
   color: var(--app-text-muted);
   font-size: 0.72rem;
   font-weight: 800;
@@ -57,7 +87,8 @@
 }
 
 .bucketlist-row__search input {
-  min-width: 280px;
+  width: 100%;
+  min-width: 0;
   min-height: 40px;
   box-sizing: border-box;
   padding: 0 13px;
@@ -90,7 +121,7 @@
   min-height: 40px;
   padding: 0 18px;
   border: 1px solid var(--app-border);
-  border-radius: 12px;
+  border-radius: 999px;
   background: var(--app-card-soft);
   color: var(--app-text);
   cursor: pointer;
@@ -108,9 +139,10 @@
 .bucketlist-row__scroll {
   min-width: 0;
   display: flex;
-  gap: 18px;
+  gap: 16px;
   overflow-x: auto;
-  padding: 18px 6px 24px;
+  min-height: 232px;
+  padding: 14px 6px 18px;
   scroll-behavior: smooth;
   scrollbar-width: none;
   -ms-overflow-style: none;
@@ -190,7 +222,7 @@
 
   .bucketlist-row__header {
     align-items: flex-start;
-    flex-direction: column;
+    grid-template-columns: 1fr;
   }
 
   .bucketlist-row__subtitle {
@@ -201,6 +233,12 @@
   .bucketlist-row__search input {
     width: 100%;
     min-width: 0;
+  }
+
+  .bucketlist-row__actions {
+    width: 100%;
+    align-items: stretch;
+    grid-template-columns: 1fr;
   }
 
   .bucketlist-row__view-all {

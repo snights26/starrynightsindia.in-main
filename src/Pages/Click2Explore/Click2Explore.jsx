@@ -75,6 +75,14 @@ const REGION_NAME_ALIASES = {
   "united arab emirates": "dubai"
 };
 
+// The live catalogue predates the map and stores Chhattisgarh under DOM-CT.
+// Keep DOM-CG as the geographic/map identity, but use the established category
+// key when loading its package collection. This avoids showing an empty state
+// for packages that are already correctly mapped in the catalogue.
+const REGION_PACKAGE_CATEGORY_CODE_ALIASES = {
+  "DOM-CG": "DOM-CT"
+};
+
 const DOMESTIC_REGION_CODES_BY_NAME = {
   "andaman and nicobar": "DOM-AN",
   "andaman and nicobar islands": "DOM-AN",
@@ -430,6 +438,8 @@ export default function Click2Explore() {
     [activeGeoJson, activeMap.viewBox, activeGeoData.coordinateMode]
   );
   const selectedRegionCode = selectedByMap[activeMap.key] || activeMap.defaultRegionCode;
+  const selectedPackageCategoryCode = REGION_PACKAGE_CATEGORY_CODE_ALIASES[selectedRegionCode]
+    || selectedRegionCode;
 
   const categoriesByCode = useMemo(() => {
     return new Map(flattenCategories(categoryTree).map((category) => [category.code || category.categoryCode, category]));
@@ -517,7 +527,7 @@ export default function Click2Explore() {
     setLoadingPackages(true);
     setPackageLoadFailed(false);
 
-    publicCatalogService.getPackages({ regionCode: selectedRegionCode })
+    publicCatalogService.getPackages({ regionCode: selectedPackageCategoryCode })
       .then((data) => {
         if (!active) return;
         setPackagesByRegion((previous) => ({
@@ -537,7 +547,7 @@ export default function Click2Explore() {
     return () => {
       active = false;
     };
-  }, [selectedRegionCode, packagesByRegion]);
+  }, [selectedRegionCode, selectedPackageCategoryCode, packagesByRegion]);
 
   const changeSlide = (nextIndex) => {
     setSlideIndex((nextIndex + MAPS.length) % MAPS.length);

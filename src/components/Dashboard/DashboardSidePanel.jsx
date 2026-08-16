@@ -53,6 +53,7 @@ export default function DashboardSidePanel() {
           </div>
 
           <div className="side-profile-info">
+            <p className="side-profile-eyebrow">Traveller profile</p>
             <h3>{user?.name || "Guest User"}</h3>
             <p className="side-user-id">User ID: <strong>{user?.userId || user?.id || "Not available"}</strong></p>
             <p>{user?.email || "No Email"}</p>

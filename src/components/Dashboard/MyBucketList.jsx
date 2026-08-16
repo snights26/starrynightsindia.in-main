@@ -1,10 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { MdChevronLeft, MdChevronRight } from "react-icons/md";
 import { useAuth } from "../../context/AuthContext";
 import PackageCard from "../Common/PackageCard";
 import "./MyBucketList.css";
 
 export default function MyBucketList() {
+  const navigate = useNavigate();
   const scrollRef = useRef(null);
   const [showLeft, setShowLeft] = useState(false);
   const [showRight, setShowRight] = useState(true);
@@ -50,18 +52,36 @@ export default function MyBucketList() {
 
       <div className="bucketlist-row__header">
         <div>
-          <h2 className="bucketlist-row__title">My Bucket List</h2>
+          <div className="bucketlist-row__title-line">
+            <h2 className="bucketlist-row__title">My Bucket List</h2>
+            {!likedPackagesLoading && <span className="bucketlist-row__count">{packages.length} saved</span>}
+          </div>
           <p className="bucketlist-row__subtitle">Search through the packages you have saved.</p>
         </div>
-        <label className="bucketlist-row__search">
-          <span>Search saved packages</span>
-          <input
-            type="search"
-            value={search}
-            onChange={(event) => setSearch(event.target.value)}
-            placeholder="Search by package name or code..."
-          />
-        </label>
+        <div className="bucketlist-row__actions">
+          <label className="bucketlist-row__search">
+            <span>Search saved packages</span>
+            <input
+              type="search"
+              value={search}
+              onChange={(event) => setSearch(event.target.value)}
+              placeholder="Search by package name or code..."
+            />
+          </label>
+          <button
+            className="bucketlist-row__view-all"
+            type="button"
+            onClick={() => navigate("/all-packages", {
+              state: {
+                title: "My Bucket List",
+                items: packages,
+                packageCodes: packages.map((pkg) => pkg.packageCode || pkg.code).filter(Boolean),
+              },
+            })}
+          >
+            View all <span aria-hidden="true">→</span>
+          </button>
+        </div>
       </div>
 
       <div className="bucketlist-row__scroll" ref={scrollRef} onScroll={handleScroll}>

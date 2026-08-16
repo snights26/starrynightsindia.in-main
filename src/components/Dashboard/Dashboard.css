@@ -1,13 +1,15 @@
 .dashboard-container {
   min-height: 100vh;
   display: grid;
-  grid-template-columns: minmax(0, 3fr) minmax(340px, 1fr);
+  grid-template-columns: minmax(0, 1fr) minmax(340px, 410px);
   grid-template-areas: "main side";
-  gap: 24px;
-  padding: 92px clamp(18px, 3vw, 48px) 48px;
+  align-items: start;
+  gap: clamp(20px, 2vw, 30px);
+  padding: 104px clamp(18px, 3vw, 58px) 56px;
   background: var(--app-page-gradient);
   color: var(--app-text);
   box-sizing: border-box;
+  isolation: isolate;
 }
 
 body {
@@ -28,7 +30,7 @@ body {
   grid-area: main;
   display: grid;
   align-content: start;
-  gap: 24px;
+  gap: 26px;
   border: 0;
   border-radius: 0;
   background: transparent;
@@ -41,10 +43,12 @@ body {
   align-self: start;
   padding: 0;
   border: 1px solid var(--app-border);
-  border-radius: 18px;
+  border-radius: 22px;
   background: var(--app-card);
   box-shadow: var(--app-shadow);
   overflow: hidden;
+  position: sticky;
+  top: 92px;
 }
 
 .session-overlay {
@@ -132,6 +136,7 @@ body {
 
   .dashboard-side {
     order: 1;
+    position: static;
   }
 
   .dashboard-main {
