@@ -41,11 +41,13 @@ export default function Notifications() {
 
       {/* Cards */}
       <div className="ns-grid">
-        {filteredData.map((item) => (
+        {filteredData.map((item) => {
+          const pdfUrl = resolveAssetUrl(item.pdfUrl || item.pdf);
+          return (
           <div
             key={item.id}
             className="ns-card"
-            onClick={() => item.pdf && setActivePDF(resolveAssetUrl(item.pdf))}
+            onClick={() => pdfUrl && setActivePDF(pdfUrl)}
           >
             <div className="ns-image-wrapper">
               <img src={resolveAssetUrl(item.image)} alt={item.title} />
@@ -56,7 +58,8 @@ export default function Notifications() {
               <p>{item.description}</p>
             </div>
           </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* 🔥 PDF MODAL */}

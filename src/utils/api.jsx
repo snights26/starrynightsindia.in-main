@@ -23,18 +23,19 @@ api.interceptors.response.use((response) => response.data?.data ?? response.data
 export const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080/api";
 
 export const resolveAssetUrl = (url) => {
-  if (!url || url.startsWith("http") || url.startsWith("blob:")) {
-    return url || "";
+  const value = typeof url === "string" ? url.trim() : "";
+  if (!value || /^https?:\/\//i.test(value) || value.startsWith("blob:")) {
+    return value;
   }
-  if (url.startsWith("/api/")) {
-    return `${apiBaseUrl.replace(/\/api$/, "")}${url}`;
+  if (value.startsWith("/api/")) {
+    return `${apiBaseUrl.replace(/\/api$/, "")}${value}`;
   }
   // Older records were persisted before the API context path was included.
   // Keep those URLs working while all new uploads use /api/uploads/.
-  if (url.startsWith("/uploads/")) {
-    return `${apiBaseUrl}${url}`;
+  if (value.startsWith("/uploads/")) {
+    return `${apiBaseUrl}${value}`;
   }
-  return url;
+  return "";
 };
 
 export default api;
