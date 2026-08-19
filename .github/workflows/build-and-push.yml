@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  build:
+  build-beta:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -31,11 +31,45 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/snights26/starrynightsindia.in:${{ github.sha }}
+          tags: ghcr.io/snights26/starrynightsindia.in:beta-${{ github.sha }}
           build-args: |
             VITE_API_BASE_URL=${{ vars.BETA_VITE_API_BASE_URL }}
             VITE_GOOGLE_AUTH_ENABLED=${{ vars.BETA_VITE_GOOGLE_AUTH_ENABLED }}
             VITE_GOOGLE_CLIENT_ID=${{ vars.BETA_VITE_GOOGLE_CLIENT_ID }}
             VITE_PUBLIC_BROWSER_CACHE_ENABLED=${{ vars.BETA_VITE_PUBLIC_BROWSER_CACHE_ENABLED }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  build-prod:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ghcr.io/snights26/starrynightsindia.in:prod-${{ github.sha }}
+          build-args: |
+            VITE_API_BASE_URL=${{ vars.PROD_VITE_API_BASE_URL }}
+            VITE_GOOGLE_AUTH_ENABLED=${{ vars.PROD_VITE_GOOGLE_AUTH_ENABLED }}
+            VITE_GOOGLE_CLIENT_ID=${{ vars.PROD_VITE_GOOGLE_CLIENT_ID }}
+            VITE_PUBLIC_BROWSER_CACHE_ENABLED=${{ vars.PROD_VITE_PUBLIC_BROWSER_CACHE_ENABLED }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
