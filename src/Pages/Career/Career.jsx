@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./Career.css";
 import { apiBaseUrl } from "../../utils/api";
+import { isBlank, isValidPhoneNumber, normalizePhoneNumber } from "../../utils/formValidation";
 
 export default function Career() {
 
@@ -30,7 +31,7 @@ const {name,value,files}=e.target;
 if(files){
 setFormData({...formData,[name]:files[0]});
 }else{
-setFormData({...formData,[name]:value});
+setFormData({...formData,[name]:name === "phone" ? normalizePhoneNumber(value) : value});
 }
 };
 
@@ -40,6 +41,17 @@ setFormData({...formData,[name]:value});
 const handleSubmit=async(e)=>{
 e.preventDefault();
 if (isSubmitting) return;
+
+if (isBlank(formData.name) || isBlank(formData.email) || isBlank(formData.phone)
+  || isBlank(formData.position) || isBlank(formData.about) || !formData.resume) {
+  alert("Please complete all application fields and attach your resume.");
+  return;
+}
+
+if (!isValidPhoneNumber(formData.phone)) {
+  alert("Enter a valid 10-digit phone number.");
+  return;
+}
 
 const data=new FormData();
 
@@ -531,6 +543,7 @@ type="text"
 name="name"
 placeholder="Full Name"
 required
+value={formData.name}
 onChange={handleChange}
 />
 
@@ -539,6 +552,7 @@ type="email"
 name="email"
 placeholder="Email Address"
 required
+value={formData.email}
 onChange={handleChange}
 />
 
@@ -547,6 +561,11 @@ type="tel"
 name="phone"
 placeholder="Phone Number"
 required
+value={formData.phone}
+inputMode="numeric"
+pattern="[0-9]{10}"
+maxLength={10}
+title="Enter a 10-digit phone number"
 onChange={handleChange}
 />
 
@@ -554,6 +573,8 @@ onChange={handleChange}
 type="text"
 name="position"
 placeholder="Position Applying For"
+required
+value={formData.position}
 onChange={handleChange}
 />
 
@@ -568,6 +589,8 @@ onChange={handleChange}
 <textarea
 name="about"
 placeholder="Tell us about yourself"
+required
+value={formData.about}
 onChange={handleChange}
 />
 

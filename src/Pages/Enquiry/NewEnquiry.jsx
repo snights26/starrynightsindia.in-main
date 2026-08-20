@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./NewEnquiry.css";
 import api from "../../utils/api";
+import { isBlank, isValidPhoneNumber, normalizePhoneNumber } from "../../utils/formValidation";
 
 function NewEnquiry() {
 
@@ -40,9 +41,10 @@ function NewEnquiry() {
 
   // HANDLE CHANGE
   const handleChange = (e) => {
+    const value = e.target.name === "contact" ? normalizePhoneNumber(e.target.value) : e.target.value;
     setForm({
       ...form,
-      [e.target.name]: e.target.value
+      [e.target.name]: value
     });
   };
 
@@ -57,8 +59,18 @@ function NewEnquiry() {
     e.preventDefault();
     if (isSubmitting) return;
 
-    if (!form.name || !form.contact || !form.destination) {
-      alert("Please fill required fields");
+    if (isBlank(form.name) || isBlank(form.contact) || isBlank(form.destination)) {
+      alert("Please enter your name, 10-digit contact number, and destination.");
+      return;
+    }
+
+    if (!isValidPhoneNumber(form.contact)) {
+      alert("Enter a valid 10-digit contact number.");
+      return;
+    }
+
+    if (form.startDate && form.endDate && form.startDate > form.endDate) {
+      alert("Start date cannot be later than the end date.");
       return;
     }
 
@@ -94,12 +106,22 @@ function NewEnquiry() {
           <div className="form-grid">
             <div className="field">
               <label>Customer Name</label>
-              <input name="name" value={form.name} onChange={handleChange} />
+              <input name="name" value={form.name} onChange={handleChange} required />
             </div>
 
             <div className="field">
               <label>Contact Number</label>
-              <input name="contact" value={form.contact} onChange={handleChange} />
+              <input
+                type="tel"
+                name="contact"
+                value={form.contact}
+                onChange={handleChange}
+                inputMode="numeric"
+                pattern="[0-9]{10}"
+                maxLength={10}
+                title="Enter a 10-digit contact number"
+                required
+              />
             </div>
 
             <div className="field">
@@ -126,7 +148,7 @@ function NewEnquiry() {
 
             <div className="field">
               <label>Destination</label>
-              <input name="destination" value={form.destination} onChange={handleChange} />
+              <input name="destination" value={form.destination} onChange={handleChange} required />
             </div>
 
             <div className="field">
@@ -141,19 +163,19 @@ function NewEnquiry() {
 
             <div className="field">
               <label>Start Date</label>
-              <input type="date" name="startDate" value={form.startDate} onChange={handleChange} />
+              <input type="date" name="startDate" value={form.startDate} onChange={handleChange} max={form.endDate || undefined} />
             </div>
 
             <div className="field">
               <label>End Date</label>
-              <input type="date" name="endDate" value={form.endDate} onChange={handleChange} />
+              <input type="date" name="endDate" value={form.endDate} onChange={handleChange} min={form.startDate || undefined} />
             </div>
 
             <div className="field">
               <label>Total Persons ({form.persons})</label>
               <div className="persons-grid">
-                <input name="adult" value={form.adult} onChange={handleChange} placeholder="Adults" />
-                <input name="child" value={form.child} onChange={handleChange} placeholder="Children" />
+                <input type="number" min="0" step="1" name="adult" value={form.adult} onChange={handleChange} placeholder="Adults" />
+                <input type="number" min="0" step="1" name="child" value={form.child} onChange={handleChange} placeholder="Children" />
               </div>
             </div>
           </div>

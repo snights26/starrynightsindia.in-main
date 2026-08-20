@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./Contact.css";
 import api from "../../utils/api";
+import { isBlank, isValidPhoneNumber, normalizePhoneNumber } from "../../utils/formValidation";
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -14,12 +15,23 @@ export default function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const value = e.target.name === "phone" ? normalizePhoneNumber(e.target.value) : e.target.value;
+    setFormData({ ...formData, [e.target.name]: value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (isSubmitting) return;
+
+    if (isBlank(formData.name) || isBlank(formData.email) || isBlank(formData.phone) || isBlank(formData.message)) {
+      alert("Please complete all fields before sending your message.");
+      return;
+    }
+
+    if (!isValidPhoneNumber(formData.phone)) {
+      alert("Enter a valid 10-digit phone number.");
+      return;
+    }
 
     try {
       setIsSubmitting(true);
@@ -122,6 +134,11 @@ export default function Contact() {
               placeholder="Phone Number"
               value={formData.phone}
               onChange={handleChange}
+              inputMode="numeric"
+              pattern="[0-9]{10}"
+              maxLength={10}
+              title="Enter a 10-digit phone number"
+              required
             />
 
             <textarea
