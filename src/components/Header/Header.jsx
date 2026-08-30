@@ -5,7 +5,8 @@ import { useAuth } from "../../context/AuthContext";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FiHome, FiUser } from "react-icons/fi";
 import { MdExplore } from "react-icons/md";     
-import { FaPlane } from "react-icons/fa";      
+import { FaPlane, FaFire  } from "react-icons/fa";  
+import { FaFilePen } from "react-icons/fa6";    
 import LiveIstClock from "./LiveIstClock";
 
 export default function Header() {
@@ -151,13 +152,13 @@ export default function Header() {
           <div 
             className={location.pathname === "/trending" ? "active-tab" : ""}
             onClick={() => navigate("/trending")}>
-            <MdExplore />
+            <FaFire />
           </div>
 
           <div 
             className={`cta-icon ${location.pathname === "/Enquiry" ? "active-tab" : ""}`}
             onClick={() => navigate("/Enquiry")}>
-            <FaPlane />
+            <FaFilePen />
           </div>
 
           {user ? (
