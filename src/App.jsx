@@ -9,14 +9,14 @@ import Footer from "./components/Header/Footer";
 import GlobalExplorerPromo from "./Pages/Click2Explore/GlobalExplorerPromo";
 import OccasionPopup from "./components/OccasionPopup/OccasionPopup";
 
-import { AuthProvider } from "./context/AuthContext";
+import { AuthProvider, useAuth } from "./context/AuthContext";
 import PrivateRoute from "./components/AuthFolder/PrivateRoute";
 import ProfileCompletionGuard from "./components/AuthFolder/ProfileCompletionGuard";
 import Chatbot from "./components/Chatbot/Chatbot";
 import { Toaster } from "react-hot-toast";
 
 import ScrollToTop from "./components/ScrollToTop";
-import { CustomAlertProvider, ThemeProvider, ThemeToggle } from "./common";
+import { CustomAlertProvider, Loader, ThemeProvider, ThemeToggle } from "./common";
 import "./theme-overrides.css";
 
 // Route-only modules (including PDF and dashboard code) must not inflate the
@@ -41,10 +41,23 @@ const CreateUser = lazy(() => import("./components/AuthFolder/createUser"));
 const TimeZones = lazy(() => import("./Pages/TimeZones/TimeZones"));
 const LegalPolicy = lazy(() => import("./Pages/LegalPolicies/LegalPolicy"));
 
+function SignInDashboardLoader() {
+  const { dashboardLoading } = useAuth();
+
+  if (!dashboardLoading) return null;
+
+  return (
+    <div className="auth-dashboard-loader" role="status" aria-live="polite" aria-label="Preparing your dashboard">
+      <Loader label="Preparing your dashboard…" />
+    </div>
+  );
+}
+
 function App() {
   return (
     <ThemeProvider>
       <AuthProvider>
+        <SignInDashboardLoader />
         <BrowserRouter>
       <CustomAlertProvider />
       <ScrollToTop />

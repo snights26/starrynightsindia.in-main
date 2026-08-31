@@ -4,16 +4,23 @@ import { useAuth } from "../../context/AuthContext";
 import api from "../../utils/api";
 import "./MyTours.css";
 
-export default function MyTours() {
+export default function MyTours({ onReady }) {
   const { user } = useAuth();
   const [tours, setTours] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
+    let active = true;
+
     api.get(`/mytours?email=${encodeURIComponent(user?.email || "")}`)
-      .then(setTours)
-      .catch(() => setTours([]));
-  }, [user]);
+      .then((data) => active && setTours(data))
+      .catch(() => active && setTours([]))
+      .finally(() => active && onReady?.());
+
+    return () => {
+      active = false;
+    };
+  }, [user?.email, onReady]);
 
   return (
     <div className="mytours-container">

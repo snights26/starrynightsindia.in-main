@@ -3,7 +3,7 @@ import api from "../utils/api";
 
 const AuthContext = createContext();
 
-const WARNING_TIME = 30 * 1000;
+const ACCESS_TOKEN_REFRESH_LEAD_TIME = 60 * 1000;
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
@@ -13,13 +13,11 @@ export function AuthProvider({ children }) {
   const [likedPackagesLoading, setLikedPackagesLoading] = useState(false);
   const [likedPackagesSyncVersion, setLikedPackagesSyncVersion] = useState(0);
   const [pendingLikeCodes, setPendingLikeCodes] = useState([]);
-  const [showWarning, setShowWarning] = useState(false);
-  const [countdown, setCountdown] = useState(30);
+  const [dashboardLoading, setDashboardLoading] = useState(false);
   const [forceLogin, setForceLogin] = useState(false);
 
-  const warningTimerRef = useRef(null);
+  const accessRefreshTimerRef = useRef(null);
   const logoutTimerRef = useRef(null);
-  const countdownIntervalRef = useRef(null);
   const pendingLikeCodesRef = useRef(new Set());
   const likedPackagesRef = useRef([]);
 
@@ -48,9 +46,8 @@ export function AuthProvider({ children }) {
   };
 
   const clearTimers = () => {
-    if (warningTimerRef.current) clearTimeout(warningTimerRef.current);
+    if (accessRefreshTimerRef.current) clearTimeout(accessRefreshTimerRef.current);
     if (logoutTimerRef.current) clearTimeout(logoutTimerRef.current);
-    if (countdownIntervalRef.current) clearInterval(countdownIntervalRef.current);
   };
 
   const logout = (auto = false) => {
@@ -62,44 +59,40 @@ export function AuthProvider({ children }) {
     localStorage.removeItem("auth");
     clearLikedPackages();
     setUser(null);
-    setShowWarning(false);
+    setDashboardLoading(false);
     if (auto) setForceLogin(true);
   };
 
   const startTimers = (storedData) => {
     clearTimers();
-    const timeLeft = storedData.accessExpiry - Date.now();
+    const deviceSessionTimeLeft = storedData.refreshExpiry - Date.now();
 
-    if (timeLeft <= 0) {
+    if (deviceSessionTimeLeft <= 0) {
       logout(true);
       return;
     }
 
-    const warningDelay = Math.max(timeLeft - WARNING_TIME, 0);
+    const accessRefreshDelay = Math.max(Math.min(
+      storedData.accessExpiry - Date.now() - ACCESS_TOKEN_REFRESH_LEAD_TIME,
+      deviceSessionTimeLeft,
+    ), 0);
 
-    warningTimerRef.current = setTimeout(() => {
-      setShowWarning(true);
-      setCountdown(30);
-      countdownIntervalRef.current = setInterval(() => {
-        setCountdown((prev) => {
-          if (prev <= 1) {
-            clearInterval(countdownIntervalRef.current);
-            return 0;
-          }
-          return prev - 1;
-        });
-      }, 1000);
-    }, warningDelay);
-
-    logoutTimerRef.current = setTimeout(() => {
+    // Access tokens stay short-lived while the current browser has a fixed seven-day session.
+    accessRefreshTimerRef.current = setTimeout(() => {
       const latest = JSON.parse(localStorage.getItem("auth") || "null");
-      if (!latest || latest.accessExpiry <= Date.now()) {
+      if (latest?.refreshExpiry > Date.now()) {
+        refreshAccessToken(latest);
+      } else {
         logout(true);
       }
-    }, timeLeft);
+    }, accessRefreshDelay);
+
+    logoutTimerRef.current = setTimeout(() => {
+      logout(true);
+    }, deviceSessionTimeLeft);
   };
 
-  const saveAuth = (data) => {
+  const saveAuth = (data, { prepareDashboard = false } = {}) => {
     const authData = {
       user: data.user,
       accessToken: data.accessToken,
@@ -109,10 +102,9 @@ export function AuthProvider({ children }) {
     };
 
     localStorage.setItem("auth", JSON.stringify(authData));
+    if (prepareDashboard) setDashboardLoading(true);
     prepareLikedPackagesSync();
     setUser(data.user);
-    setShowWarning(false);
-    setCountdown(30);
     setForceLogin(false);
     startTimers(authData);
     return authData;
@@ -230,9 +222,11 @@ export function AuthProvider({ children }) {
 
   const googleLogin = async (idToken) => {
     const data = await api.post("/auth/google", { idToken });
-    saveAuth(data);
+    saveAuth(data, { prepareDashboard: true });
     return data.user;
   };
+
+  const completeDashboardLoading = () => setDashboardLoading(false);
 
   return (
     <AuthContext.Provider
@@ -246,10 +240,10 @@ export function AuthProvider({ children }) {
         googleLogin,
         logout,
         loading,
-        showWarning,
+        dashboardLoading,
+        completeDashboardLoading,
         refreshAccessToken,
         updateStoredUser,
-        countdown,
         forceLogin,
         setForceLogin,
       }}

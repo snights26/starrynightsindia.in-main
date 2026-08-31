@@ -7,7 +7,7 @@ import "./DashboardSidePanel.css";
 
 const DEFAULT_PROFILE_IMAGE = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
 
-export default function DashboardSidePanel() {
+export default function DashboardSidePanel({ onReady }) {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
   const [notifications, setNotifications] = useState([]);
@@ -15,8 +15,17 @@ export default function DashboardSidePanel() {
   const [showNotif, setShowNotif] = useState(false);
 
   useEffect(() => {
-    api.get("/notifications/me").then(setNotifications).catch(() => setNotifications([]));
-  }, []);
+    let active = true;
+
+    api.get("/notifications/me")
+      .then((data) => active && setNotifications(data))
+      .catch(() => active && setNotifications([]))
+      .finally(() => active && onReady?.());
+
+    return () => {
+      active = false;
+    };
+  }, [onReady]);
 
   const openProfile = () => navigate("/complete-profile");
   const profileImage = resolveAssetUrl(user?.photo || user?.profileImageUrl || user?.profileImage) || DEFAULT_PROFILE_IMAGE;

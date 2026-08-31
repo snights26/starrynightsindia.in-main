@@ -1,4 +1,5 @@
 // src/components/Dashboard/Dashboard.jsx
+import { useEffect, useState } from "react";
 import "./Dashboard.css";
 import MyBucketList from "./MyBucketList";
 import MyTours from "./MyTours";
@@ -6,36 +7,25 @@ import DashboardSidePanel from "./DashboardSidePanel";
 import { useAuth } from "../../context/AuthContext";
 
 export default function Dashboard() {
+  const { dashboardLoading, likedPackagesLoading, completeDashboardLoading } = useAuth();
+  const [toursReady, setToursReady] = useState(false);
+  const [notificationsReady, setNotificationsReady] = useState(false);
 
-  const { showWarning, refreshAccessToken, countdown } = useAuth();
+  useEffect(() => {
+    if (dashboardLoading && !likedPackagesLoading && toursReady && notificationsReady) {
+      completeDashboardLoading();
+    }
+  }, [dashboardLoading, likedPackagesLoading, toursReady, notificationsReady, completeDashboardLoading]);
 
   return (
     <>
-   {showWarning && (
-  <div className="session-overlay">
-    <div className="session-modal">
-      <h2>Adventure Paused?</h2>
-      <p className="countdown">
-  Session expires in {countdown} seconds
-</p>
-      
-
-      <div className="session-actions">
-        <button className="stay-btn" onClick={() => refreshAccessToken()}>
-          Stay Logged In
-        </button>
-      </div>
-    </div>
-  </div>
-)}
-
       <div className="dashboard-container">
         <div className="dashboard-main">
           <MyBucketList />
-          <MyTours />
+          <MyTours onReady={setToursReady} />
         </div>
 
-        <DashboardSidePanel />
+        <DashboardSidePanel onReady={setNotificationsReady} />
       </div>
     </>
   );

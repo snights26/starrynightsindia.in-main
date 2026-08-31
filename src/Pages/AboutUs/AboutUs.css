@@ -7,7 +7,8 @@
 
 .team-banner {
   width: 100%;
-  min-height: 320px;
+  aspect-ratio: 5076 / 1291;
+  max-height: 520px;
   overflow: hidden;
   position: relative;
   background: var(--app-card-soft, #d3d3d3);
@@ -15,8 +16,7 @@
 
 .team-banner img {
   width: 100%;
-  min-height: 320px;
-  max-height: 520px;
+  height: 100%;
   object-fit: cover;
   object-position: center bottom;
   filter: brightness(0.92);
@@ -253,11 +253,6 @@ html[data-theme="dark"] .about-page {
 }
 
 @media (max-width: 768px) {
-  .team-banner,
-  .team-banner img {
-    min-height: 240px;
-  }
-
   .about-hero {
     padding: 28px 5% 42px;
   }

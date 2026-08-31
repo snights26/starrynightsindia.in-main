@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { FaCompass } from "react-icons/fa";
 import "./Chatbot.css";
 import PackageCard from "../Common/PackageCard";
-import api from "../../utils/api";
+import { chatbotApi } from "../../utils/api";
 
 const getSessionId = () => {
   const existing = localStorage.getItem("chatbotSessionId");
@@ -99,7 +99,7 @@ export default function Chatbot() {
     setIsSending(true);
 
     try {
-      const response = await api.post("/chatbot/query", {
+      const response = await chatbotApi.post("/chatbot/query", {
         message: trimmed,
         sessionId,
       });
@@ -160,6 +160,12 @@ export default function Chatbot() {
       return;
     }
     setIsOpen(true);
+  };
+
+  const closeAfterMobilePackageNavigation = () => {
+    if (window.matchMedia("(max-width: 900px)").matches) {
+      setIsOpen(false);
+    }
   };
 
   return (
@@ -225,6 +231,7 @@ export default function Chatbot() {
                             image={pkg.image}
                             name={pkg.name || pkg.title}
                             packageCode={pkg.packageCode || pkg.code}
+                            onPackageOpen={closeAfterMobilePackageNavigation}
                           />
                         </div>
                       ))}

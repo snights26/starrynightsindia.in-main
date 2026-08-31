@@ -5,7 +5,7 @@ import { useAuth } from "../../context/AuthContext";
 import { resolveAssetUrl } from "../../utils/api";
 import "./PackageCard.css";
 
-export default function PackageCard({ image, name, packageCode }) {
+export default function PackageCard({ image, name, packageCode, onPackageOpen }) {
   const navigate = useNavigate();
   const { user, likedPackageCodes, likedPackagesLoading, pendingLikeCodes, toggleLikedPackage } = useAuth();
   const normalizedPackageCode = String(packageCode || "").trim().toUpperCase();
@@ -15,6 +15,7 @@ export default function PackageCard({ image, name, packageCode }) {
   const handleClick = () => {
     if (!packageCode) return;
     navigate(`/package/${packageCode}`);
+    onPackageOpen?.();
   };
 
   const handleFavorite = async (e) => {

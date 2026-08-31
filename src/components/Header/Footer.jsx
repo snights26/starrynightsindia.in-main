@@ -63,11 +63,9 @@ export default function Footer() {
           <a href="tel:+919284137430">+91 928 4137 430</a>
           <a href="mailto:travelwithstarrynights@gmail.com">travelwithstarrynights@gmail.com</a>
           <a href="https://maps.app.goo.gl/XdpxF664BZL1MYHx6" target="_blank" rel="noopener noreferrer">
-            Branch-1: Pune Bangalore Highway, Chandani Chowk, Pune
+            004, Starry Nights, Nanded, Maharashtra – 431603.
           </a>
-          <a href="https://maps.app.goo.gl/XdpxF664BZL1MYHx6" target="_blank" rel="noopener noreferrer">
-            Branch-2: HUDCO Bus Stop, Nanded
-          </a>
+
 
           <div className="footer-social">
             <a href="https://wa.me/message/UTCOF3APCTTKP1" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
@@ -84,7 +82,7 @@ export default function Footer() {
       </div>
 
       <div className="footer-bottom">
-        © {currentYear} Starry Nights Holidays. Explore Beyond Limits.
+        © {currentYear} Starry Nights Holidays. Journey Beyond Horizon.
       </div>
     </footer>
   );

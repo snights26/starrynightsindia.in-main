@@ -8,6 +8,45 @@
   background: var(--app-card);
 }
 
+.auth-dashboard-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 1000004;
+  display: grid;
+  min-height: 100dvh;
+  place-items: center;
+  padding: 24px;
+  background:
+    radial-gradient(circle at 50% 42%, var(--app-accent-soft), transparent 22rem),
+    var(--app-bg);
+}
+
+.auth-dashboard-loader .ui-loader {
+  display: grid;
+  min-width: min(100%, 290px);
+  place-items: center;
+  gap: 14px;
+  padding: 28px;
+  border-radius: 18px;
+  box-shadow: var(--app-shadow);
+  color: var(--app-text);
+  font-weight: 800;
+}
+
+.auth-dashboard-loader .ui-loader::before {
+  width: 34px;
+  height: 34px;
+  border: 3px solid var(--app-border);
+  border-top-color: var(--app-accent);
+  border-radius: 50%;
+  content: "";
+  animation: auth-dashboard-loader-spin 0.8s linear infinite;
+}
+
+@keyframes auth-dashboard-loader-spin {
+  to { transform: rotate(360deg); }
+}
+
 .ui-empty-state h3 {
   margin: 0 0 6px;
   color: var(--app-text);
