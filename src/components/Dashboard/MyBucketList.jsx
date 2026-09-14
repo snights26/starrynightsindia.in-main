@@ -44,12 +44,6 @@ export default function MyBucketList() {
 
   return (
     <div className="bucketlist-row">
-      {showLeft && (
-        <button className="bucketlist-row__btn bucketlist-row__btn--left" type="button" aria-label="Scroll left" onClick={() => scroll("left")}>
-          <MdChevronLeft />
-        </button>
-      )}
-
       <div className="bucketlist-row__header">
         <div>
           <div className="bucketlist-row__title-line">
@@ -84,19 +78,27 @@ export default function MyBucketList() {
         </div>
       </div>
 
-      <div className="bucketlist-row__scroll" ref={scrollRef} onScroll={handleScroll}>
-        {filteredPackages.map((pkg, idx) => (
-          <PackageCard key={pkg.packageCode || idx} image={pkg.image} name={pkg.name} packageCode={pkg.packageCode} />
-        ))}
-        {likedPackagesLoading && <div className="bucketlist-row__empty">Loading saved packages…</div>}
-        {!likedPackagesLoading && filteredPackages.length === 0 && <div className="bucketlist-row__empty">No saved packages match your search.</div>}
-      </div>
+      <div className="bucketlist-row__carousel">
+        {showLeft && (
+          <button className="bucketlist-row__btn bucketlist-row__btn--left" type="button" aria-label="Scroll left" onClick={() => scroll("left")}>
+            <MdChevronLeft aria-hidden="true" />
+          </button>
+        )}
 
-      {showRight && (
-        <button className="bucketlist-row__btn bucketlist-row__btn--right" type="button" aria-label="Scroll right" onClick={() => scroll("right")}>
-          <MdChevronRight />
-        </button>
-      )}
+        <div className="bucketlist-row__scroll" ref={scrollRef} onScroll={handleScroll}>
+          {filteredPackages.map((pkg, idx) => (
+            <PackageCard key={pkg.packageCode || idx} image={pkg.image} name={pkg.name} packageCode={pkg.packageCode} />
+          ))}
+          {likedPackagesLoading && <div className="bucketlist-row__empty">Loading saved packages…</div>}
+          {!likedPackagesLoading && filteredPackages.length === 0 && <div className="bucketlist-row__empty">No saved packages match your search.</div>}
+        </div>
+
+        {showRight && (
+          <button className="bucketlist-row__btn bucketlist-row__btn--right" type="button" aria-label="Scroll right" onClick={() => scroll("right")}>
+            <MdChevronRight aria-hidden="true" />
+          </button>
+        )}
+      </div>
     </div>
   );
 }

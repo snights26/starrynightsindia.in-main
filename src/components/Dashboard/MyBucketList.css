@@ -138,12 +138,14 @@
 
 .bucketlist-row__scroll {
   min-width: 0;
+  box-sizing: border-box;
   display: flex;
   gap: 16px;
   overflow-x: auto;
   min-height: 232px;
-  padding: 14px 6px 18px;
+  padding: 14px 54px 18px;
   scroll-behavior: smooth;
+  scroll-padding-inline: 54px;
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
@@ -154,21 +156,28 @@
   height: 0;
 }
 
+.bucketlist-row__carousel {
+  position: relative;
+}
+
 .bucketlist-row__btn {
   position: absolute;
-  top: 58%;
+  top: 50%;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   width: 42px;
-  height: 92px;
+  min-width: 42px;
+  height: 42px;
+  min-height: 42px;
+  padding: 0;
   z-index: 10;
   border: 1px solid rgba(255,255,255,0.14);
-  border-radius: 999px;
-  background: linear-gradient(90deg, rgba(0,0,0,0.9), rgba(0,0,0,0.55));
+  border-radius: 50%;
+  background: rgba(0,0,0,0.72);
   color: #fff;
   cursor: pointer;
-  font-size: 1.9rem;
+  font-size: 1.55rem;
   opacity: 0.84;
   transform: translateY(-50%);
   transition: opacity 0.2s ease, transform 0.2s ease, background 0.2s ease;
@@ -187,32 +196,50 @@
 }
 
 .bucketlist-row__btn--left {
-  left: 8px;
+  left: 6px;
 }
 
 .bucketlist-row__btn--right {
-  right: 8px;
+  right: 6px;
 }
 
-.bucketlist-row::before,
-.bucketlist-row::after {
+.bucketlist-row__carousel::before,
+.bucketlist-row__carousel::after {
   content: "";
   position: absolute;
-  top: 78px;
+  top: 0;
   bottom: 0;
   width: 42px;
   z-index: 5;
   pointer-events: none;
 }
 
-.bucketlist-row::before {
+.bucketlist-row__carousel::before {
   left: 0;
   background: linear-gradient(to right, var(--app-card), transparent);
 }
 
-.bucketlist-row::after {
+.bucketlist-row__carousel::after {
   right: 0;
   background: linear-gradient(to left, var(--app-card), transparent);
+}
+
+/* Keep carousel controls compact when the global dashboard button styles load. */
+html[data-theme] .bucketlist-row .bucketlist-row__btn {
+  width: 42px !important;
+  min-width: 42px !important;
+  height: 42px !important;
+  min-height: 42px !important;
+  padding: 0 !important;
+  border-radius: 50% !important;
+  background: var(--app-overlay-control-bg) !important;
+  color: var(--app-overlay-control-color) !important;
+}
+
+html[data-theme] .bucketlist-row .bucketlist-row__btn:hover {
+  background: var(--app-accent) !important;
+  color: #fff !important;
+  transform: translateY(-50%) scale(1.03) !important;
 }
 
 @media (max-width: 768px) {
@@ -247,7 +274,17 @@
 
   .bucketlist-row__btn {
     width: 34px;
-    height: 62px;
+    min-width: 34px;
+    height: 34px;
+    min-height: 34px;
+    padding: 0;
     opacity: 0.92;
+  }
+
+  html[data-theme] .bucketlist-row .bucketlist-row__btn {
+    width: 34px !important;
+    min-width: 34px !important;
+    height: 34px !important;
+    min-height: 34px !important;
   }
 }

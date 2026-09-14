@@ -4,10 +4,11 @@ import { resolveAssetUrl } from "../../utils/api";
 import { publicContentService } from "../../public-cache/publicData";
 
 const IMAGES_PER_PAGE = 7;
+const INITIAL_VISIBLE_IMAGES = IMAGES_PER_PAGE * 3;
 
 export default function Gallery({ images = [] }) {
   const [selectedImage, setSelectedImage] = useState(null);
-  const [visibleCount, setVisibleCount] = useState(IMAGES_PER_PAGE);
+  const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE_IMAGES);
   const [galleryImages, setGalleryImages] = useState(images);
 
   useEffect(() => {
